@@ -79,7 +79,7 @@ public:
                     const sf::Color&  color = sf::Color::White);
 	
 	template <class Func>
-	void AddButton(const std::string& name, Func f);
+	void AddButton(const std::string& name, sf::Keyboard::Key shortcut, Func f);
 
     void HandleKeyPress(const sf::Keyboard::Key& key);
 
@@ -124,7 +124,7 @@ public:
 
 
 template <class Func>
-void GUI::AddButton(const std::string& name, Func f)
+void GUI::AddButton(const std::string& name, sf::Keyboard::Key shortcut, Func f)
 {
-	m_buttons.emplace_back(new Button<Func>(name,f));
+	m_buttons.emplace_back(new Button<Func>(name,f,shortcut));
 }

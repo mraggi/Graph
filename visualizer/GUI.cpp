@@ -29,6 +29,14 @@ void GUI::HandleKeyPress(const sf::Keyboard::Key& key)
             (*DV.var) = !(*DV.var);
     }
     
+    for (auto& btn : m_buttons)
+	{
+		if (key == btn->Shortcut())
+		{
+			btn->Activate();
+		}
+	}
+    
 }
 
 

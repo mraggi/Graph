@@ -22,7 +22,7 @@ public:
 
     GraphApp(const string& name = "Graph");
 
-    void SetGraph(const Graph& G) { P.SetGraph(G); }
+    void SetGraph(const Graph& G) { P.SetGraph(G); FitGraphToScreen(); }
     PhysicalGraph& GetGraph() { return P; }
 
     void Update(real time);
@@ -43,6 +43,7 @@ public:
     // This is for all "rare" events (joysticks?)
     
     vertex_t GetVertexUnderMouse() const;
+	void FitGraphToScreen();
 private:
     void DrawGraph();
 

@@ -40,6 +40,7 @@ public:
     // Graph modification functions
     vertex_t add_vertex(const Point& position)
     {
+		cout << "Adding vertex at " << position << endl;
         M.emplace_back(position,Point(),Point());
         return G.add_vertex();
     }

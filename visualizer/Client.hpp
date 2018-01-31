@@ -783,7 +783,9 @@ void Client<Derived>::ClientRenderGUI()
 		auto P = Point(30,num*txtseparation);
 		
 		auto color = sf::Color::Yellow;
-		Render(btn->Name(),P,color);
+		stringstream name;
+		name << btn->Name() << " [" << btn->Shortcut() << ']';
+		Render(name.str(),P,color);
 		
 		auto B = GetBox(num);
 		

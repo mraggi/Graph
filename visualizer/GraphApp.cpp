@@ -50,7 +50,22 @@ GraphApp::GraphApp(const string& name) : Base(name)
 	PA.AddSlider(P.max_speed, "Max Speed",  10, sf::Keyboard::G, sf::Keyboard::H);
 	PA.AddSlider(vertex_size,"Vertex Size", 1, sf::Keyboard::I, sf::Keyboard::O);
 	PA.AddSlider(edge_thickness,"Edge Thickness", 1, sf::Keyboard::T, sf::Keyboard::Y);
-	
+	PA.AddButton("Clear Graph",sf::Keyboard::C,[this](){ SetGraph(Graph(0)); });
+	PA.AddButton("Petersen Graph",sf::Keyboard::S,[this](){ SetGraph(graphs::Petersen()); });
+	PA.AddButton("Random Graph",sf::Keyboard::D,[this]()
+	{ 
+		Graph G(1000);
+		for (auto i : G.vertices())
+		{
+			for (int j = i+1; j < G.num_vertices(); ++j)
+			{
+				if (probability_of_true(1.05/G.num_vertices()))
+					G.add_edge(i,j);
+			}
+		}
+		SetGraph(G); 
+		
+	});
 	
 // 	PA.AddElement(label_size,"Label Size", 1, sf::Keyboard::N, sf::Keyboard::M);
 }
@@ -67,6 +82,8 @@ void GraphApp::Update(real time)
 	
 	PA.Watch("To fit graph to screen, press [Enter]");
 	PA.Watch("Toggle fullscreen with [F]");
+	PA.Watch("To add vertex, press CTRL+Left mouse button");
+	PA.Watch("To add edge, press SHIFT+Left mouse button");
 	PA.Watch(P.num_vertices(), "Num vertices");
 	PA.Watch(P.num_edges(), "Num edges");
 	
@@ -176,22 +193,31 @@ GraphApp::vertex_t GraphApp::GetVertexUnderMouse() const
 }
 
 
+void GraphApp::FitGraphToScreen()
+{
+	m_Camera = GetBoundingBoxOfGraph();
+	FixAspectRatio();
+	SynchronizeCameraWithView();
+}
+
 void GraphApp::OnKeyPress(sf::Keyboard::Key key) 
 {
 	if (key == sf::Keyboard::Return)
 	{
-		m_Camera = GetBoundingBoxOfGraph();
-		FixAspectRatio();
-		SynchronizeCameraWithView();
+		FitGraphToScreen();
 	}
 }
 
 Box GraphApp::GetBoundingBoxOfGraph() const
 {
-	real minX = 999999999;
-	real minY = 999999999;
-	real maxX = -999999999;
-	real maxY = -999999999;
+	if (P.num_vertices() == 0)
+	{
+		return Box({0,0},{1000,1000});
+	}
+	real minX = 9999999;
+	real minY = 9999999;
+	real maxX = -9999999;
+	real maxY = -9999999;
 	
 	for (auto v : P.vertices())
 	{
