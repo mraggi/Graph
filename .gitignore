@@ -1,8 +1,8 @@
 build*
 *.kdev4
 *.kate-swp
-*Make*
 *make*
 *CMakeCache*
 *cmake_install*
 *CMakeFiles*
+Makefile
