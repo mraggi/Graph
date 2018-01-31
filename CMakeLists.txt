@@ -41,7 +41,7 @@ add_executable(playground main.cpp)
 target_link_libraries(playground graph)
 
 if (${BUILD_VISUALIZER})
-	find_package(SFML REQUIRED)
+# 	find_package(SFML REQUIRED)
 	add_definitions(-DUSE_SFML)
 	
 	file(GLOB GEOMETRY_FILES visualizer/Geometry/*.cpp)
