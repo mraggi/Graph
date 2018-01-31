@@ -112,12 +112,14 @@ inline double linear_interpolate(double x, double a, double b, double u, double 
     return (v - u) * (x - a) / (b - a) + u;
 }
 
-template <class T, class Compare> T clamp(const T& v, const T& lo, const T& hi, Compare comp)
+template <class T, class Compare>
+T clamp(const T& v, const T& lo, const T& hi, Compare comp)
 {
     return assert(!comp(hi, lo)), comp(v, lo) ? lo : comp(hi, v) ? hi : v;
 }
 
-template <class T> T clamp(const T& v, const T& lo, const T& hi)
+template <class T>
+T clamp(const T& v, const T& lo, const T& hi)
 {
     return clamp(v, lo, hi, std::less<>());
 }

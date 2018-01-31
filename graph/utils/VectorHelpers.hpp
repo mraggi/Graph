@@ -12,7 +12,8 @@
 /// \brief Converts a std::vector<U> into a std::vector<T>, provided U can be
 /// converted to T
 ////////////////////////////////////
-template <typename T, typename U> std::vector<T> Convert(const std::vector<U>& G)
+template <typename T, typename U>
+std::vector<T> Convert(const std::vector<U>& G)
 {
     auto           n = G.size();
     std::vector<T> toReturn(n);
@@ -28,7 +29,8 @@ template <typename T, typename U> std::vector<T> Convert(const std::vector<U>& G
 ////////////////////////////////////
 /// \brief prints out a space separated std::vector.
 ////////////////////////////////////
-template <class T> std::ostream& operator<<(std::ostream& os, const std::vector<T>& V)
+template <class T>
+std::ostream& operator<<(std::ostream& os, const std::vector<T>& V)
 {
     if (V.empty())
         return os;
@@ -46,7 +48,8 @@ template <class T> std::ostream& operator<<(std::ostream& os, const std::vector<
 ////////////////////////////////////
 /// \brief prints out a matrix
 ////////////////////////////////////
-template <class T> std::ostream& operator<<(std::ostream& os, const std::vector<std::vector<T>>& V)
+template <class T>
+std::ostream& operator<<(std::ostream& os, const std::vector<std::vector<T>>& V)
 {
     os << std::endl;
     for (auto& v : V)
@@ -90,7 +93,8 @@ inline std::ostream& operator<<(std::ostream& os, const std::vector<bool>& V)
 ///
 /// \return f∘g
 ///////////////////////////
-template <class vecT, class UIntType> vecT compose(const vecT& f, const std::vector<UIntType>& g)
+template <class vecT, class UIntType>
+vecT compose(const vecT& f, const std::vector<UIntType>& g)
 {
     // 		typename vecT::value_type u(0);
     vecT toReturn(g.size());

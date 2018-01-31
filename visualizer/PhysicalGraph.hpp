@@ -27,8 +27,8 @@ public:
     using all_vertices = basic_natural_number<vertex_t>;
     all_vertices vertices() const { return all_vertices(num_vertices()); }
 
-    vertex_t num_vertices() const { return G.num_vertices(); }
-	Graph::size_type num_edges() const { return G.num_edges(); }
+    vertex_t         num_vertices() const { return G.num_vertices(); }
+    Graph::size_type num_edges() const { return G.num_edges(); }
 
     // Graph modification functions
     vertex_t add_vertex()
@@ -36,12 +36,12 @@ public:
         M.emplace_back();
         return G.add_vertex();
     }
-    
+
     // Graph modification functions
     vertex_t add_vertex(const Point& position)
     {
-		cout << "Adding vertex at " << position << endl;
-        M.emplace_back(position,Point(),Point());
+        cout << "Adding vertex at " << position << endl;
+        M.emplace_back(position, Point(), Point());
         return G.add_vertex();
     }
 
@@ -50,18 +50,18 @@ public:
         E.emplace_back(Edge(from, to, w));
         G.add_edge(from, to, w);
     }
-    
+
     void add_edge_no_repeat(vertex_t from, vertex_t to, weight_t w = 1)
     {
         if (G.add_edge_no_repeat(from, to, w))
-			E.emplace_back(Edge(from, to, w));
+            E.emplace_back(Edge(from, to, w));
     }
 
     const Graph& graph() const { return G; }
 
     bool turn_physics_on{true};
     bool attract_to_center{true};
-	bool repulsion_on{true};
+    bool repulsion_on{true};
 
     // constants of motion
     real repelling_force{150000.0};

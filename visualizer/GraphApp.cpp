@@ -8,37 +8,6 @@ using Base = GraphApp::Base;
 GraphApp::GraphApp(const string& name) : Base(name)
 									   , P()
 {
-// 	Graph G(graphs::Petersen());
-	
-// 	Graph G(16);
-// 	
-// 	for (int i = 0; i < 16; ++i)
-// 	{
-// 		for (int j = i+1; j < 16; ++j)
-// 		{
-// 			if (j-i == 4)
-// 				G.add_edge(i,j);
-// 			if (j-i == 1 && j%4 != 0)
-// 				G.add_edge(i,j);
-// 			
-// 			if (j%4 != 3 && j-i == 3)
-// 				G.add_edge(i,j);
-// 			
-// 			if (j%4 != 0 && j-i == 5)
-// 				G.add_edge(i,j);
-// 		}
-// 	}
-	
-// 	Graph G(1000);
-// 	for (auto i : G.vertices())
-// 	{
-// 		for (int j = i+1; j < G.num_vertices(); ++j)
-// 		{
-// 			if (probability_of_true(1.05/G.num_vertices()))
-// 				G.add_edge(i,j);
-// 		}
-// 	}
-	
 	SetGraph(Graph(0));
 	
 	

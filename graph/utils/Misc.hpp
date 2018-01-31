@@ -14,7 +14,8 @@
 /// C++ modulo operator % is dumb for negative integers: (-7)%3 returns -1,
 /// instead of 2. This fixes it. \return an integer in [0,b)
 //////////////////////////////////////////
-template <class IntType> inline IntType modulo(IntType a, IntType b)
+template <class IntType>
+inline IntType modulo(IntType a, IntType b)
 {
     IntType r = a % b;
     if (r < 0)
@@ -28,14 +29,16 @@ template <class IntType> inline IntType modulo(IntType a, IntType b)
 /// C++ modulo operator %= is dumb for negative integers: (-7)%3 returns -1,
 /// instead of 2. This fixes it.
 //////////////////////////////////////////
-template <class IntType> inline void reduce_modulo(IntType& a, IntType b)
+template <class IntType>
+inline void reduce_modulo(IntType& a, IntType b)
 {
     a %= b;
     if (a < 0)
         a += b;
 }
 
-template <class T> inline T pow(T a, unsigned long n)
+template <class T>
+inline T pow(T a, unsigned long n)
 {
     T r = 1;
 
@@ -52,7 +55,8 @@ template <class T> inline T pow(T a, unsigned long n)
 }
 
 // Deprecated in c++17. Here for use in c++14.
-template <class T> T gcd(T a, T b)
+template <class T>
+T gcd(T a, T b)
 {
     while (b != 0)
         {
@@ -63,7 +67,8 @@ template <class T> T gcd(T a, T b)
     return a;
 }
 
-template <class T, class Container> T reduce_fraction(Container Numerator, Container Denominator)
+template <class T, class Container>
+T reduce_fraction(Container Numerator, Container Denominator)
 {
     for (auto& b : Denominator)
         {

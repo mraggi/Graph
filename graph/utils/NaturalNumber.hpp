@@ -9,7 +9,8 @@
 /// \brief In set theory, a common way of defining a natural number is. n :=
 /// {0,1,2,...,n-1}, with 0 = {}.
 //////////////////////////////////////////
-template <class IntType> class basic_natural_number
+template <class IntType>
+class basic_natural_number
 {
 public:
     using difference_type = long long;
@@ -68,7 +69,8 @@ public:
 
     IntType operator[](size_type m) const { return m; }
 
-    template <class Pred> IntType partition_point(Pred p)
+    template <class Pred>
+    IntType partition_point(Pred p)
     {
         return *std::partition_point(begin(), end(), p);
     }

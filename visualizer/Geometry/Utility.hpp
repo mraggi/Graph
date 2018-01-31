@@ -28,7 +28,8 @@ inline bool isAngleBetweenAngles(real a, real b1, real b2)
     return c2 <= c;
 }
 
-template <class T> int signof(const T& a)
+template <class T>
+int signof(const T& a)
 {
     if (a > 0)
         return 1;

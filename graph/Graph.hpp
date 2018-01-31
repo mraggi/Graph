@@ -40,7 +40,8 @@ public:
 
     bool add_edge_no_repeat(vertex_t from,
                             vertex_t to,
-                            weight_t w = 1); // only add if not already present. Returns true if added.
+                            weight_t w
+                            = 1); // only add if not already present. Returns true if added.
 
     void sort_neighbors(); // sorts them so that searching can later be done in
                            // log time

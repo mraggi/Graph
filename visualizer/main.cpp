@@ -8,8 +8,8 @@ using namespace std;
 int main()
 {
     GraphApp app;
-	
-	app.Run();
+
+    app.Run();
 
     return 0;
 }

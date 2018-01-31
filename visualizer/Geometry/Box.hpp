@@ -3,8 +3,8 @@
 #include "FConvex.hpp"
 
 #ifdef USE_SFML
-#include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #endif
 
 class Box : public FConvex
@@ -15,11 +15,13 @@ private:
 public:
     explicit Box(const Point& pos = Point(0, 0), real w = 0, real h = 0);
     explicit Box(const Point& corner1, const Point& corner2);
-	
+
 #ifdef USE_SFML
-	explicit Box(const sf::FloatRect& F) : FConvex({F.left+F.width/2.0, F.top+F.height/2.0}), m_pLR(F.width,F.height) {}
+    explicit Box(const sf::FloatRect& F)
+        : FConvex({F.left + F.width / 2.0, F.top + F.height / 2.0}), m_pLR(F.width, F.height)
+    {}
 #endif
-	
+
     Box(const Box& box);
     virtual ~Box(){};
 

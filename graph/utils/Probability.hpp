@@ -33,7 +33,8 @@ inline bool probability_of_true(double p)
  * @return A random integer in the range [from,thru), with uniform probability
  * distribution
  */
-template <class IntType = int> IntType random_int(IntType from, IntType thru)
+template <class IntType = int>
+IntType random_int(IntType from, IntType thru)
 {
     static std::uniform_int_distribution<IntType> d{};
     using parm_t = typename decltype(d)::param_type;
@@ -45,7 +46,8 @@ template <class IntType = int> IntType random_int(IntType from, IntType thru)
  * @return A random float number in the range [from,thru), with uniform
  * probability distribution
  */
-template <class FloatType = double> FloatType random_real(FloatType from, FloatType upto)
+template <class FloatType = double>
+FloatType random_real(FloatType from, FloatType upto)
 {
     static std::uniform_real_distribution<> d{};
     using parm_t = decltype(d)::param_type;
