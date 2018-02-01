@@ -15,18 +15,28 @@ sudo rm -rf /usr/include/SFML
 sudo rm -rf /usr/lib/*sfml*
 
 # Basic things
-sudo apt-get install build-essential mc cmake git software-properties-common python-software-properties libboost-dev libgtest-dev  
+sudo apt-get install build-essential mc cmake git software-properties-common python-software-properties libboost-dev libgtest-dev wget aria2
 
-# sudo apt-get install libxrandr-dev libopenal-dev libfreetype6 libfreetype6-dev libflac-dev libogg-dev libvorbis-dev libopenal-dev libudev-dev 
-
-# sudo apt-add-repository ppa:sonkun/sfml-stable
-# sudo apt-get update
-sudo apt-get install libsfml-dev
-
+# Set up gtest
 cd /usr/src/gtest/
 sudo cmake .
 sudo make
 sudo cp *.a /usr/lib
+
+# Prepare to install SFML
+sudo apt-get install libxrandr-dev libopenal-dev libfreetype6 libfreetype6-dev libflac-dev libogg-dev libvorbis-dev libopenal-dev libudev-dev libsndfile-dev libjpeg-dev libglew-dev
+
+cd ~
+aria2c https://www.sfml-dev.org/files/SFML-2.4.2-sources.zip
+unzip SFML-2.4.2-sources.zip
+cd SFML-2.4.2
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+make
+sudo make install
+
+
 
 cd ~
 rm -rf Graph
