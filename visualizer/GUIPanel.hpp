@@ -26,19 +26,19 @@ inline std::ostream& operator<<(std::ostream& os, const sf::Keyboard::Key& key)
 		os << ".";
 		break;
 
-	case sf::Keyboard::LBracket: ///< The [ key
-		os << '[';
+	case sf::Keyboard::LBracket: 
+		os << '{';
 		break;
 
 	case sf::Keyboard::RBracket:
-		os << ']';
+		os << '}';
 		break;
 
 	case sf::Keyboard::Tab:
 		os << "Tab";
 		break;
 
-	case sf::Keyboard::Add: ///< The [ key
+	case sf::Keyboard::Add: 
 		os << '+';
 		break;
 

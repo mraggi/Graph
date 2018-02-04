@@ -214,6 +214,21 @@ Client<Derived>::Client(const string& Name)
 
 	GUI.AddController(
 	  time_dilation, "Time Dilation", 0.1, sf::Keyboard::Comma, sf::Keyboard::Period, orange);
+
+	GUI.AddAction("Change font", sf::Keyboard::F1, [this]()
+	{
+		static int font = 0;
+		
+		++font;
+		if (font == 3)
+			font = 0;
+		if (font == 0)
+			m_Font.loadFromFile("font.ttf");
+		else if (font == 1)
+			m_Font.loadFromFile("font-mono.ttf");
+		else
+			m_Font.loadFromFile("font-serif.ttf");
+	}, orange);
 	GUI.AddSpacer();
 }
 
@@ -246,8 +261,6 @@ void Client<Derived>::Run()
 			fps		  = numframes / fps_clock.Reset();
 			numframes = 0;
 		}
-
-		// 		GUI.Watch(fps, "FPS", sf::Color(255, 150, 50));
 
 		double frame_time = main_clock.Reset();
 		ClientUpdate(frame_time * time_dilation);

@@ -11,9 +11,8 @@ GraphApp::GraphApp(const string& name) : Base(name), P()
 
 	CreateGUI();
 
-	vertex_colors[0] = sf::Color::White;
-	vertex_colors[1].g /= 2;
-	//  GUI.AddElement(label_size,"Label Size", 1, sf::Keyboard::N, sf::Keyboard::M);
+// 	vertex_colors[0] = sf::Color::White;
+// 	vertex_colors[1].g /= 2;
 }
 
 void GraphApp::CreateGUI()
@@ -93,7 +92,7 @@ void GraphApp::CreateGUI()
 
 	GUI.AddSpacer();
 
-	GUI.AddText("Available Shortcuts = " + GUI.AvailableShortcuts(), sf::Color(50, 50, 50));
+	GUI.AddText("Available Shortcuts: " + GUI.AvailableShortcuts(), sf::Color(50, 50, 50));
 }
 
 void GraphApp::Update(real time)
