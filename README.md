@@ -19,13 +19,3 @@
 
 `wget https://raw.githubusercontent.com/mraggi/Graph/master/install_arch.sh && chmod +x install_arch.sh && ./install_arch.sh`
 
-En manjaro/arch es fácil:
-```sh
-sudo pacman -S sfml git cmake boost gtest clang gcc kdevelop
-git clone https://github.com/mraggi/Graph
-cd Graph
-mkdir build
-cd build
-cmake ..
-make
-```
