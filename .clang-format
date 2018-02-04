@@ -6,32 +6,31 @@ AlignAfterOpenBracket: true
 AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: true
 AlignEscapedNewlines: Right
-AlignOperands:   false
-AlignTrailingComments: false
+AlignOperands:   true
+AlignTrailingComments: true
 AllowAllParametersOfDeclarationOnNextLine: true
-AllowShortBlocksOnASingleLine: false
+AllowShortBlocksOnASingleLine: true
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
-AlwaysBreakAfterDefinitionReturnType: None
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: true
 BinPackArguments: false
 BinPackParameters: false
 BraceWrapping:   
-  AfterClass:      true
+  AfterClass: true
   AfterControlStatement: true
-  AfterEnum:       true
-  AfterFunction:   true
-  AfterNamespace:  true
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
   AfterObjCDeclaration: true
   AfterStruct:     true
   AfterUnion:      true
   BeforeCatch:     true
   BeforeElse:      true
-  IndentBraces:    true
+  IndentBraces:    false
   SplitEmptyFunction: false
   SplitEmptyRecord: false
   SplitEmptyNamespace: false
@@ -84,7 +83,7 @@ PenaltyBreakBeforeFirstCallParameter: 19
 PenaltyBreakComment: 300
 PenaltyBreakFirstLessLess: 120
 PenaltyBreakString: 1000
-PenaltyExcessCharacter: 1000000
+PenaltyExcessCharacter: 1000
 PenaltyReturnTypeOnItsOwnLine: 60
 PointerAlignment: Left
 ReflowComments:  true
@@ -103,6 +102,6 @@ SpacesInParentheses: false
 SpacesInSquareBrackets: false
 Standard:        Cpp11
 TabWidth:        4
-UseTab:          Never
+UseTab:          Always
 ...
 

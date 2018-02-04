@@ -48,7 +48,7 @@ if (${BUILD_VISUALIZER})
 	add_library(geometry ${GEOMETRY_FILES})
 	
 	add_executable(visualizer 	visualizer/main.cpp
-								visualizer/GUI.cpp
+								visualizer/GUIPanel.cpp
 								visualizer/RichText.cpp
 								visualizer/GraphApp.cpp
 								visualizer/PhysicalGraph.cpp)

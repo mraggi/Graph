@@ -11,10 +11,10 @@
  */
 inline std::default_random_engine& random_engine()
 {
-    using RE          = std::default_random_engine;
-    using result_type = RE::result_type;
-    static std::default_random_engine e(static_cast<result_type>(time(nullptr)));
-    return e;
+	using RE		  = std::default_random_engine;
+	using result_type = RE::result_type;
+	static std::default_random_engine e(static_cast<result_type>(time(nullptr)));
+	return e;
 }
 
 /**
@@ -24,8 +24,8 @@ inline std::default_random_engine& random_engine()
  */
 inline bool probability_of_true(double p)
 {
-    static std::bernoulli_distribution d(p);
-    return d(random_engine());
+	std::bernoulli_distribution d(p);
+	return d(random_engine());
 }
 
 /**
@@ -36,9 +36,9 @@ inline bool probability_of_true(double p)
 template <class IntType = int>
 IntType random_int(IntType from, IntType thru)
 {
-    static std::uniform_int_distribution<IntType> d{};
-    using parm_t = typename decltype(d)::param_type;
-    return d(random_engine(), parm_t{from, --thru});
+	std::uniform_int_distribution<IntType> d{};
+	using parm_t = typename decltype(d)::param_type;
+	return d(random_engine(), parm_t{from, --thru});
 }
 
 /**
@@ -49,7 +49,7 @@ IntType random_int(IntType from, IntType thru)
 template <class FloatType = double>
 FloatType random_real(FloatType from, FloatType upto)
 {
-    static std::uniform_real_distribution<> d{};
-    using parm_t = decltype(d)::param_type;
-    return d(random_engine(), parm_t{from, upto});
+	std::uniform_real_distribution<> d{};
+	using parm_t = decltype(d)::param_type;
+	return d(random_engine(), parm_t{from, upto});
 }
