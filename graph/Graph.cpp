@@ -138,7 +138,8 @@ neighbor_const_iterator Graph::get_neighbor(vertex_t from, vertex_t to) const
 	}
 	else
 	{
-		return std::find_if(m_graph[from].begin(), m_graph[from].begin(), [to](auto& N) {
+		return std::find_if(m_graph[from].begin(), m_graph[from].end(), [to](auto& N) 
+		{
 			return vertex_t(N) == to;
 		});
 	}
@@ -151,8 +152,10 @@ weight_t Graph::edge_value(vertex_t from, vertex_t to) const
 
 	auto neigh = get_neighbor(from, to);
 
-	if (neigh == neighbors(from).end() || *neigh != to)
+	if (neigh == neighbors(from).end() || vertex_t(*neigh) != to)
+	{
 		return 0;
+	}
 
 	return neigh->weight();
 }

@@ -5,83 +5,7 @@
 #include <sstream>
 #include <unordered_map>
 
-inline std::ostream& operator<<(std::ostream& os, const sf::Keyboard::Key& key)
-{
-	// Handle special cases
-	switch (key)
-	{
-	case sf::Keyboard::Return:
-		os << "Enter";
-		break;
-
-	case sf::Keyboard::Space:
-		os << "Space";
-		break;
-
-	case sf::Keyboard::Comma:
-		os << ",";
-		break;
-
-	case sf::Keyboard::Period:
-		os << ".";
-		break;
-
-	case sf::Keyboard::LBracket: 
-		os << '{';
-		break;
-
-	case sf::Keyboard::RBracket:
-		os << '}';
-		break;
-
-	case sf::Keyboard::Tab:
-		os << "Tab";
-		break;
-
-	case sf::Keyboard::Add: 
-		os << '+';
-		break;
-
-	case sf::Keyboard::Subtract:
-		os << '-';
-		break;
-
-	case sf::Keyboard::Dash:
-		os << '-';
-		break;
-
-	default:
-		break;
-	}
-
-	// Handle all letters
-	if (sf::Keyboard::A <= key && key <= sf::Keyboard::Z)
-	{
-		os << static_cast<char>('A' + static_cast<char>(key));
-		return os;
-	}
-
-	// Handle F-keys
-	if (sf::Keyboard::F1 <= key && key <= sf::Keyboard::F15)
-	{
-		os << 'F' << 1 + key - sf::Keyboard::F1;
-		return os;
-	}
-
-	if (sf::Keyboard::Num0 <= key && key <= sf::Keyboard::Num9)
-	{
-		os << key - sf::Keyboard::Num0;
-		return os;
-	}
-
-	if (sf::Keyboard::Numpad0 <= key && key <= sf::Keyboard::Numpad0)
-	{
-		os << "Numpad" << key - sf::Keyboard::Numpad0;
-		return os;
-	}
-
-	return os;
-}
+inline std::ostream& operator<<(std::ostream& os, const sf::Keyboard::Key& key);
 
 enum class ShapeType
 {
@@ -393,4 +317,82 @@ void GUIPanel::Render(C& client)
 		client.Render(element->GetString(), P, element->color, TextSize);
 		++num;
 	}
+}
+
+inline std::ostream& operator<<(std::ostream& os, const sf::Keyboard::Key& key)
+{
+	// Handle special cases
+	switch (key)
+	{
+	case sf::Keyboard::Return:
+		os << "Enter";
+		break;
+
+	case sf::Keyboard::Space:
+		os << "Space";
+		break;
+
+	case sf::Keyboard::Comma:
+		os << ",";
+		break;
+
+	case sf::Keyboard::Period:
+		os << ".";
+		break;
+
+	case sf::Keyboard::LBracket:
+		os << '{';
+		break;
+
+	case sf::Keyboard::RBracket:
+		os << '}';
+		break;
+
+	case sf::Keyboard::Tab:
+		os << "Tab";
+		break;
+
+	case sf::Keyboard::Add:
+		os << '+';
+		break;
+
+	case sf::Keyboard::Subtract:
+		os << '-';
+		break;
+
+	case sf::Keyboard::Dash:
+		os << '-';
+		break;
+
+	default:
+		break;
+	}
+
+	// Handle all letters
+	if (sf::Keyboard::A <= key && key <= sf::Keyboard::Z)
+	{
+		os << static_cast<char>('A' + static_cast<char>(key));
+		return os;
+	}
+
+	// Handle F-keys
+	if (sf::Keyboard::F1 <= key && key <= sf::Keyboard::F15)
+	{
+		os << 'F' << 1 + key - sf::Keyboard::F1;
+		return os;
+	}
+
+	if (sf::Keyboard::Num0 <= key && key <= sf::Keyboard::Num9)
+	{
+		os << key - sf::Keyboard::Num0;
+		return os;
+	}
+
+	if (sf::Keyboard::Numpad0 <= key && key <= sf::Keyboard::Numpad0)
+	{
+		os << "Numpad" << key - sf::Keyboard::Numpad0;
+		return os;
+	}
+
+	return os;
 }

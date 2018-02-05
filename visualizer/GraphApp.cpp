@@ -11,8 +11,41 @@ GraphApp::GraphApp(const string& name) : Base(name), P()
 
 	CreateGUI();
 
-// 	vertex_colors[0] = sf::Color::White;
-// 	vertex_colors[1].g /= 2;
+	auto& A = CreateAnimation();
+
+	for (int i = 0; i < 100; ++i)
+	{
+		A.AddScene<unsigned char>(vertex_colors[0].g, 0, 255, 1.0);
+		A.AddScene<unsigned char>(vertex_colors[0].g, 255, 0, 1.0);
+	}
+
+	auto& B = CreateAnimation();
+
+	for (int i = 0; i < 100; ++i)
+	{
+		B.AddScene(vertex_colors[1], sf::Color::Yellow, sf::Color::Red, 0.5);
+		B.AddScene(vertex_colors[1], sf::Color::Red, sf::Color::Yellow, 0.5);
+	}
+
+	auto& C = CreateAnimation();
+
+	for (int i = 0; i < 100; ++i)
+	{
+		C.AddScene(vertex_colors[2], sf::Color::Green, sf::Color::Blue, 0.4);
+		C.AddScene(vertex_colors[2], sf::Color::Blue, sf::Color::Green, 0.4);
+	}
+
+	auto& D = CreateAnimation();
+
+	for (int i = 0; i < 100; ++i)
+	{
+		auto E = Graph::Edge(0, 1);
+		D.AddScene(edge_colors[E], sf::Color::Magenta, sf::Color::Cyan, 0.47);
+		D.AddScene(edge_colors[E], sf::Color::Cyan, sf::Color::Magenta, 0.47);
+	}
+
+	// 	vertex_colors[0] = sf::Color::White;
+	// 	vertex_colors[1].g /= 2;
 }
 
 void GraphApp::CreateGUI()
@@ -121,7 +154,7 @@ void GraphApp::DrawGraph()
 {
 	for (auto e : P.edges())
 	{
-		Base::Render(Segment(P[e.from], P[e.to]), default_edge_color, edge_thickness);
+		Base::Render(Segment(P[e.from], P[e.to]), edge_colors(e), edge_thickness);
 	}
 
 	for (auto v : P.vertices())

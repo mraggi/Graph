@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Animator.hpp"
 #include "GUIPanel.hpp"
 #include "Geometry/AllConvex.hpp"
 #include "RichText.hpp"
@@ -74,6 +75,13 @@ public:
 	void Render(const string& filename, const FConvex& conv, real angle = 0);
 
 	void Render(const string& txt, const Point& point, const sf::Color& color, int size);
+
+	Animation& CreateAnimation()
+	{
+		m_animations.emplace_back(new Animation);
+		return (*m_animations.back());
+	}
+
 	/// *************** End Geometry rendering
 private:
 	void Update(real time) { underlying().Update(time); }
@@ -170,7 +178,10 @@ private:
 	real fps{60.0};
 
 	real time_dilation{1.0};
-};
+
+	std::vector<std::unique_ptr<Animation>> m_animations;
+
+}; // class client definition
 
 inline std::ostream& operator<<(std::ostream& os, const sf::Keyboard::Key& rhs);
 
@@ -215,20 +226,22 @@ Client<Derived>::Client(const string& Name)
 	GUI.AddController(
 	  time_dilation, "Time Dilation", 0.1, sf::Keyboard::Comma, sf::Keyboard::Period, orange);
 
-	GUI.AddAction("Change font", sf::Keyboard::F1, [this]()
-	{
-		static int font = 0;
-		
-		++font;
-		if (font == 3)
-			font = 0;
-		if (font == 0)
-			m_Font.loadFromFile("font.ttf");
-		else if (font == 1)
-			m_Font.loadFromFile("font-mono.ttf");
-		else
-			m_Font.loadFromFile("font-serif.ttf");
-	}, orange);
+	GUI.AddAction("Change font",
+				  sf::Keyboard::F1,
+				  [this]() {
+					  static int font = 0;
+
+					  ++font;
+					  if (font == 3)
+						  font = 0;
+					  if (font == 0)
+						  m_Font.loadFromFile("font.ttf");
+					  else if (font == 1)
+						  m_Font.loadFromFile("font-mono.ttf");
+					  else
+						  m_Font.loadFromFile("font-serif.ttf");
+				  },
+				  orange);
 	GUI.AddSpacer();
 }
 
@@ -310,6 +323,9 @@ void Client<Derived>::ClientUpdate(real time)
 
 	Update(time);
 	UpdateGUIPanel(time);
+
+	for (auto& A : m_animations)
+		A->Update(time);
 
 } // end update
 

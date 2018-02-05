@@ -88,7 +88,10 @@ T reduce_fraction(Container Numerator, Container Denominator)
 	return result;
 }
 
-template <class Key, class Value, class Map = std::unordered_map<Key, Value>>
+template <class Key,
+		  class Value,
+		  class Hash = std::hash<Key>,
+		  class Map  = std::unordered_map<Key, Value, Hash>>
 class map_with_default : public Map
 {
 

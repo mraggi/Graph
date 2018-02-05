@@ -60,7 +60,13 @@ public:
 		return &GA;
 	}
 
-	map_with_default<vertex_t, sf::Color> vertex_colors{default_vertex_color};
+	struct edge_hash
+	{
+		size_t operator()(const Graph::Edge& E) const { return E.from + (size_t(1) << 32) * E.to; }
+	};
+
+	map_with_default<vertex_t, sf::Color>				vertex_colors{default_vertex_color};
+	map_with_default<Graph::Edge, sf::Color, edge_hash> edge_colors{default_edge_color};
 
 private:
 	PhysicalGraph P;
