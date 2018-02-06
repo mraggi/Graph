@@ -24,6 +24,8 @@ private:
 	Client(const string& Name = "Window"); // Standard way to do CRTP
 
 public:
+	using animation = Animation<Client<Derived>>;
+
 	GUIPanel GUI;
 
 	sf::View* View() { return &m_View; }
@@ -76,16 +78,15 @@ public:
 
 	void Render(const string& txt, const Point& point, const sf::Color& color, int size);
 
-	Animation& CreateAnimation()
+	animation& CreateAnimation(bool pause_after_every_scene = false)
 	{
-		m_animations.emplace_back(new Animation);
+		m_animations.emplace_back(new animation(this, pause_after_every_scene));
 		return (*m_animations.back());
 	}
 
 	/// *************** End Geometry rendering
 private:
 	void Update(real time) { underlying().Update(time); }
-	void UpdateGUIPanel(real time);
 
 	void RenderWorld() { underlying().RenderWorld(); }
 	void RenderGUIPanel() { underlying().RenderGUIPanel(); }
@@ -179,7 +180,7 @@ private:
 
 	real time_dilation{1.0};
 
-	std::vector<std::unique_ptr<Animation>> m_animations;
+	std::vector<std::unique_ptr<animation>> m_animations;
 
 }; // class client definition
 
@@ -242,6 +243,12 @@ Client<Derived>::Client(const string& Name)
 						  m_Font.loadFromFile("font-serif.ttf");
 				  },
 				  orange);
+	GUI.AddAction("Animation step", sf::Keyboard::Space, [this]() {
+		for (auto& a : m_animations)
+		{
+			a->Play();
+		}
+	});
 	GUI.AddSpacer();
 }
 
@@ -322,7 +329,7 @@ void Client<Derived>::ClientUpdate(real time)
 	m_Camera.Translate(velocity);
 
 	Update(time);
-	UpdateGUIPanel(time);
+	GUI.Update(time);
 
 	for (auto& A : m_animations)
 		A->Update(time);
@@ -715,13 +722,6 @@ void Client<Derived>::Render(const Convex& conv, const sf::Color& color, int thi
 
 		return;
 	}
-}
-
-template <class Derived>
-void Client<Derived>::UpdateGUIPanel(real time)
-{
-	// 	GUI.m_iLastWatchedVarThisRound	= 0;
-	// 	GUI.m_iLastWatchedStringThisRound = 0;
 }
 
 template <class Derived>

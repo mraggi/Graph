@@ -104,22 +104,16 @@ bool Graph::is_neighbor(vertex_t from, vertex_t to) const
 
 neighbor_iterator Graph::get_neighbor(vertex_t from, vertex_t to)
 {
+	auto first = m_graph[from].begin();
+	auto last  = m_graph[from].end();
+
 	if (m_neighbors_sorted)
 	{
-		auto it = std::partition_point(m_graph[from].begin(),
-									   m_graph[from].end(),
-									   [to](const vertex_t& a) { return vertex_t(a) < to; });
-
-		if (it == m_graph[from].end() || *it != to)
-			return m_graph[from].end();
-
-		return it;
+		return find_binary(first, last, to);
 	}
 	else
 	{
-		return std::find_if(m_graph[from].begin(), m_graph[from].begin(), [to](auto& N) {
-			return vertex_t(N) == to;
-		});
+		return std::find(first, last, to);
 	}
 }
 
@@ -138,10 +132,8 @@ neighbor_const_iterator Graph::get_neighbor(vertex_t from, vertex_t to) const
 	}
 	else
 	{
-		return std::find_if(m_graph[from].begin(), m_graph[from].end(), [to](auto& N) 
-		{
-			return vertex_t(N) == to;
-		});
+		return std::find_if(
+		  m_graph[from].begin(), m_graph[from].end(), [to](auto& N) { return vertex_t(N) == to; });
 	}
 }
 

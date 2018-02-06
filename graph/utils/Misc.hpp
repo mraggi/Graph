@@ -121,3 +121,50 @@ public:
 private:
 	Value m_default;
 };
+
+template <class Key,
+		  class Value,
+		  class Hash = std::hash<Key>,
+		  class Map  = std::unordered_map<Key, Value, Hash>>
+class map_with_default_by_ref : public Map
+{
+
+public:
+	// 	using Base = typename Map;
+	map_with_default_by_ref(const Value& default_value) : m_default(default_value) {}
+
+	Value operator()(const Key& key) const
+	{
+		auto it = Map::find(key);
+		if (it == Map::end())
+			return m_default;
+		return it->second;
+	}
+
+	Value& operator[](const Key& key)
+	{
+		auto it = Map::find(key);
+		if (it == Map::end())
+		{
+			Map::		operator[](key) = m_default;
+			return Map::operator[](key);
+		}
+		return it->second;
+	}
+
+	void set_default(const Value& new_value) { m_default = new_value; }
+
+private:
+	const Value& m_default;
+};
+
+template <class Iter, class T>
+Iter find_binary(const Iter& first, const Iter& last, const T& t)
+{
+	auto it = std::lower_bound(first, last, t);
+
+	if (it == last || *it != t)
+		return last;
+
+	return it;
+}

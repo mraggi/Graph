@@ -23,6 +23,10 @@ Graph Petersen()
 				 {6, 9},
 				 {7, 9}});
 
+	G.sort_neighbors();
+
 	return G;
 }
+
+// Fill here the cycle, path, complete and random graph.
 }

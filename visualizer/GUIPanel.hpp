@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Geometry/AllConvex.hpp"
+#include "MessageBox.hpp"
 #include <SFML/Graphics.hpp>
 #include <sstream>
 #include <unordered_map>
@@ -220,9 +221,21 @@ public:
 
 	std::string AvailableShortcuts() const;
 
+	void Update(real time) { m_message_box.Update(time); }
+
+	void
+	AddMessage(const string& s = "", const sf::Color& c = sf::Color::White, real duration = 5.0)
+	{
+		m_message_box.AddMessage(s, c, duration);
+	}
+
+	void AddMessage(const Message& M) { m_message_box.AddMessage(M); }
+
 private:
 	std::vector<std::unique_ptr<GuiElement>>						gui_elements;
 	std::unordered_map<sf::Keyboard::Key, std::vector<GuiElement*>> shortcuts;
+
+	MessageBox m_message_box;
 
 	Circle GetCircle(int num);
 	Box	GetBox(int num);
@@ -317,6 +330,7 @@ void GUIPanel::Render(C& client)
 		client.Render(element->GetString(), P, element->color, TextSize);
 		++num;
 	}
+	m_message_box.Render(client);
 }
 
 inline std::ostream& operator<<(std::ostream& os, const sf::Keyboard::Key& key)

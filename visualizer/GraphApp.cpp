@@ -11,41 +11,32 @@ GraphApp::GraphApp(const string& name) : Base(name), P()
 
 	CreateGUI();
 
-	auto& A = CreateAnimation();
+	auto start_edge_color   = default_edge_color;
+	auto new_edge_color		= sf::Color::Green;
+	auto start_vertex_color = default_vertex_color;
+	auto new_vertex_color   = sf::Color::Red;
 
-	for (int i = 0; i < 100; ++i)
-	{
-		A.AddScene<unsigned char>(vertex_colors[0].g, 0, 255, 1.0);
-		A.AddScene<unsigned char>(vertex_colors[0].g, 255, 0, 1.0);
-	}
+	auto& A = CreateAnimation(true);
+	A.SetLoop(true);
+
+	auto t = A.AddScene(default_edge_color, start_edge_color, new_edge_color, 5.0);
+	t->SetStartMessage("Changing color!", new_edge_color);
+	t->SetFinishMessage("Finished changing color!", new_edge_color);
+
+	auto r = A.AddScene(default_edge_color, new_edge_color, start_edge_color, 5.0);
+
+	r->SetStartMessage("Going back!", start_edge_color);
+	r->SetFinishMessage("Finished going back!", start_edge_color);
+
+	auto& A2 = CreateAnimation(true);
+	A2.SetLoop(true);
+	A2.AddScene(default_vertex_color, start_vertex_color, new_vertex_color, 5.0);
+	A2.AddScene(default_vertex_color, new_vertex_color, start_vertex_color, 5.0);
 
 	auto& B = CreateAnimation();
-
-	for (int i = 0; i < 100; ++i)
-	{
-		B.AddScene(vertex_colors[1], sf::Color::Yellow, sf::Color::Red, 0.5);
-		B.AddScene(vertex_colors[1], sf::Color::Red, sf::Color::Yellow, 0.5);
-	}
-
-	auto& C = CreateAnimation();
-
-	for (int i = 0; i < 100; ++i)
-	{
-		C.AddScene(vertex_colors[2], sf::Color::Green, sf::Color::Blue, 0.4);
-		C.AddScene(vertex_colors[2], sf::Color::Blue, sf::Color::Green, 0.4);
-	}
-
-	auto& D = CreateAnimation();
-
-	for (int i = 0; i < 100; ++i)
-	{
-		auto E = Graph::Edge(0, 1);
-		D.AddScene(edge_colors[E], sf::Color::Magenta, sf::Color::Cyan, 0.47);
-		D.AddScene(edge_colors[E], sf::Color::Cyan, sf::Color::Magenta, 0.47);
-	}
-
-	// 	vertex_colors[0] = sf::Color::White;
-	// 	vertex_colors[1].g /= 2;
+	B.SetLoop(true);
+	B.AddScene(vertex_colors[0], sf::Color::Red, sf::Color::Yellow, 1.0);
+	B.AddScene(vertex_colors[0], sf::Color::Yellow, sf::Color::Red, 1.0);
 }
 
 void GraphApp::CreateGUI()
@@ -126,6 +117,10 @@ void GraphApp::CreateGUI()
 	GUI.AddSpacer();
 
 	GUI.AddText("Available Shortcuts: " + GUI.AvailableShortcuts(), sf::Color(50, 50, 50));
+
+	GUI.AddAction("Print Message", sf::Keyboard::Tab, [this]() {
+		GUI.AddMessage("Hola mundo!", sf::Color::Red);
+	});
 }
 
 void GraphApp::Update(real time)

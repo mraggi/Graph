@@ -118,6 +118,50 @@ TEST(Graph, MakeSimple)
 	}
 }
 
+TEST(Graph, GetNeighbor)
+{
+	// 	Graph G = graphs::RandomGraph(20,0.5);
+
+	Graph G = graphs::Petersen();
+	G.add_edges({{1, 0}, {0, 2}, {2, 4}, {3, 5}, {3, 1}, {8, 4}, {1, 9}});
+
+	for (auto v : G.vertices())
+	{
+		for (auto u : G.vertices())
+		{
+			auto it = G.get_neighbor(u, v);
+			if (G.is_neighbor(u, v))
+			{
+				ASSERT_EQ(*it, v);
+			}
+			else
+			{
+				ASSERT_EQ(it, G.neighbors(u).end());
+			}
+		}
+	}
+
+	auto sortedG = G;
+
+	sortedG.sort_neighbors();
+
+	for (auto v : sortedG.vertices())
+	{
+		for (auto u : sortedG.vertices())
+		{
+			auto it = sortedG.get_neighbor(u, v);
+			if (sortedG.is_neighbor(u, v))
+			{
+				ASSERT_EQ(*it, v);
+			}
+			else
+			{
+				ASSERT_EQ(it, sortedG.neighbors(u).end());
+			}
+		}
+	}
+}
+
 TEST(Graph, PetersenGraph)
 {
 	auto G = graphs::Petersen();
