@@ -54,10 +54,10 @@ public:
 
 	void FitGraphToScreen();
 
-	static GraphApp* GlobalInstance()
+	static GraphApp& GlobalInstance()
 	{
 		static GraphApp GA("Graph");
-		return &GA;
+		return GA;
 	}
 
 	struct edge_hash
@@ -89,4 +89,4 @@ private:
 	int num_verts{0};
 };
 
-#define APP (*GraphApp::GlobalInstance())
+#define APP (GraphApp::GlobalInstance())

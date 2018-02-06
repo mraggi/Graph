@@ -225,7 +225,7 @@ Client<Derived>::Client(const string& Name)
 	GUI.AddWatcher(fps, "FPS", orange);
 
 	GUI.AddController(
-	  time_dilation, "Time Dilation", 0.1, sf::Keyboard::Comma, sf::Keyboard::Period, orange);
+	  time_dilation, "Time scale", 0.1, sf::Keyboard::Comma, sf::Keyboard::Period, orange);
 
 	GUI.AddAction("Change font",
 				  sf::Keyboard::F1,
@@ -243,12 +243,15 @@ Client<Derived>::Client(const string& Name)
 						  m_Font.loadFromFile("font-serif.ttf");
 				  },
 				  orange);
-	GUI.AddAction("Animation step", sf::Keyboard::Space, [this]() {
-		for (auto& a : m_animations)
-		{
-			a->Play();
-		}
-	});
+	GUI.AddAction("Animation step",
+				  sf::Keyboard::Space,
+				  [this]() {
+					  for (auto& a : m_animations)
+					  {
+						  a->Play();
+					  }
+				  },
+				  orange);
 	GUI.AddSpacer();
 }
 
