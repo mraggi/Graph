@@ -2,14 +2,11 @@
 #include "GraphApp.hpp"
 #include "Misc.hpp"
 #include "Probability.hpp"
-
 using namespace std;
 
 int main()
 {
-    GraphApp app;
-	
-	app.Run();
+	APP.Run();
 
-    return 0;
+	return 0;
 }

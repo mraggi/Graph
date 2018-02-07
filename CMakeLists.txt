@@ -48,12 +48,13 @@ if (${BUILD_VISUALIZER})
 	add_library(geometry ${GEOMETRY_FILES})
 	
 	add_executable(visualizer 	visualizer/main.cpp
-								visualizer/GUI.cpp
+								visualizer/GUIPanel.cpp
 								visualizer/RichText.cpp
 								visualizer/GraphApp.cpp
 								visualizer/PhysicalGraph.cpp)
 								
 	target_link_libraries(visualizer graph geometry sfml-window sfml-graphics sfml-system)
-# 	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/SourceCodePro-Regular.ttf ${CMAKE_CURRENT_BINARY_DIR}/font.ttf COPYONLY)
+	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/SourceCodePro-Regular.ttf ${CMAKE_CURRENT_BINARY_DIR}/font-mono.ttf COPYONLY)
 	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Lato-Medium.ttf ${CMAKE_CURRENT_BINARY_DIR}/font.ttf COPYONLY)
+	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/NotoSerif-Regular.ttf ${CMAKE_CURRENT_BINARY_DIR}/font-serif.ttf COPYONLY)
 endif()

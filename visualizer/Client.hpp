@@ -1,27 +1,33 @@
 #pragma once
 
-#include "GUI.hpp"
+#include "Animator.hpp"
+#include "GUIPanel.hpp"
 #include "Geometry/AllConvex.hpp"
 #include "RichText.hpp"
 #include "TimeHelpers.hpp"
 #include <SFML/Graphics.hpp>
 
-class GUI;
+class GUIPanel;
 
 const real CameraMoveSpeed = 0.25;
 const real CameraZoomSpeed = 0.12;
 
 const int ColorDepth   = 24;
 const int AntiAliasing = 8;
-const int Stencil      = 8;
+const int Stencil	  = 8;
 
-template <class Derived> 
+template <class Derived>
 class Client
 {
+private:
 	friend Derived;
-	Client(const string& Name = "Window");
+	Client(const string& Name = "Window"); // Standard way to do CRTP
 
 public:
+	using animation = Animation<Client<Derived>>;
+
+	GUIPanel GUI;
+
 	sf::View* View() { return &m_View; }
 
 	void Run();
@@ -40,16 +46,16 @@ public:
 	void Render(const Point& origin, const sf::Color& color = sf::Color::Blue, int thickness = 5);
 
 	void Render(const Segment&   A,
-	            const sf::Color& color     = sf::Color::Green,
-	            int              thickness = 1,
-	            bool             directed  = false);
+				const sf::Color& color	 = sf::Color::Green,
+				int				 thickness = 1,
+				bool			 directed  = false);
 
 	void Render(const Circle& circle, const sf::Color& color = sf::Color::Red, int thickness = 2);
 
-	void Render(const Circle&    circle,
-	            const sf::Color& fillcolor,
-	            const sf::Color& outlinecolor,
-	            int              thickness = 2);
+	void Render(const Circle&	circle,
+				const sf::Color& fillcolor,
+				const sf::Color& outlinecolor,
+				int				 thickness = 2);
 
 	void Render(const VP& polygon, const sf::Color& color = sf::Color::Magenta, int thickness = 1);
 
@@ -61,25 +67,31 @@ public:
 	void Render(const Ray& ray, const sf::Color& color = sf::Color::Yellow, int thickness = 1);
 
 	void Render(const Box& box, const sf::Color& color = sf::Color::Cyan, int thickness = 1);
-	void Render(const Box& box, const sf::Color& fillcolor, const sf::Color& outlinecolor, int thickness = 0);
+	void Render(const Box&		 box,
+				const sf::Color& fillcolor,
+				const sf::Color& outlinecolor,
+				int				 thickness = 0);
 
 	void Render(const Convex& conv, const sf::Color& color = sf::Color::White, int thickness = 1);
 
 	void Render(const string& filename, const FConvex& conv, real angle = 0);
 
-	void Render(const string&    txt,
-	            const Point&     point = Point(0, 0),
-	            const sf::Color& color = sf::Color::White,
-	            int              size  = 30);
+	void Render(const string& txt, const Point& point, const sf::Color& color, int size);
+
+	animation& CreateAnimation(bool pause_after_every_scene = false)
+	{
+		m_animations.emplace_back(new animation(this, pause_after_every_scene));
+		return (*m_animations.back());
+	}
+
 	/// *************** End Geometry rendering
 private:
 	void Update(real time) { underlying().Update(time); }
-	void UpdateGUI(real time);
 
 	void RenderWorld() { underlying().RenderWorld(); }
-	void RenderGUI() { underlying().RenderGUI(); }
+	void RenderGUIPanel() { underlying().RenderGUIPanel(); }
 
-	void ClientRenderGUI();
+	void ClientRenderGUIPanel();
 
 	// ********** EVENT HANDLING
 
@@ -102,19 +114,19 @@ private:
 	void OnMouseMoved() { underlying().OnMouseMoved(); }
 
 	void Resize(real w, real h);
-	
+
 	void FixAspectRatio()
 	{
-		real r = WindowWidth()/WindowHeight();
-		if (m_Camera.Width()/m_Camera.Height() > r)
+		real r = WindowWidth() / WindowHeight();
+		if (m_Camera.Width() / m_Camera.Height() > r)
 		{
-			m_Camera.SetHeight(m_Camera.Width()/r);
-		} else
+			m_Camera.SetHeight(m_Camera.Width() / r);
+		}
+		else
 		{
-			m_Camera.SetWidth(r*m_Camera.Height());
+			m_Camera.SetWidth(r * m_Camera.Height());
 		}
 	}
-	
 
 public:
 	void ClearScreen() { m_Window.clear(); }
@@ -122,8 +134,8 @@ public:
 
 	void SetGuiView()
 	{
-		sf::View GUIView(sf::FloatRect(0.0, 0.0, WindowWidth(), WindowHeight()));
-		m_Window.setView(GUIView);
+		sf::View GUIPanelView(sf::FloatRect(0.0, 0.0, WindowWidth(), WindowHeight()));
+		m_Window.setView(GUIPanelView);
 	}
 
 	void SetWorldView() { m_Window.setView(m_View); }
@@ -148,22 +160,29 @@ private:
 	Client(const Client& rhs) = delete;
 	Client& operator=(const Client& rhs) = delete;
 
+	void ToggleFullScreen();
+
 	Point m_vMousePosition;
 
 	sf::RenderWindow m_Window;
-	sf::View         m_View;
-	Box              m_Camera;
+	sf::View		 m_View;
+	Box				 m_Camera;
 
 	sf::Font m_Font;
-	bool     m_bShouldClose;
+	bool	 m_bShouldClose;
 
-	Derived&       underlying()       { return static_cast<Derived&>(*this); }
+	Derived&	   underlying() { return static_cast<Derived&>(*this); }
 	Derived const& underlying() const { return static_cast<Derived const&>(*this); }
 
-	const string& m_title;
-	Circle GetCircle(int num);
-	Box GetBox(int num);
-};
+	string m_title;
+
+	real fps{60.0};
+
+	real time_dilation{1.0};
+
+	std::vector<std::unique_ptr<animation>> m_animations;
+
+}; // class client definition
 
 inline std::ostream& operator<<(std::ostream& os, const sf::Keyboard::Key& rhs);
 
@@ -171,9 +190,9 @@ template <class Derived>
 Client<Derived>::Client(const string& Name)
 	: m_vMousePosition(0, 0)
 	, m_Window(sf::VideoMode::getDesktopMode(),
-	           Name,
-	           sf::Style::Close | sf::Style::Resize | sf::Style::Titlebar,
-	           sf::ContextSettings(ColorDepth, Stencil, AntiAliasing))
+			   Name,
+			   sf::Style::Close | sf::Style::Resize | sf::Style::Titlebar,
+			   sf::ContextSettings(ColorDepth, Stencil, AntiAliasing))
 	, m_View()
 	, m_Camera(Point(0, 0), Point(800, 600))
 	, m_Font()
@@ -195,16 +214,49 @@ Client<Derived>::Client(const string& Name)
 	SynchronizeCameraWithView();
 
 	SetWorldView();
-	m_Camera.Translate({ -double(width) / 8, -double(height) / 4});
+	m_Camera.Translate({-double(width) / 8, -double(height) / 4});
 	m_Camera.Scale(1.8);
 
 	SynchronizeCameraWithView();
 
-	m_vMousePosition = m_Window.mapPixelToCoords(sf::Mouse::getPosition(m_Window), m_View);
+	sf::Color orange(255, 150, 0);
 
+	m_vMousePosition = m_Window.mapPixelToCoords(sf::Mouse::getPosition(m_Window), m_View);
+	GUI.AddWatcher(fps, "FPS", orange);
+
+	GUI.AddController(
+	  time_dilation, "Time scale", 0.1, sf::Keyboard::Comma, sf::Keyboard::Period, orange);
+
+	GUI.AddAction("Change font",
+				  sf::Keyboard::F1,
+				  [this]() {
+					  static int font = 0;
+
+					  ++font;
+					  if (font == 3)
+						  font = 0;
+					  if (font == 0)
+						  m_Font.loadFromFile("font.ttf");
+					  else if (font == 1)
+						  m_Font.loadFromFile("font-mono.ttf");
+					  else
+						  m_Font.loadFromFile("font-serif.ttf");
+				  },
+				  orange);
+	GUI.AddAction("Animation step",
+				  sf::Keyboard::Space,
+				  [this]() {
+					  for (auto& a : m_animations)
+					  {
+						  a->Play();
+					  }
+				  },
+				  orange);
+	GUI.AddSpacer();
 }
 
-template <class Derived> void Client<Derived>::Run()
+template <class Derived>
+void Client<Derived>::Run()
 {
 	cout << "Starting client" << endl;
 
@@ -221,7 +273,6 @@ template <class Derived> void Client<Derived>::Run()
 	Chronometer fps_clock;
 	Chronometer render_clock;
 
-	real fps       = 60;
 	long numframes = 0;
 
 	const int fps_numframes_before_reset = 30;
@@ -230,14 +281,12 @@ template <class Derived> void Client<Derived>::Run()
 	{
 		if (fps_clock.Peek() > 0.5)
 		{
-			fps       = numframes / fps_clock.Reset();
+			fps		  = numframes / fps_clock.Reset();
 			numframes = 0;
 		}
 
-		PA.Watch(fps, "FPS", sf::Color(255, 150, 50));
-
 		double frame_time = main_clock.Reset();
-		ClientUpdate(frame_time);
+		ClientUpdate(frame_time * time_dilation);
 
 		if (render_clock.Peek() > 1.0 / 60.0)
 		{
@@ -249,7 +298,8 @@ template <class Derived> void Client<Derived>::Run()
 	}
 }
 
-template <class Derived> void Client<Derived>::ClientUpdate(real time)
+template <class Derived>
+void Client<Derived>::ClientUpdate(real time)
 {
 	m_vMousePosition = m_Window.mapPixelToCoords(sf::Mouse::getPosition(m_Window), m_View);
 
@@ -282,11 +332,15 @@ template <class Derived> void Client<Derived>::ClientUpdate(real time)
 	m_Camera.Translate(velocity);
 
 	Update(time);
-	UpdateGUI(time);
+	GUI.Update(time);
+
+	for (auto& A : m_animations)
+		A->Update(time);
 
 } // end update
 
-template <class Derived> void Client<Derived>::ClientRender()
+template <class Derived>
+void Client<Derived>::ClientRender()
 {
 	ClearScreen();
 
@@ -297,15 +351,13 @@ template <class Derived> void Client<Derived>::ClientRender()
 
 	SetGuiView();
 
-	RenderGUI();
-	ClientRenderGUI();
+	RenderGUIPanel();
+	ClientRenderGUIPanel();
 
 	DisplayScreen();
 }
 
-
-
-template <class Derived> 
+template <class Derived>
 void Client<Derived>::SynchronizeCameraWithView()
 {
 	m_View.setCenter(m_Camera.Position());
@@ -313,46 +365,58 @@ void Client<Derived>::SynchronizeCameraWithView()
 }
 
 /************************************* START KEY EVENTS */
-template <class Derived> void Client<Derived>::ClientOnKeyPress(sf::Keyboard::Key key)
+template <class Derived>
+void Client<Derived>::ClientOnKeyPress(sf::Keyboard::Key key)
 {
-	PA.HandleKeyPress(key);
+	GUI.HandleKeyPress(key);
 	OnKeyPress(key);
 }
 
-template <class Derived> void Client<Derived>::ClientOnKeyRelease(sf::Keyboard::Key key)
+template <class Derived>
+void Client<Derived>::ToggleFullScreen()
+{
+	static bool fullscreen = false;
+
+	real w = sf::VideoMode::getDesktopMode().width;
+	real h = sf::VideoMode::getDesktopMode().height;
+
+	Resize(w, h);
+
+	std::cout << "Done resizing" << endl;
+
+	m_Window.close();
+
+	if (!fullscreen)
+	{
+		cout << "Creating window..." << endl;
+		cout << "Title: " << m_title << endl;
+		m_Window.create(sf::VideoMode::getFullscreenModes()[0],
+						m_title,
+						sf::Style::Fullscreen,
+						sf::ContextSettings(ColorDepth, Stencil, AntiAliasing));
+		cout << "Done!" << endl;
+		fullscreen = true;
+	}
+	else
+	{
+		m_Window.create(sf::VideoMode::getDesktopMode(),
+						m_title,
+						sf::Style::Close | sf::Style::Resize | sf::Style::Titlebar,
+						sf::ContextSettings(ColorDepth, Stencil, AntiAliasing));
+		fullscreen = false;
+	}
+}
+
+template <class Derived>
+void Client<Derived>::ClientOnKeyRelease(sf::Keyboard::Key key)
 {
 	switch (key)
 	{
 	// Exit
 	case sf::Keyboard::Escape:
+	{
 		Kill();
 		return;
-
-	// FullScreen
-	case sf::Keyboard::F:
-	{
-		static bool fullscreen = false;
-		real        w          = sf::VideoMode::getDesktopMode().width;
-		real        h          = sf::VideoMode::getDesktopMode().height;
-		Resize(w, h);
-		m_Window.close();
-
-		if (!fullscreen)
-		{
-			m_Window.create(sf::VideoMode::getFullscreenModes()[0],
-			                m_title,
-			                sf::Style::Fullscreen,
-			                sf::ContextSettings(ColorDepth, Stencil, AntiAliasing));
-			fullscreen = true;
-		}
-		else
-		{
-			m_Window.create(sf::VideoMode::getDesktopMode(),
-			                m_title,
-			                sf::Style::Close | sf::Style::Resize | sf::Style::Titlebar,
-			                sf::ContextSettings(ColorDepth, Stencil, AntiAliasing));
-			fullscreen = false;
-		}
 	}
 	break;
 
@@ -364,51 +428,27 @@ template <class Derived> void Client<Derived>::ClientOnKeyRelease(sf::Keyboard::
 }
 
 /******************************************** START MOUSE EVENTS */
-template <class Derived> 
+template <class Derived>
 void Client<Derived>::ClientOnMouseButtonRelease(sf::Mouse::Button btn)
 {
 	OnMouseButtonRelease(btn);
 }
 
-template <class Derived> 
+template <class Derived>
 void Client<Derived>::ClientOnMouseButtonPress(sf::Mouse::Button btn)
 {
-	int num = PA.m_WatchedVars.size() + PA.m_WatchedStrings.size();
-
-	for (auto& DV : PA.m_VFDb)
-	{
-		Circle O = GetCircle(num);
-		O.Scale(1.1);
-
-		if (O.Intersects(MousePositionScreen()))
-		{
-			(*DV.var) = !(*DV.var);
-		}
-
-		++num;
-	}
-	
-	num += PA.m_VFDi.size() + PA.m_VFDr.size();
-	++num;
-	
-	for (auto& btn : PA.m_buttons)
-	{
-		Box B = GetBox(num);
-		B.Scale(1.1);
-		if (B.Intersects(MousePositionScreen()))
-		{
-			btn->Activate();
-		}
-		++num;
-	}
+	GUI.HandleMousePress(MousePositionScreen(), btn);
 
 	OnMouseButtonPress(btn);
 }
 
-template <class Derived> 
-void Client<Derived>::ClientOnMouseMoved() { OnMouseMoved(); }
+template <class Derived>
+void Client<Derived>::ClientOnMouseMoved()
+{
+	OnMouseMoved();
+}
 
-template <class Derived> 
+template <class Derived>
 void Client<Derived>::ClientOnMouseWheelMoved(int delta)
 {
 	real scale = 1.0 - CameraZoomSpeed * delta;
@@ -417,7 +457,8 @@ void Client<Derived>::ClientOnMouseWheelMoved(int delta)
 	OnMouseWheelMoved(delta);
 }
 
-template <class Derived> void Client<Derived>::ClientOnEvent(const sf::Event& event)
+template <class Derived>
+void Client<Derived>::ClientOnEvent(const sf::Event& event)
 {
 	switch (event.type)
 	{
@@ -459,7 +500,8 @@ template <class Derived> void Client<Derived>::ClientOnEvent(const sf::Event& ev
 	}
 }
 
-template <class Derived> void Client<Derived>::Resize(real w, real h)
+template <class Derived>
+void Client<Derived>::Resize(real w, real h)
 {
 	// Save oldpos because SetWH changes the centre. Maybe fix that?
 	Point oldpos = m_Camera.Position();
@@ -473,7 +515,7 @@ template <class Derived> void Client<Derived>::Resize(real w, real h)
 template <class Derived>
 void Client<Derived>::Render(const Point& origin, const sf::Color& color, int thickness)
 {
-	real            radius = thickness;
+	real			radius = thickness;
 	sf::CircleShape circle(radius, 48);
 
 	circle.setPosition(origin.x - radius, origin.y - radius);
@@ -525,10 +567,10 @@ void Client<Derived>::Render(const Segment& A, const sf::Color& color, int thick
 }
 
 template <class Derived>
-void Client<Derived>::Render(const Circle&    circle,
-                             const sf::Color& fill,
-                             const sf::Color& outline,
-                             int              thickness)
+void Client<Derived>::Render(const Circle&	circle,
+							 const sf::Color& fill,
+							 const sf::Color& outline,
+							 int			  thickness)
 {
 	real  radius = circle.Radius();
 	Point origin = circle.Position();
@@ -586,9 +628,9 @@ template <class Derived>
 void Client<Derived>::Render(const Line& line, const sf::Color& color, int thickness)
 {
 	Render(Segment(line.Position() + line.Direction() * 100000,
-	               line.Position() - line.Direction() * 100000),
-	       color,
-	       thickness);
+				   line.Position() - line.Direction() * 100000),
+		   color,
+		   thickness);
 }
 
 template <class Derived>
@@ -604,7 +646,10 @@ void Client<Derived>::Render(const Box& box, const sf::Color& color, int thickne
 }
 
 template <class Derived>
-void Client<Derived>::Render(const Box& box, const sf::Color& fillcolor, const sf::Color& outlinecolor, int thickness)
+void Client<Derived>::Render(const Box&		  box,
+							 const sf::Color& fillcolor,
+							 const sf::Color& outlinecolor,
+							 int			  thickness)
 {
 	sf::RectangleShape rectangle(Point(box.Width(), box.Height()));
 	rectangle.move(box.UpLeft());
@@ -615,10 +660,10 @@ void Client<Derived>::Render(const Box& box, const sf::Color& fillcolor, const s
 }
 
 template <class Derived>
-void Client<Derived>::Render(const string&    txt,
-                             const Point&     point,
-                             const sf::Color& color,
-                             int              size)
+void Client<Derived>::Render(const string&	txt,
+							 const Point&	 point,
+							 const sf::Color& color,
+							 int			  size)
 {
 	sf::Text mytext(txt, m_Font, size);
 	mytext.setFillColor(color);
@@ -682,130 +727,8 @@ void Client<Derived>::Render(const Convex& conv, const sf::Color& color, int thi
 	}
 }
 
-template <class Derived> void Client<Derived>::UpdateGUI(real time)
+template <class Derived>
+void Client<Derived>::ClientRenderGUIPanel()
 {
-	PA.m_iLastWatchedVarThisRound    = 0;
-	PA.m_iLastWatchedStringThisRound = 0;
-}
-
-template <class Derived> 
-Circle Client<Derived>::GetCircle(int num)
-{
-	auto   txtseparation = GUI::TextSeparation;
-	auto   txtsize       = GUI::TextSize;
-	double r             = GUI::CheckboxRadius;
-	double height        = (0.5 + num) * txtseparation;
-	Point  O(2 + r, height);
-	return Circle(O, r);
-}
-
-template <class Derived> 
-Box Client<Derived>::GetBox(int num)
-{
-	auto   txtseparation = GUI::TextSeparation;
-	auto   txtsize       = GUI::TextSize;
-	double r             = GUI::CheckboxRadius;
-	double height        = (0.5 + num) * txtseparation;
-	Point  O(2 + r, height);
-	return Box(O, r, r);
-}
-
-
-
-template <class Derived> 
-void Client<Derived>::ClientRenderGUI()
-{
-	string hola;
-	size_t num = 0;
-
-	auto txtseparation = GUI::TextSeparation;
-	auto txtsize       = GUI::TextSize;
-
-	for (const auto& DV : PA.m_WatchedVars)
-	{
-		std::stringstream out;
-		out << DV.name << ": " << DV.var;
-		hola = out.str();
-
-		Render(hola, Point(2, num * txtseparation), DV.color, txtsize);
-		++num;
-	}
-
-	for (const auto& DV : PA.m_WatchedStrings)
-	{
-		Render(DV.name, Point(2, num * txtseparation), DV.color, txtsize);
-		++num;
-	}
-
-	for (const auto& DV : PA.m_VFDb)
-	{
-		Circle    O         = GetCircle(num);
-		sf::Color fillcolor = sf::Color::Transparent;
-		sf::Color outlinecolor(0, 100, 0);
-
-		if (*DV.var)
-			fillcolor = sf::Color::Green;
-
-		Render(O, fillcolor, outlinecolor, 2);
-		std::stringstream out;
-		out << DV.name << " [" << DV.increaseKey << "]";
-		hola = out.str();
-		Render(hola, Point(8 + 2 * O.Radius(), num * txtseparation), DV.color, txtsize);
-		++num;
-	}
-
-	for (const auto& DV : PA.m_VFDi)
-	{
-		std::stringstream out;
-		out << DV.name << " [" << DV.decreaseKey << "/" << DV.increaseKey
-		    << "] = " << (*DV.var);
-		hola = out.str();
-		Render(hola, Point(2, num * txtseparation), DV.color, txtsize);
-		++num;
-	}
-
-	for (const auto& DV : PA.m_VFDr)
-	{
-		// 		DebuggingVariable<real> DV = PA.m_VFDr[i];
-		std::stringstream out;
-		out << DV.name << " [" << DV.decreaseKey << "/" << DV.increaseKey
-		    << "] = " << (*DV.var);
-		hola = out.str();
-
-		Render(hola, Point(2, num * txtseparation), DV.color, txtsize);
-		++num;
-	}
-	++num;
-	for (const auto& btn : PA.m_buttons)
-	{
-// 		sf::Text text(btn->Name());
-		
-		auto P = Point(30,num*txtseparation);
-		
-		auto color = sf::Color::Yellow;
-		stringstream name;
-		name << btn->Name() << " [" << btn->Shortcut() << ']';
-		Render(name.str(),P,color);
-		
-		auto B = GetBox(num);
-		
-		if (B.Intersects(MousePositionScreen()))
-		{
-			color = sf::Color(255,200,0);
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				color = sf::Color::Red;
-		}
-		
-		
-		Render(B,color,color);
-		
-		++num;
-	}
-}
-
-std::ostream& operator<<(std::ostream& os, const sf::Keyboard::Key& key)
-{
-	os << static_cast<char>('A' + static_cast<char>(key));
-
-	return os;
+	GUI.Render(*this);
 }
