@@ -7,7 +7,7 @@ void SetUpAnimationExamples();
 
 int main()
 {
-//     SetUpAnimationExamples();
+	//     SetUpAnimationExamples();
 	APP.Run();
 
 	return 0;
@@ -15,7 +15,7 @@ int main()
 
 void SetUpAnimationExamples()
 {
-    auto start_edge_color   = APP.default_edge_color;
+	auto start_edge_color   = APP.default_edge_color;
 	auto new_edge_color		= sf::Color::Green;
 	auto start_vertex_color = APP.default_vertex_color;
 	auto new_vertex_color   = sf::Color::Red;
@@ -41,14 +41,13 @@ void SetUpAnimationExamples()
 	B.SetLoop(true);
 	B.AddScene(APP.vertex_colors[0], sf::Color::Red, sf::Color::Yellow, 1.0);
 	B.AddScene(APP.vertex_colors[0], sf::Color::Yellow, sf::Color::Red, 1.0);
-	
-    APP.GUI.AddAction("Print Message", sf::Keyboard::Tab, []() {
+
+	APP.GUI.AddAction("Print Message", sf::Keyboard::Tab, []() {
 		APP.GUI.AddMessage("Hola mundo!", sf::Color::Red);
 	});
-    
-// 	auto& C = APP.CreateAnimation();
-// 	C.SetLoop(true);
-// 	C.AddScene(APP.default_vertex_size, 0.0, 100.0, 3.0);
-// 	C.AddScene(APP.default_vertex_size, 100.0, 0.0, 3.0);
-    
+
+	// 	auto& C = APP.CreateAnimation();
+	// 	C.SetLoop(true);
+	// 	C.AddScene(APP.default_vertex_size, 0.0, 100.0, 3.0);
+	// 	C.AddScene(APP.default_vertex_size, 100.0, 0.0, 3.0);
 }

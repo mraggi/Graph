@@ -108,7 +108,10 @@ public:
 		vertex_t from;
 		vertex_t to;
 
-		bool operator==(const Edge& E) const { return from == E.from && to == E.to && m_weight == E.m_weight; }
+		bool operator==(const Edge& E) const
+		{
+			return from == E.from && to == E.to && m_weight == E.m_weight;
+		}
 
 	private:
 		weight_t m_weight{1};

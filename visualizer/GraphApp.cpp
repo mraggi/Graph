@@ -39,7 +39,8 @@ void GraphApp::CreateGUI()
 	GUI.AddSpacer();
 
 	GUI.AddController(default_vertex_size, "Vertex Size", 1.0, sf::Keyboard::I, sf::Keyboard::O);
-	GUI.AddController(default_edge_thickness, "Edge Thickness", 1.0, sf::Keyboard::T, sf::Keyboard::Y);
+	GUI.AddController(
+	  default_edge_thickness, "Edge Thickness", 1.0, sf::Keyboard::T, sf::Keyboard::Y);
 
 	GUI.AddAction(
 	  "Sort neighbors", sf::Keyboard::S, [this]() { P.sort_neighbors(); }, sf::Color::Magenta);
@@ -49,16 +50,17 @@ void GraphApp::CreateGUI()
 
 	GUI.AddAction("Clear Graph", sf::Keyboard::Num1, [this]() { SetGraph(Graph(0)); });
 
-    auto dark_orange = sf::Color(255, 100, 0);
+	auto dark_orange = sf::Color(255, 100, 0);
 
-    GUI.AddController(num_rand_verts,
+	GUI.AddController(num_rand_verts,
 					  "Num vertices for generator",
 					  10,
 					  sf::Keyboard::Subtract,
 					  sf::Keyboard::Add,
 					  dark_orange);
-    
-	GUI.AddAction("Path Graph", sf::Keyboard::Num2, [this]() { SetGraph(graphs::Path(num_rand_verts)); });
+
+	GUI.AddAction(
+	  "Path Graph", sf::Keyboard::Num2, [this]() { SetGraph(graphs::Path(num_rand_verts)); });
 
 	// Fill here with path and cycle with shortcuts 2 and 3, respectively!
 
@@ -66,7 +68,6 @@ void GraphApp::CreateGUI()
 
 	GUI.AddSpacer();
 
-	
 	GUI.AddController(avg_degree,
 					  "Average degree for random",
 					  0.1,
@@ -75,7 +76,7 @@ void GraphApp::CreateGUI()
 					  dark_orange);
 
 	GUI.AddAction("Random Graph", sf::Keyboard::Num5, [this]() {
-		SetGraph(graphs::RandomGraph(num_rand_verts,avg_degree/num_rand_verts));
+		SetGraph(graphs::RandomGraph(num_rand_verts, avg_degree / num_rand_verts));
 	});
 
 	GUI.AddSpacer();

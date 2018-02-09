@@ -31,9 +31,9 @@ Graph Petersen()
 
 Graph Path(int n)
 {
-	Graph G(n+1);
+	Graph G(n + 1);
 	for (Graph::vertex_t i = 0; i < n; ++i)
-		G.add_edge(i, i+1);
+		G.add_edge(i, i + 1);
 	return G;
 }
 
@@ -45,17 +45,17 @@ Graph CompleteBipartite(int n, int m);
 
 Graph RandomGraph(int n, double p)
 {
-    Graph G(n);
+	Graph G(n);
 
-    for (auto i : G.vertices())
-    {
-        for (int j = i + 1; j < G.num_vertices(); ++j)
-        {
-            if (probability_of_true(p))
-                G.add_edge(i, j);
-        }
-    }
-    return G;
+	for (auto i : G.vertices())
+	{
+		for (int j = i + 1; j < G.num_vertices(); ++j)
+		{
+			if (probability_of_true(p))
+				G.add_edge(i, j);
+		}
+	}
+	return G;
 }
 
 // Fill here the cycle, path, complete and random graph.

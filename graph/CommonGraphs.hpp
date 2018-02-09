@@ -16,5 +16,4 @@ Graph CompleteBipartite(int n, int m);
 
 Graph RandomGraph(int n, double p);
 
-
 }; // namespace graphs
