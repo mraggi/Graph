@@ -58,9 +58,9 @@ public:
 	vertex_t  num_vertices() const { return m_numvertices; }
 	size_type num_edges() const { return m_numedges; }
 
-	inline const std::vector<Neighbor>& neighbors(vertex_t n) const { return m_graph[n]; }
-	inline const std::vector<Neighbor>& outneighbors(vertex_t n) const { return m_graph[n]; }
-	inline const std::vector<Neighbor>& inneighbors(vertex_t n) const { return m_graph[n]; }
+	inline const neighbor_list& neighbors(vertex_t n) const { return m_graph[n]; }
+	inline const neighbor_list& outneighbors(vertex_t n) const { return m_graph[n]; }
+	inline const neighbor_list& inneighbors(vertex_t n) const { return m_graph[n]; }
 
 	using all_vertices = basic_natural_number<vertex_t>;
 	all_vertices vertices() const { return all_vertices(num_vertices()); }
@@ -108,7 +108,7 @@ public:
 		vertex_t from;
 		vertex_t to;
 
-		bool operator==(const Edge& E) const { return from == E.from && to == E.to; }
+		bool operator==(const Edge& E) const { return from == E.from && to == E.to && m_weight == E.m_weight; }
 
 	private:
 		weight_t m_weight{1};

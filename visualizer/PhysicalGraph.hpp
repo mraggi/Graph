@@ -79,7 +79,7 @@ public:
 	real ideal_edge_size{200.0};
 	real hook_constant{15.0};
 	real force_toward_center{2.0};
-	real max_speed{1600.0};
+	real max_speed{160000.0};
 	real damping{0.95};
 
 private:

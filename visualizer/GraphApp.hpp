@@ -10,14 +10,14 @@ public:
 	using vertex_t = Graph::vertex_t;
 
 	// options
-	real vertex_size{7.0};
-	real edge_thickness{2.0};
+	real default_vertex_size{7.0};
+	real default_edge_thickness{2.0};
 
-	sf::Color default_vertex_color{sf::Color(0, 200, 0)};
-	sf::Color hover_vertex_color{sf::Color(100, 200, 255)};
-	sf::Color selected_vertex_color{sf::Color(255, 0, 0)};
-	sf::Color default_edge_color{sf::Color(130, 0, 255)};
-	sf::Color created_edge_color{sf::Color(255, 90, 0)};
+	sf::Color default_vertex_color{sf::Color(0, 200, 0,220)};
+	sf::Color hover_vertex_color{sf::Color(100, 200, 255,220)};
+	sf::Color selected_vertex_color{sf::Color(255, 0, 0,220)};
+	sf::Color default_edge_color{sf::Color(130, 0, 255,220)};
+	sf::Color created_edge_color{sf::Color(255, 90, 0,220)};
 
 	bool show_labels{false};
 
@@ -62,11 +62,14 @@ public:
 
 	struct edge_hash
 	{
-		size_t operator()(const Graph::Edge& E) const { return E.from + (size_t(1) << 32) * E.to; }
+		size_t operator()(const Graph::Edge& E) const { return E.from + (size_t(1) << 32) * E.to + (size_t(1)<<48)*E.weight(); }
 	};
 
 	map_with_default_by_ref<vertex_t, sf::Color>			   vertex_colors{default_vertex_color};
 	map_with_default_by_ref<Graph::Edge, sf::Color, edge_hash> edge_colors{default_edge_color};
+    
+	map_with_default_by_ref<vertex_t, real> vertex_sizes{default_vertex_size};
+	map_with_default_by_ref<Graph::Edge, real, edge_hash> edge_thicknesses{default_edge_thickness};
 
 private:
 	PhysicalGraph P;
@@ -82,7 +85,7 @@ private:
 
 	void CreateGUI();
 
-	real label_size() const { return vertex_size * 3.8; }
+	real label_size(vertex_t i) const { return vertex_sizes(i) * 3.8; }
 
 	// Temp while I add a proper watcher
 	int num_edges{0};

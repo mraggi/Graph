@@ -10,33 +10,6 @@ GraphApp::GraphApp(const string& name) : Base(name), P()
 	SetGraph(Graph(0));
 
 	CreateGUI();
-
-	auto start_edge_color   = default_edge_color;
-	auto new_edge_color		= sf::Color::Green;
-	auto start_vertex_color = default_vertex_color;
-	auto new_vertex_color   = sf::Color::Red;
-
-	auto& A = CreateAnimation(true);
-	A.SetLoop(true);
-
-	auto t = A.AddScene(default_edge_color, start_edge_color, new_edge_color, 5.0);
-	t->SetStartMessage("Changing color!", new_edge_color);
-	t->SetFinishMessage("Finished changing color!", new_edge_color);
-
-	auto r = A.AddScene(default_edge_color, new_edge_color, start_edge_color, 5.0);
-
-	r->SetStartMessage("Going back!", start_edge_color);
-	r->SetFinishMessage("Finished going back!", start_edge_color);
-
-	auto& A2 = CreateAnimation(true);
-	A2.SetLoop(true);
-	A2.AddScene(default_vertex_color, start_vertex_color, new_vertex_color, 5.0);
-	A2.AddScene(default_vertex_color, new_vertex_color, start_vertex_color, 5.0);
-
-	auto& B = CreateAnimation();
-	B.SetLoop(true);
-	B.AddScene(vertex_colors[0], sf::Color::Red, sf::Color::Yellow, 1.0);
-	B.AddScene(vertex_colors[0], sf::Color::Yellow, sf::Color::Red, 1.0);
 }
 
 void GraphApp::CreateGUI()
@@ -50,9 +23,6 @@ void GraphApp::CreateGUI()
 	GUI.AddWatcher(num_edges, "Number of Edges", intructions_color);
 
 	GUI.AddSpacer();
-
-	GUI.AddAction(
-	  "Toggle Fullscreen", sf::Keyboard::F, [this]() { ToggleFullScreen(); }, sf::Color::Blue);
 
 	GUI.AddAction("Fit Graph to Screen",
 				  sf::Keyboard::Return,
@@ -68,8 +38,8 @@ void GraphApp::CreateGUI()
 
 	GUI.AddSpacer();
 
-	GUI.AddController(vertex_size, "Vertex Size", 1.0, sf::Keyboard::I, sf::Keyboard::O);
-	GUI.AddController(edge_thickness, "Edge Thickness", 1.0, sf::Keyboard::T, sf::Keyboard::Y);
+	GUI.AddController(default_vertex_size, "Vertex Size", 1.0, sf::Keyboard::I, sf::Keyboard::O);
+	GUI.AddController(default_edge_thickness, "Edge Thickness", 1.0, sf::Keyboard::T, sf::Keyboard::Y);
 
 	GUI.AddAction(
 	  "Sort neighbors", sf::Keyboard::S, [this]() { P.sort_neighbors(); }, sf::Color::Magenta);
@@ -79,48 +49,39 @@ void GraphApp::CreateGUI()
 
 	GUI.AddAction("Clear Graph", sf::Keyboard::Num1, [this]() { SetGraph(Graph(0)); });
 
+    auto dark_orange = sf::Color(255, 100, 0);
+
+    GUI.AddController(num_rand_verts,
+					  "Num vertices for generator",
+					  10,
+					  sf::Keyboard::Subtract,
+					  sf::Keyboard::Add,
+					  dark_orange);
+    
+	GUI.AddAction("Path Graph", sf::Keyboard::Num2, [this]() { SetGraph(graphs::Path(num_rand_verts)); });
+
 	// Fill here with path and cycle with shortcuts 2 and 3, respectively!
 
 	GUI.AddAction("Petersen Graph", sf::Keyboard::Num4, [this]() { SetGraph(graphs::Petersen()); });
 
 	GUI.AddSpacer();
 
-	GUI.AddController(num_rand_verts,
-					  "Random graph size",
-					  10,
-					  sf::Keyboard::Subtract,
-					  sf::Keyboard::Add,
-					  sf::Color(255, 100, 0));
+	
 	GUI.AddController(avg_degree,
-					  "Average degree to generate random",
+					  "Average degree for random",
 					  0.1,
 					  sf::Keyboard::LBracket,
 					  sf::Keyboard::RBracket,
-					  sf::Color(255, 100, 0));
+					  dark_orange);
 
 	GUI.AddAction("Random Graph", sf::Keyboard::Num5, [this]() {
-		Graph G(num_rand_verts);
-		real  p = avg_degree / num_rand_verts;
-
-		for (auto i : G.vertices())
-		{
-			for (int j = i + 1; j < G.num_vertices(); ++j)
-			{
-				if (probability_of_true(p))
-					G.add_edge(i, j);
-			}
-		}
-
-		SetGraph(G);
+		SetGraph(graphs::RandomGraph(num_rand_verts,avg_degree/num_rand_verts));
 	});
 
 	GUI.AddSpacer();
 
-	GUI.AddText("Available Shortcuts: " + GUI.AvailableShortcuts(), sf::Color(50, 50, 50));
-
-	GUI.AddAction("Print Message", sf::Keyboard::Tab, [this]() {
-		GUI.AddMessage("Hola mundo!", sf::Color::Red);
-	});
+	GUI.AddText("Available Shortcuts: " + GUI.AvailableShortcuts(), sf::Color(40, 40, 50));
+	GUI.AddSpacer();
 }
 
 void GraphApp::Update(real time)
@@ -141,7 +102,7 @@ void GraphApp::RenderWorld()
 
 	if (edge_start != Graph::INVALID_VERTEX)
 	{
-		Render(Segment(P[edge_start], MousePosition()), created_edge_color, edge_thickness);
+		Render(Segment(P[edge_start], MousePosition()), created_edge_color, default_edge_thickness);
 	}
 }
 
@@ -149,7 +110,7 @@ void GraphApp::DrawGraph()
 {
 	for (auto e : P.edges())
 	{
-		Base::Render(Segment(P[e.from], P[e.to]), edge_colors(e), edge_thickness);
+		Base::Render(Segment(P[e.from], P[e.to]), edge_colors(e), edge_thicknesses(e));
 	}
 
 	for (auto v : P.vertices())
@@ -163,18 +124,18 @@ void GraphApp::DrawGraph()
 
 		if (show_labels)
 			Base::Render(std::to_string(v),
-						 P[v] - Point(label_size() * 0.45, label_size() * 1.2) / 2,
+						 P[v] - Point(label_size(v) * 0.45, label_size(v) * 1.2) / 2,
 						 vcol,
-						 label_size());
+						 label_size(v));
 		else
-			Base::Render(P[v], vcol, vertex_size);
+			Base::Render(P[v], vcol, vertex_sizes(v));
 	}
 }
 
 bool GraphApp::IsMouseOverVertex(vertex_t v) const
 {
 	auto   MP  = MousePosition();
-	double vs  = vertex_size + 3; // leave 3 pixels to grab the vertex
+	double vs  = vertex_sizes(v) + 3; // leave 3 pixels to grab the vertex
 	double vs2 = vs * vs;
 	return distancesq(MP, P[v]) < vs2;
 }
@@ -278,29 +239,7 @@ Box GraphApp::GetBoundingBoxOfGraph() const
 		maxY   = max(maxY, p.y);
 	}
 
-	Point border = Point(5 + 2 * vertex_size, 5 + 2 * vertex_size);
+	Point border = Point(5 + 2 * default_vertex_size, 5 + 2 * default_vertex_size);
 	Box   B(Point(minX, minY) - border, Point(maxX, maxY) + border);
 	return B;
 }
-
-// sf::Color& GraphApp::GetVertexColor(vertex_t v)
-// {
-//  auto it = vertex_colors.find(v);
-//  if (it != vertex_colors.end())
-//      return it->second;
-//  auto t = vertex_colors.insert({v,default_vertex_color}).first;
-//  return t->second;
-// }
-//
-// sf::Color GraphApp::GetVertexColor(vertex_t v) const
-// {
-//  auto it = vertex_colors.find(v);
-//  if (it != vertex_colors.end())
-//      return it->second;
-//  return default_vertex_color;
-// }
-//
-// void GraphApp::SetVertexColor(vertex_t v, const sf::Color& color)
-// {
-//  vertex_colors[v] = color;
-// }

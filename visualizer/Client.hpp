@@ -224,17 +224,19 @@ Client<Derived>::Client(const string& Name)
 	m_vMousePosition = m_Window.mapPixelToCoords(sf::Mouse::getPosition(m_Window), m_View);
 	GUI.AddWatcher(fps, "FPS", orange);
 
-	GUI.AddController(
-	  time_dilation, "Time scale", 0.1, sf::Keyboard::Comma, sf::Keyboard::Period, orange);
-
+	GUI.AddController(time_dilation, "Time scale", 0.1, sf::Keyboard::Comma, sf::Keyboard::Period, orange);
+    GUI.AddAction("Toggle Fullscreen", sf::Keyboard::F, [this](){ ToggleFullScreen(); }, orange);
 	GUI.AddAction("Change font",
 				  sf::Keyboard::F1,
-				  [this]() {
+				  [this]() 
+                  {
 					  static int font = 0;
 
 					  ++font;
-					  if (font == 3)
+
+                      if (font == 3)
 						  font = 0;
+                      
 					  if (font == 0)
 						  m_Font.loadFromFile("font.ttf");
 					  else if (font == 1)
