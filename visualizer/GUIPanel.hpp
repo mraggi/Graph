@@ -233,7 +233,14 @@ public:
 
 private:
 	std::vector<std::unique_ptr<GuiElement>>						gui_elements;
-	std::unordered_map<sf::Keyboard::Key, std::vector<GuiElement*>> shortcuts;
+	
+	// The following is only required on older compilers.
+	struct key_hash
+	{
+		size_t operator()(const sf::Keyboard::Key& key) const { return static_cast<size_t>(key); }
+	};
+	
+	std::unordered_map<sf::Keyboard::Key, std::vector<GuiElement*>, key_hash> shortcuts;
 
 	MessageBox m_message_box;
 
