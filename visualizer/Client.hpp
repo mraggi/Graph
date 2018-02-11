@@ -227,7 +227,8 @@ Client<Derived>::Client(const string& Name)
 	GUI.AddController(
 	  time_dilation, "Time scale", 0.1, sf::Keyboard::Comma, sf::Keyboard::Period, orange);
 	GUI.AddAction("Toggle Fullscreen", sf::Keyboard::F, [this]() { ToggleFullScreen(); }, orange);
-	GUI.AddAction("Change font",
+    GUI.AddController(GUI.TextSize,"Text size", 0.5, sf::Keyboard::N, sf::Keyboard::M,orange);
+    GUI.AddAction("Change font",
 				  sf::Keyboard::F1,
 				  [this]() {
 					  static int font = 0;

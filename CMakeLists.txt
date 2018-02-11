@@ -20,7 +20,8 @@ include_directories(graph/utils)
 
 # Add cpp files that have to do with graphs here
 add_library(graph graph/Graph.cpp
-				  graph/CommonGraphs.cpp)
+				  graph/CommonGraphs.cpp
+				  graph/MinSpanningTree.cpp)
 
 if (${BUILD_TESTS})
 	find_package(GTest REQUIRED)

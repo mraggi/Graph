@@ -2,6 +2,7 @@
 #include "CommonGraphs.hpp"
 #include "Graph.hpp"
 #include "Probability.hpp"
+#include "MinSpanningTree.hpp"
 
 using Base = GraphApp::Base;
 
@@ -95,6 +96,8 @@ void GraphApp::Update(real time)
 	P.Update(time);
 	num_edges = P.num_edges();
 	num_verts = P.num_vertices();
+	
+	
 }
 
 void GraphApp::RenderWorld()
