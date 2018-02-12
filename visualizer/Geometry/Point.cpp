@@ -1,8 +1,6 @@
 #include "Point.hpp"
 #include "Probability.hpp"
 
-Point Point::globalTestPoint(0, 0);
-
 void Point::Normalize(void)
 {
 	if (x != 0 || y != 0)
@@ -128,19 +126,19 @@ Point Point::Projection(const Point& H) const
 
 Point Point::ProjectionToLine(const Point& A, const Point& B) const
 {
-	// 	cout << "Projection to line" << endl;
-	Point me	   = *this;
-	Point meMinusA = me - A;
+	Point me = *this;
+	
+    Point meMinusA = me - A;
 	Point BMinusA  = B - A;
-	// 	cout << "baaaa" << endl;
-	Point temp = meMinusA.Projection(BMinusA);
-	// 	cout << "temp: " << temp << endl;
-	return temp + A;
+
+    Point temp = meMinusA.Projection(BMinusA);
+	
+    return temp + A;
 }
 
 Point Point::ForwardProjection(const Point& H) const
 {
-	if (fabs(AngleTo(H)) > pi / 2)
+	if (std::abs(AngleTo(H)) > pi / 2)
 		return Point(0, 0);
 	return Projection(H);
 }
@@ -221,7 +219,7 @@ Point Point::GlobalToLocal(const Point& origin, const Point& U, const Point& V) 
 	real  determinant = (U.x * V.y - U.y * V.x);
 
 	// check to see if they U and V are linearly dependent
-	if (fabs(determinant) != 0)
+	if (std::abs(determinant) != 0)
 		return L.Projection(U);
 
 	real locx = (L.x * V.y - L.y * V.x) / determinant;

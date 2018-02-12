@@ -11,7 +11,7 @@
 class Scene
 {
 public:
-	virtual ~Scene() {}
+	virtual ~Scene() = default;
 
 	explicit Scene(real duration = 5.0) : m_duration(duration) {}
 
@@ -103,28 +103,27 @@ public:
 	InterpolatorScene(T& val, const T& start, const T& end, real duration)
 		: Scene(duration), m_val(&val), m_start(start), m_end(end)
 	{}
-	
+
 	virtual void ChildUpdate() override
 	{
 		real t = ElapsedPercentage();
-		
-		
+
 		if (set_start_on_start)
 		{
-				m_start = *(m_val);
-			
+			m_start = *(m_val);
+
 			set_start_on_start = false;
 		}
-		
+
 		*(m_val) = interpolate(t, m_start, m_end);
 	}
 
-	virtual ~InterpolatorScene() {}
+	virtual ~InterpolatorScene() = default;
 
 private:
-	T* m_val;
-	T m_start;
-	T m_end;
+	T*   m_val;
+	T	m_start;
+	T	m_end;
 	bool set_start_on_start{false};
 };
 
@@ -134,7 +133,7 @@ class Animation
 public:
 	Animation(Client* parent) : m_parent(parent)
 	{
-		scenes.reserve(10000);
+		scenes.reserve(100);
 		current_scene = scenes.begin();
 	}
 
@@ -192,7 +191,7 @@ public:
 		Reset();
 		return scenes.back().get();
 	}
-	
+
 	template <class T>
 	Scene* AddScene(T& val, const T& end, real duration)
 	{

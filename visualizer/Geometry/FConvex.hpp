@@ -7,7 +7,7 @@ class FConvex : public Convex
 {
 public:
 	explicit FConvex(const Point& p = Point(0, 0)) : Convex(p) {}
-	virtual ~FConvex(){};
+	virtual ~FConvex() = default;
 
 	virtual real MaxX() const = 0;
 	virtual real MinX() const = 0;

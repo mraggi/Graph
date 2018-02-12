@@ -4,6 +4,8 @@
 namespace graphs
 {
 
+using vertex_t = Graph::vertex_t;
+
 Graph Petersen()
 {
 	Graph G(10);
@@ -32,14 +34,32 @@ Graph Petersen()
 Graph Path(int n)
 {
 	Graph G(n + 1);
-	for (Graph::vertex_t i = 0; i < n; ++i)
+	for (vertex_t i = 0; i < n; ++i)
 		G.add_edge(i, i + 1);
 	return G;
 }
 
-Graph Cycle(int n);
+Graph Cycle(int n)
+{
+    Graph G = Path(n-1);
+    G.add_edge(0,n-1);
+    return G;
+}
 
-Graph Complete(int n);
+Graph Complete(int n)
+{
+    Graph G(n);
+    
+    for (vertex_t i = 0; i+1 < n; ++i)
+    {
+        for (vertex_t j = i+1; j < n; ++j)
+        {
+            G.add_edge(i,j);
+        }
+    }
+    
+    return G;
+}
 
 Graph CompleteBipartite(int n, int m);
 

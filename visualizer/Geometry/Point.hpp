@@ -150,15 +150,18 @@ public:
 	Point(const sf::Vector2f& p) : x(p.x), y(p.y) {}
 	Point(const sf::Vector2i& p) : x(p.x), y(p.y) {}
 	Point(const sf::Vector2u& p) : x(p.x), y(p.y) {}
-		   operator sf::Vector2f() const { return sf::Vector2f(x, y); }
-		   operator sf::Vector2i() const { return sf::Vector2i(x, y); }
-		   operator sf::Vector2u() const { return sf::Vector2u(x, y); }
+    
+    operator sf::Vector2f() const { return sf::Vector2f(x, y); }
+    operator sf::Vector2i() const { return sf::Vector2i(x, y); }
+    operator sf::Vector2u() const { return sf::Vector2u(x, y); }
+    
 	Point& operator=(const sf::Vector2f& vec)
 	{
 		x = vec.x;
 		y = vec.y;
 		return *this;
 	}
+	
 	Point& operator=(const sf::Vector2i& vec)
 	{
 		x = vec.x;
@@ -166,8 +169,6 @@ public:
 		return *this;
 	}
 #endif
-
-	static Point globalTestPoint;
 };
 
 // Add and Substract

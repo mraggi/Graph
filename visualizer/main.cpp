@@ -14,7 +14,7 @@ void AnimateKruskal();
 
 int main()
 {
-// 	AnimatePrim();
+	// 	AnimatePrim();
 	APP.Run();
 
 	return 0;
@@ -31,7 +31,7 @@ std::vector<sf::Color*> neighbor_colors(const Graph& G, Graph::vertex_t v)
 	std::vector<sf::Color*> result;
 	for (auto u : G.neighbors(v))
 	{
-		Graph::Edge E(v,u,u.weight());
+		Graph::Edge E(v, u, u.weight());
 		result.emplace_back(&APP.edge_colors[E]);
 	}
 	return result;
@@ -47,7 +47,7 @@ void AnimatePrim()
 	APP.SetGraph(G);
 
 	auto& Prim = APP.CreateAnimation();
-		Prim.PauseAfterEveryScene(true);
+	Prim.PauseAfterEveryScene(true);
 
 	const auto grey			 = sf::Color(120, 120, 120);
 	const auto black		 = sf::Color(36, 36, 36);
@@ -67,11 +67,11 @@ void AnimatePrim()
 
 	Prim.AddScene(APP.vertex_colors[0], sf::Color::Blue, 0.5)
 	  ->AddStartMessage(APP.GUI, "Considering vertex 0", sf::Color::Blue);
-	
-// 	auto E0 = neighbor_colors(G,0);
-// 	auto E1 = std::vector<sf::Color>(E0.size(),sf::Color::Yellow);
-// 	Prim.AddScene(E0,E1,5.0);
-	
+
+	// 	auto E0 = neighbor_colors(G,0);
+	// 	auto E1 = std::vector<sf::Color>(E0.size(),sf::Color::Yellow);
+	// 	Prim.AddScene(E0,E1,5.0);
+
 	for (auto v : G.neighbors(0))
 	{
 		auto E = Edge(0, v, v.weight());

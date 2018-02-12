@@ -6,7 +6,7 @@
 class GraphApp : public Client<GraphApp> // using CRTP
 {
 public:
-	using Base	 = Client<GraphApp>;
+	using Base = Client<GraphApp>;
 	using vertex_t = Graph::vertex_t;
 
 	// options
@@ -73,10 +73,10 @@ public:
 		}
 	};
 
-	map_with_default_by_ref<vertex_t, sf::Color>			   vertex_colors{default_vertex_color};
+	map_with_default_by_ref<vertex_t, sf::Color> vertex_colors{default_vertex_color};
+	map_with_default_by_ref<vertex_t, real>	vertex_sizes{default_vertex_size};
+    
 	map_with_default_by_ref<Graph::Edge, sf::Color, edge_hash> edge_colors{default_edge_color};
-
-	map_with_default_by_ref<vertex_t, real>				  vertex_sizes{default_vertex_size};
 	map_with_default_by_ref<Graph::Edge, real, edge_hash> edge_thicknesses{default_edge_thickness};
 
 private:

@@ -29,13 +29,13 @@ inline sf::Color interpolate(real t, const sf::Color& from, const sf::Color& to)
 }
 
 template <class U, class T = U>
-inline std::vector<T> interpolate(real t, const std::vector<U>& A,const std::vector<U>& B)
+inline std::vector<T> interpolate(real t, const std::vector<U>& A, const std::vector<U>& B)
 {
 	assert(A.size() == B.size());
 	std::vector<T> result(A.size());
 	for (size_t i = 0; i < result.size(); ++i)
 	{
-		result[i] = interpolate(t,A[i],B[i]);
+		result[i] = interpolate(t, A[i], B[i]);
 	}
 	return result;
 }

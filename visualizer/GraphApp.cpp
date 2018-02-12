@@ -38,9 +38,9 @@ void GraphApp::CreateGUI()
 
 	GUI.AddSpacer();
 
-	GUI.AddController(default_vertex_size, "Vertex Size", 1.0, sf::Keyboard::I, sf::Keyboard::O);
+	GUI.AddController(default_vertex_size, "Vertex Size", 0.5, sf::Keyboard::I, sf::Keyboard::O);
 	GUI.AddController(
-	  default_edge_thickness, "Edge Thickness", 1.0, sf::Keyboard::T, sf::Keyboard::Y);
+	  default_edge_thickness, "Edge Thickness", 0.25, sf::Keyboard::T, sf::Keyboard::Y);
 
 	GUI.AddAction(
 	  "Sort neighbors", sf::Keyboard::S, [this]() { P.sort_neighbors(); }, sf::Color::Magenta);
@@ -59,14 +59,15 @@ void GraphApp::CreateGUI()
 					  sf::Keyboard::H,
 					  dark_orange);
 
-	GUI.AddAction(
-	  "Path Graph", sf::Keyboard::Num2, [this]() { SetGraph(graphs::Path(num_rand_verts)); });
+	GUI.AddAction("Path Graph", sf::Keyboard::Num2, [this]() { SetGraph(graphs::Path(num_rand_verts)); });
+    
+	GUI.AddAction("Cycle Graph", sf::Keyboard::Num3, [this]() { SetGraph(graphs::Cycle(num_rand_verts)); });
+    
+	GUI.AddAction("Complete Graph", sf::Keyboard::Num4, [this]() { SetGraph(graphs::Complete(num_rand_verts)); });
 
 	// Fill here with path and cycle with shortcuts 2 and 3, respectively!
 
-	GUI.AddAction("Petersen Graph", sf::Keyboard::Num4, [this]() { SetGraph(graphs::Petersen()); });
-
-	GUI.AddSpacer();
+	GUI.AddAction("Petersen Graph", sf::Keyboard::Num5, [this]() { SetGraph(graphs::Petersen()); });
 
 	GUI.AddController(avg_degree,
 					  "Average degree for random",
@@ -75,7 +76,7 @@ void GraphApp::CreateGUI()
 					  sf::Keyboard::RBracket,
 					  dark_orange);
 
-	GUI.AddAction("Random Graph", sf::Keyboard::Num5, [this]() {
+	GUI.AddAction("Random Graph", sf::Keyboard::Num6, [this]() {
 		SetGraph(graphs::RandomGraph(num_rand_verts, avg_degree / num_rand_verts));
 	});
 
@@ -167,9 +168,7 @@ void GraphApp::OnMouseButtonPress(sf::Mouse::Button btn)
 			auto v = VertexUnderMouse();
 
 			if (v != Graph::INVALID_VERTEX)
-			{
 				P.remove_vertex(v);
-			}
 		}
 	}
 }
@@ -222,9 +221,7 @@ void GraphApp::OnKeyPress(sf::Keyboard::Key key) {}
 Box GraphApp::GetBoundingBoxOfGraph() const
 {
 	if (P.num_vertices() == 0)
-	{
 		return Box({0, 0}, {1000, 1000});
-	}
 
 	real minX = 9999999;
 	real minY = 9999999;
@@ -234,13 +231,17 @@ Box GraphApp::GetBoundingBoxOfGraph() const
 	for (auto v : P.vertices())
 	{
 		auto p = P[v];
+        
 		minX   = min(minX, p.x);
 		minY   = min(minY, p.y);
 		maxX   = max(maxX, p.x);
 		maxY   = max(maxY, p.y);
 	}
 
-	Point border = Point(5 + 2 * default_vertex_size, 5 + 2 * default_vertex_size);
+	real b = 5 + 2 * default_vertex_size;
+	Point border(b,b);
+    
 	Box   B(Point(minX, minY) - border, Point(maxX, maxY) + border);
-	return B;
+	
+    return B;
 }

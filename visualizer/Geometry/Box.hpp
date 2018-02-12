@@ -23,7 +23,7 @@ public:
 #endif
 
 	Box(const Box& box);
-	virtual ~Box(){};
+	virtual ~Box() = default;
 
 	void SetWH(real w, real h)
 	{

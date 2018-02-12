@@ -11,7 +11,7 @@ protected:
 public:
 	Segment();
 	Segment(const Point& pointA, const Point& pointB);
-	virtual ~Segment() {}
+	virtual ~Segment() = default;
 
 	Point Direction() const { return m_vDirection; }
 
@@ -38,14 +38,14 @@ public:
 
 	void Scale(real amount)
 	{
-		m_pPosition += m_vDirection * (1 - amount) / 2;
+		m_pPosition += m_vDirection * (1.0 - amount) / 2.0;
 		m_vDirection *= amount;
 	}
 
 	void Scale(real amount, real u)
 	{
 		m_pPosition += m_vDirection * (1 - amount) / 2;
-		m_vDirection *= amount;
+		m_vDirection.Scale(amount,u);
 	}
 
 	real Area() const { return 0; }

@@ -31,7 +31,7 @@ struct GuiElement
 
 	virtual ShapeType Shape() const { return ShapeType::NoShape; };
 
-	virtual ~GuiElement() {}
+	virtual ~GuiElement() = default;
 };
 
 struct Spacer : public GuiElement
@@ -214,18 +214,18 @@ public:
 	//  void Watch(real var, const std::string& name, sf::Color col = sf::Color(100, 100, 255));
 
 	//  void Watch(const std::string& var, sf::Color col = sf::Color(100, 255, 10));
-
-	real TextSize{16};
-	real TextSeparation{TextSize * 1.2};
-	real CheckboxRadius{6};
-
+    
+	real text_size{16};
+    
+    real TextSize() const { return text_size; }
+    real TextSeparation() const { return text_size*1.2; }
+    real CheckboxRadius() const { return text_size/2.5; }
+    
 	std::string AvailableShortcuts() const;
 
 	void Update(real time)
 	{
 		m_message_box.Update(time);
-		TextSeparation = TextSize * 1.2;
-		CheckboxRadius = TextSize / 2.5;
 	}
 
 	void
@@ -289,13 +289,13 @@ void GUIPanel::Render(C& client)
 
 	for (auto& element : gui_elements)
 	{
-		Point P(2, num * TextSeparation - 1);
+		Point P(2, num * TextSeparation() - 1);
 
 		auto shape = element->Shape();
 
 		if (shape != ShapeType::NoShape)
 		{
-			P.x += 2 * CheckboxRadius + 10;
+			P.x += 2 * CheckboxRadius() + 10;
 		}
 
 		if (shape == ShapeType::CircleShape)
@@ -339,7 +339,7 @@ void GUIPanel::Render(C& client)
 			client.Render(GetBox(num), color, color);
 		}
 
-		client.Render(element->GetString(), P, element->color, TextSize);
+		client.Render(element->GetString(), P, element->color, TextSize());
 		++num;
 	}
 	m_message_box.Render(client);

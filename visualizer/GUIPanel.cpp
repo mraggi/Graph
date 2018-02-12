@@ -14,9 +14,9 @@ void GUIPanel::HandleKeyPress(const sf::Keyboard::Key& key)
 
 Circle GUIPanel::GetCircle(int num)
 {
-	double r = CheckboxRadius;
+	double r = CheckboxRadius();
 
-	double height = (0.5 + num) * TextSeparation;
+	double height = (0.5 + num) * TextSeparation();
 
 	Point O(2 + r, height);
 
@@ -25,8 +25,8 @@ Circle GUIPanel::GetCircle(int num)
 
 Box GUIPanel::GetBox(int num)
 {
-	double r	  = CheckboxRadius;
-	double height = (0.5 + num) * TextSeparation;
+	double r	  = CheckboxRadius();
+	double height = (0.5 + num) * TextSeparation();
 
 	Point O(2 + r, height);
 
