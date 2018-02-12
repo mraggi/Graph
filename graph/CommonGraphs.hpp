@@ -16,4 +16,6 @@ Graph CompleteBipartite(int n, int m);
 
 Graph RandomGraph(int n, double p);
 
+Graph RandomWeightedGraph(int n, double p);
+
 }; // namespace graphs

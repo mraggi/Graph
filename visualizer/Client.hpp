@@ -3,7 +3,6 @@
 #include "Animator.hpp"
 #include "GUIPanel.hpp"
 #include "Geometry/AllConvex.hpp"
-#include "RichText.hpp"
 #include "TimeHelpers.hpp"
 #include <SFML/Graphics.hpp>
 
@@ -78,9 +77,10 @@ public:
 
 	void Render(const string& txt, const Point& point, const sf::Color& color, int size);
 
-	animation& CreateAnimation(bool pause_after_every_scene = false)
+	animation& CreateAnimation()
 	{
-		m_animations.emplace_back(new animation(this, pause_after_every_scene));
+		m_animations.emplace_back(new animation(this));
+
 		return (*m_animations.back());
 	}
 
@@ -199,6 +199,8 @@ Client<Derived>::Client(const string& Name)
 	, m_bShouldClose(false)
 	, m_title(Name)
 {
+	m_animations.reserve(10000);
+
 	if (!m_Font.loadFromFile("font.ttf"))
 		cout << "Fatal error; Could not load font!" << endl;
 
@@ -227,8 +229,8 @@ Client<Derived>::Client(const string& Name)
 	GUI.AddController(
 	  time_dilation, "Time scale", 0.1, sf::Keyboard::Comma, sf::Keyboard::Period, orange);
 	GUI.AddAction("Toggle Fullscreen", sf::Keyboard::F, [this]() { ToggleFullScreen(); }, orange);
-    GUI.AddController(GUI.TextSize,"Text size", 0.5, sf::Keyboard::N, sf::Keyboard::M,orange);
-    GUI.AddAction("Change font",
+	GUI.AddController(GUI.TextSize, "Text size", 0.5, sf::Keyboard::N, sf::Keyboard::M, orange);
+	GUI.AddAction("Change font",
 				  sf::Keyboard::F1,
 				  [this]() {
 					  static int font = 0;

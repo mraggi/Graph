@@ -64,7 +64,12 @@ public:
 	{
 		size_t operator()(const Graph::Edge& E) const
 		{
-			return E.from + (size_t(1) << 32) * E.to + (size_t(1) << 48) * E.weight();
+			size_t a = E.from;
+			size_t b = E.to;
+			if (a > b)
+				std::swap(a, b);
+
+			return a + (size_t(1) << 32) * b + (size_t(1) << 48) * E.weight();
 		}
 	};
 

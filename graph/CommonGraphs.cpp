@@ -58,5 +58,22 @@ Graph RandomGraph(int n, double p)
 	return G;
 }
 
+Graph RandomWeightedGraph(int n, double p)
+{
+	Graph G(n);
+
+	for (auto i : G.vertices())
+	{
+		for (int j = i + 1; j < G.num_vertices(); ++j)
+		{
+			if (probability_of_true(p))
+			{
+				G.add_edge(i, j, random_int(0, 100));
+			}
+		}
+	}
+	return G;
+}
+
 // Fill here the cycle, path, complete and random graph.
 }

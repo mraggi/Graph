@@ -110,7 +110,8 @@ public:
 
 		bool operator==(const Edge& E) const
 		{
-			return from == E.from && to == E.to && m_weight == E.m_weight;
+			return ((from == E.from && to == E.to) || (from == E.to && to == E.from))
+				   && m_weight == E.m_weight;
 		}
 
 	private:
