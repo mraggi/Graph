@@ -55,8 +55,8 @@ void GraphApp::CreateGUI()
 	GUI.AddController(num_rand_verts,
 					  "Num vertices for generator",
 					  10,
-					  sf::Keyboard::Subtract,
-					  sf::Keyboard::Add,
+					  sf::Keyboard::G,
+					  sf::Keyboard::H,
 					  dark_orange);
 
 	GUI.AddAction(
