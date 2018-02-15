@@ -41,14 +41,12 @@ public:
 
 	bool add_edge_no_repeat(vertex_t from,
 							vertex_t to,
-							weight_t w
-							= 1); // only add if not already present. Returns true if added.
+							weight_t w = 1); // only add if not already present. Returns true if added.
 
-	void sort_neighbors(); // sorts them so that searching can later be done in
-	// log time
+	void sort_neighbors(); // sorts them so that searching can later be done in log time
 
-	void remove_vertex(vertex_t v); // TODO
-	void remove_edge(vertex_t v, vertex_t u); // TODO
+	void remove_vertex(vertex_t v);
+	void remove_edge(vertex_t v, vertex_t u);
 
 	void delete_loops();
 	void delete_repeated_edges();

@@ -48,11 +48,6 @@ vertex_t Graph::add_vertex()
 	return r;
 }
 
-// void Graph::remove_edge(vertex_t a, vertex_t b)
-// {
-//
-// }
-
 std::vector<Edge> Graph::edges() const
 {
 	std::vector<Edge> total;
@@ -200,14 +195,13 @@ void Graph::remove_vertex(vertex_t v)
 
 	if (v != last_vertex)
 	{
+		//Replace all occurrences of last_vertex to now be v
 		for (auto u : neighbors(last_vertex))
 		{
 			for (auto& w : m_graph[u])
 			{
 				if (w.vertex == last_vertex)
-				{
 					w.vertex = v;
-				}
 			}
 		}
 
