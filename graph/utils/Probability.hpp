@@ -11,9 +11,9 @@
  */
 inline std::default_random_engine& random_engine()
 {
-	using RE		  = std::default_random_engine;
+	using RE = std::default_random_engine;
 	using result_type = RE::result_type;
-	static std::default_random_engine e(static_cast<result_type>(time(nullptr)));
+	static RE e(static_cast<result_type>(time(nullptr)));
 	return e;
 }
 

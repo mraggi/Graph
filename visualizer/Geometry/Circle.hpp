@@ -11,10 +11,7 @@ private:
 	real m_rRadius;
 
 public:
-	explicit Circle(const Point& center = Point(0, 0), real m_rRadius = 0);
-	Circle(const Circle& circle);
-	~Circle() {}
-
+	explicit Circle(const Point& p = Point(0, 0), real r = 0);
 	void SetRadius(const real r) { m_rRadius = r; }
 
 	real MinX() const { return Position().x - m_rRadius; }
@@ -52,7 +49,7 @@ public:
 	// origin--point through point.
 	bool PerpendicularSegmentOfPoint(const Point& point, Segment* perp = NULL) const;
 
-	shape		 Type() const { return shape_Circle; }
+	shape Type() const { return shape_Circle; }
 	static shape ClassType() { return shape_Circle; }
 
 	using FConvex::Intersects;

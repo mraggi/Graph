@@ -49,7 +49,7 @@ TEST(Graph, AddEdge)
 TEST(Graph, Vertices)
 {
 	Graph G(10);
-	int   i = 0;
+	int i = 0;
 	for (auto v : G.vertices())
 	{
 		ASSERT_EQ(v, i);

@@ -64,8 +64,6 @@ Graph Complete(int n)
 	return G;
 }
 
-Graph CompleteBipartite(int n, int m);
-
 Graph Random(int n, double p)
 {
 	Graph G(n);
@@ -99,4 +97,4 @@ Graph RandomWeighted(int n, double p)
 }
 
 // Fill here the cycle, path, complete and random graph.
-}
+} // namespace graphs

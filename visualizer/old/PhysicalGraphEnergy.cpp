@@ -5,7 +5,7 @@ void PhysicalGraph::Update(double time)
 
 	auto gradient = [this](const MultiDimVector& X) -> MultiDimVector {
 		MultiDimVector R(X.size());
-		double		   d2 = ideal_edge_size * ideal_edge_size;
+		double d2 = ideal_edge_size * ideal_edge_size;
 
 		for (auto a : vertices())
 		{
@@ -29,7 +29,7 @@ void PhysicalGraph::Update(double time)
 				}
 				else
 				{
-					double t  = repelling_threshold;
+					double t = repelling_threshold;
 					double t2 = t * t;
 					if (dist2 < t2)
 					{

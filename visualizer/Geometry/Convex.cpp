@@ -65,19 +65,13 @@ bool Convex::Intersects(const Ray& other) const
 
 bool Convex::Intersects(const Ray& other, Point& intersection) const
 {
-	if (Intersects(Line(other), intersection) && other.PointInLineIntersectsMe(intersection))
-		return true;
-
-	return false;
+	return Intersects(Line(other), intersection) && other.PointInLineIntersectsMe(intersection);
 }
 
 bool Convex::Intersects(const Ray& other, Point& intersection, Point& normal) const
 {
-	if (Intersects(Line(other), intersection, normal)
-		&& other.PointInLineIntersectsMe(intersection))
-		return true;
-
-	return false;
+	return Intersects(Line(other), intersection, normal)
+	  && other.PointInLineIntersectsMe(intersection);
 }
 
 bool Convex::Intersects(const Segment& other, Segment& intersection) const
@@ -87,10 +81,8 @@ bool Convex::Intersects(const Segment& other, Segment& intersection) const
 
 	Point A = intersection.Origin();
 	Point B = intersection.End();
-	if (!other.SegmentInLineIntersectsMe(intersection.Origin(), intersection.End(), &intersection))
-		return false;
-
-	return true;
+	return !!other.SegmentInLineIntersectsMe(
+	  intersection.Origin(), intersection.End(), &intersection);
 }
 
 bool Convex::Intersects(const Ray& other, Segment& intersection) const
@@ -100,10 +92,8 @@ bool Convex::Intersects(const Ray& other, Segment& intersection) const
 
 	Point A = intersection.Origin();
 	Point B = intersection.End();
-	if (!other.SegmentInLineIntersectsMe(intersection.Origin(), intersection.End(), &intersection))
-		return false;
-
-	return true;
+	return !!other.SegmentInLineIntersectsMe(
+	  intersection.Origin(), intersection.End(), &intersection);
 }
 
 bool Convex::Intersects(const CPoint& other) { return Intersects(other.Position()); }

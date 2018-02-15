@@ -36,16 +36,16 @@ public:
 	}
 
 	Point VectorWithAngle(real t) const; // std::vector of same length and angle t
-	void  SetAngle(real t);
+	void SetAngle(real t);
 
-	void  Rotate(real t);
+	void Rotate(real t);
 	Point Rotated(real t) const;
 
-	void  Rotate(real sint,
-				 real cost);				   // so that you don't calculate sin and cos again.
+	void Rotate(real SIN,
+				real COS); // so that you don't calculate sin and cos again.
 	Point Rotated(real sint, real cost) const; // so that you don't calculate sin and cos again.
 
-	void  Normalize();
+	void Normalize();
 	Point Normalized() const;
 
 	void Scale(real factor)
@@ -67,7 +67,7 @@ public:
 	void SetPolar(real r, real t);
 
 	Point WithLength(real r) const;
-	Point WithLengthSq(real r) const;
+	Point WithLengthSq(real r2) const;
 
 	Point Projection(const Point& H) const;
 	Point ProjectionToLine(const Point& A, const Point& B) const;
@@ -82,7 +82,7 @@ public:
 	// it's negative
 	Point ForwardProjection(const Point& H) const;
 
-	void  Truncate(real r);
+	void Truncate(real r);
 	Point Truncated(real r) const;
 
 	// Returns a point with same length that is rotated pi/2 counter-clockwise

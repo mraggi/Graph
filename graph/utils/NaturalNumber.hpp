@@ -14,8 +14,8 @@ class basic_natural_number
 {
 public:
 	using difference_type = long long;
-	using size_type		  = long long;
-	using value_type	  = IntType;
+	using size_type = long long;
+	using value_type = IntType;
 	class iterator;
 	using const_iterator = iterator;
 
@@ -79,7 +79,7 @@ private:
 	IntType m_n;
 }; // end class basic_natural_number
 
-using natural_number	 = basic_natural_number<int>;
+using natural_number = basic_natural_number<int>;
 using big_natural_number = basic_natural_number<long long>;
 
 template <class Container, class T = typename Container::size_type>

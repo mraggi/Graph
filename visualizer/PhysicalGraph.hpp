@@ -9,9 +9,9 @@ class PhysicalGraph
 public:
 	using vertex_t = Graph::vertex_t;
 	using weight_t = Graph::weight_t;
-	using Edge	 = Graph::Edge;
+	using Edge = Graph::Edge;
 
-	PhysicalGraph(const Graph& g);
+	explicit PhysicalGraph(const Graph& g);
 
 	explicit PhysicalGraph(vertex_t num_verts = 0);
 
@@ -19,7 +19,7 @@ public:
 
 	void Update(double time);
 
-	Point  operator[](size_t i) const { return M[i].position; }
+	Point operator[](size_t i) const { return M[i].position; }
 	Point& operator[](size_t i) { return M[i].position; }
 
 	const std::vector<Graph::Edge>& edges() const { return E; }
@@ -27,7 +27,7 @@ public:
 	using all_vertices = basic_natural_number<vertex_t>;
 	all_vertices vertices() const { return all_vertices(num_vertices()); }
 
-	vertex_t		 num_vertices() const { return G.num_vertices(); }
+	vertex_t num_vertices() const { return G.num_vertices(); }
 	Graph::size_type num_edges() const { return G.num_edges(); }
 
 	// Graph modification functions
@@ -42,7 +42,7 @@ public:
 	void remove_vertex(vertex_t v)
 	{
 		vertex_t last = num_vertices() - 1;
-		M[v]		  = M[last];
+		M[v] = M[last];
 		M.pop_back();
 		G.remove_vertex(v);
 		E = G.edges();
@@ -102,8 +102,8 @@ private:
 	Point v(vertex_t v) const { return M[v].velocity; }
 	Point a(vertex_t v) const { return M[v].acceleration; }
 
-	Graph				G;
-	std::vector<Edge>   E;
+	Graph G;
+	std::vector<Edge> E;
 	std::vector<Motion> M;
 
 	real time_since_last_update{0.0}; // this is so it runs at fixed fps

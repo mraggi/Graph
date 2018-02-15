@@ -14,12 +14,12 @@ bool DoLinesIntersect(Point p1, Point p2, Point p3, Point p4, Point* intersectio
 		return false;
 
 	// Get the x and y
-	if (intersection)
+	if (intersection != nullptr)
 	{
-		real pre		= (x1 * y2 - y1 * x2);
-		real post		= (x3 * y4 - y3 * x4);
-		real x			= (pre * (x3 - x4) - (x1 - x2) * post) / d;
-		real y			= (pre * (y3 - y4) - (y1 - y2) * post) / d;
+		real pre = (x1 * y2 - y1 * x2);
+		real post = (x3 * y4 - y3 * x4);
+		real x = (pre * (x3 - x4) - (x1 - x2) * post) / d;
+		real y = (pre * (y3 - y4) - (y1 - y2) * post) / d;
 		intersection->x = x;
 		intersection->y = y;
 	}
@@ -37,13 +37,13 @@ bool DoSegmentsIntersect(Point p1, Point p2, Point p3, Point p4, Point* intersec
 	if (d == 0)
 		return false;
 
-	real pre  = (x1 * y2 - y1 * x2);
+	real pre = (x1 * y2 - y1 * x2);
 	real post = (x3 * y4 - y3 * x4);
-	real x	= (pre * (x3 - x4) - (x1 - x2) * post) / d;
-	real y	= (pre * (y3 - y4) - (y1 - y2) * post) / d;
+	real x = (pre * (x3 - x4) - (x1 - x2) * post) / d;
+	real y = (pre * (y3 - y4) - (y1 - y2) * post) / d;
 
 	// Get the x and y
-	if (intersection)
+	if (intersection != nullptr)
 	{
 		intersection->x = x;
 		intersection->y = y;
@@ -58,82 +58,6 @@ bool DoSegmentsIntersect(Point p1, Point p2, Point p3, Point p4, Point* intersec
 	return true;
 }
 
-bool DoSegmentsIntersectStairConvexity(Point p1, Point p2, Point p3, Point p4)
-{
-	real x1 = p1.x, x2 = p2.x, x3 = p3.x, x4 = p4.x;
-	real y1 = p1.y, y2 = p2.y, y3 = p3.y, y4 = p4.y;
-
-	if (y1 > y2)
-	{
-		auto a = p1;
-		p1	 = p2;
-		p2	 = a;
-	}
-
-	if (y3 > y4)
-	{
-
-		auto a = p3;
-		p3	 = p4;
-		p4	 = a;
-	}
-
-	x1 = p1.x, x2 = p2.x, x3 = p3.x, x4 = p4.x;
-	y1 = p1.y, y2 = p2.y, y3 = p3.y, y4 = p4.y;
-
-	if ((x1 <= x3 && x3 <= x2) || (x1 >= x3 && x3 >= x2))
-	{
-		if (y3 < y2 && y4 > y2)
-			return true;
-	}
-
-	if ((x3 <= x1 && x1 <= x4) || (x3 >= x1 && x1 >= x4))
-	{
-		if (y1 < y4 && y4 < y2)
-			return true;
-	}
-
-	return false;
-}
-
-bool DoSegmentsIntersectStairConvexityH(Point p1, Point p2, Point p3, Point p4)
-{
-	real x1 = p1.x, x2 = p2.x, x3 = p3.x, x4 = p4.x;
-	real y1 = p1.y, y2 = p2.y, y3 = p3.y, y4 = p4.y;
-
-	if (x1 < x2)
-	{
-		auto a = p1;
-		p1	 = p2;
-		p2	 = a;
-	}
-
-	if (x3 < x4)
-	{
-
-		auto a = p3;
-		p3	 = p4;
-		p4	 = a;
-	}
-
-	x1 = p1.x, x2 = p2.x, x3 = p3.x, x4 = p4.x;
-	y1 = p1.y, y2 = p2.y, y3 = p3.y, y4 = p4.y;
-
-	if ((y3 >= y1 && y1 >= y4) || (y3 <= y1 && y1 <= y4))
-	{
-		if (x2 < x4 && x4 < x1)
-			return true;
-	}
-
-	if ((y1 <= y3 && y3 <= y2) || (y1 >= y3 && y3 >= y2))
-	{
-		if (x3 > x2 && x2 > x4)
-			return true;
-	}
-
-	return false;
-}
-
 bool DoesSegmentIntersectLine(Point p1, Point p2, Point p3, Point p4, Point* intersection)
 {
 	real x1 = p1.x, x2 = p2.x, x3 = p3.x, x4 = p4.x;
@@ -144,13 +68,13 @@ bool DoesSegmentIntersectLine(Point p1, Point p2, Point p3, Point p4, Point* int
 	if (d == 0)
 		return false;
 
-	real pre  = (x1 * y2 - y1 * x2);
+	real pre = (x1 * y2 - y1 * x2);
 	real post = (x3 * y4 - y3 * x4);
-	real x	= (pre * (x3 - x4) - (x1 - x2) * post) / d;
-	real y	= (pre * (y3 - y4) - (y1 - y2) * post) / d;
+	real x = (pre * (x3 - x4) - (x1 - x2) * post) / d;
+	real y = (pre * (y3 - y4) - (y1 - y2) * post) / d;
 
 	// Get the x and y
-	if (intersection)
+	if (intersection != nullptr)
 	{
 		intersection->x = x;
 		intersection->y = y;
@@ -193,9 +117,8 @@ VP ConvexHull(const VP& SetOfPoints)
 	VP bottom;
 
 	// 	cout << "baaah" << endl;
-	for (unsigned i = 0; i < SetOfPoints.size(); ++i)
+	for (auto P : SetOfPoints)
 	{
-		Point P = SetOfPoints[i];
 		if (P.IsToTheLeftOfLine(l, h))
 			top.push_back(P);
 		else if (P.IsToTheRightOfLine(l, h))
@@ -230,18 +153,17 @@ VP ConvexHull(const VP& SetOfPoints, Point A, Point B)
 
 	// 	cout << "Not empty!!! Size = " << SetOfPoints.size() << endl;
 
-	real  maxdistancesq = 0;
+	real maxdistancesq = 0;
 	Point farthest;
-	for (unsigned i = 0; i < SetOfPoints.size(); ++i)
+	for (auto P : SetOfPoints)
 	{
 		// 		cout << "i = " << i << endl;
-		Point P = SetOfPoints[i];
 		// 		cout << "P = " << P << endl;
 		real dist = P.DistanceSq(P.ProjectionToLine(A, B));
 		// 		cout << "dist = " << dist << endl;
 		if (dist > maxdistancesq)
 		{
-			farthest	  = P;
+			farthest = P;
 			maxdistancesq = dist;
 		}
 		// 		cout << "farthest = " << farthest << endl;
@@ -250,10 +172,8 @@ VP ConvexHull(const VP& SetOfPoints, Point A, Point B)
 
 	VP izquierda;
 	VP derecha;
-	for (unsigned i = 0; i < SetOfPoints.size(); ++i)
+	for (auto P : SetOfPoints)
 	{
-		Point P = SetOfPoints[i];
-
 		bool uno = P.IsToTheLeftOfLine(farthest, A);
 		bool dos = P.IsToTheLeftOfLine(B, farthest);
 

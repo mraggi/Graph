@@ -7,20 +7,20 @@ class CPoint : public FConvex
 public:
 	CPoint() : FConvex(Point(0, 0)) {}
 	explicit CPoint(const Point& point) : FConvex(point) {}
-	Point		 FarthestPointAtAngle(real angle) const { return Position(); }
-	real		 Radius() const { return 0; }
-	real		 Perimeter() const { return 0; }
-	real		 Area() const { return 0; }
-	real		 MinY() const { return Position().y; }
-	real		 MaxY() const { return Position().y; }
-	real		 MinX() const { return Position().x; }
-	real		 MaxX() const { return Position().x; }
-	real		 Width() const { return 0; }
-	real		 Height() const { return 0; }
-	void		 Scale(real Xamount, real Yamount) {}
-	void		 Scale(real amount) {}
-	void		 Rotate(real angle) {}
-	shape		 Type() const { return shape_Point; }
+	Point FarthestPointAtAngle(real angle) const { return Position(); }
+	real Radius() const { return 0; }
+	real Perimeter() const { return 0; }
+	real Area() const { return 0; }
+	real MinY() const { return Position().y; }
+	real MaxY() const { return Position().y; }
+	real MinX() const { return Position().x; }
+	real MaxX() const { return Position().x; }
+	real Width() const { return 0; }
+	real Height() const { return 0; }
+	void Scale(real Xamount, real Yamount) {}
+	void Scale(real amount) {}
+	void Rotate(real angle) {}
+	shape Type() const { return shape_Point; }
 	static shape ClassType() { return shape_Point; }
 
 	//	operator const Point&() const { return m_pPosition; }

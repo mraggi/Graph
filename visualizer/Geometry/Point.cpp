@@ -1,7 +1,7 @@
 #include "Point.hpp"
 #include "Probability.hpp"
 
-void Point::Normalize(void)
+void Point::Normalize()
 {
 	if (x != 0 || y != 0)
 	{
@@ -38,15 +38,15 @@ real Point::DistanceSq(const Point& vec) const
 Point Point::VectorWithAngle(real t) const
 {
 	Point withAngle;
-	real  r = Length();
+	real r = Length();
 	return Polar(r, t);
 }
 
 void Point::SetAngle(real t)
 {
 	real r = Length();
-	x	  = r * cos(t);
-	y	  = r * sin(t);
+	x = r * cos(t);
+	y = r * sin(t);
 }
 
 Point Point::Rotated(real t) const
@@ -56,7 +56,7 @@ Point Point::Rotated(real t) const
 
 	real xprime = COS * x - SIN * y;
 	real yprime = SIN * x + COS * y;
-	return Point(xprime, yprime);
+	return {xprime, yprime};
 }
 
 void Point::Rotate(real t)
@@ -119,7 +119,7 @@ Point Point::WithLengthSq(real r2) const
 Point Point::Projection(const Point& H) const
 {
 	Point T(x, y);
-	real  t	= (T * H) / (H * H);
+	real t = (T * H) / (H * H);
 	Point proj = t * H;
 	return proj;
 }
@@ -129,7 +129,7 @@ Point Point::ProjectionToLine(const Point& A, const Point& B) const
 	Point me = *this;
 
 	Point meMinusA = me - A;
-	Point BMinusA  = B - A;
+	Point BMinusA = B - A;
 
 	Point temp = meMinusA.Projection(BMinusA);
 
@@ -139,7 +139,7 @@ Point Point::ProjectionToLine(const Point& A, const Point& B) const
 Point Point::ForwardProjection(const Point& H) const
 {
 	if (std::abs(AngleTo(H)) > pi / 2)
-		return Point(0, 0);
+		return {0, 0};
 	return Projection(H);
 }
 
@@ -147,9 +147,7 @@ bool Point::IsToTheLeftOfLine(const Point& A, const Point& B) const
 {
 	Point H = B - A;
 	Point P = (*this) - A;
-	if (H.x * P.y > H.y * P.x)
-		return true;
-	return false;
+	return H.x * P.y > H.y * P.x;
 }
 
 bool Point::IsOnLine(const Point& A, const Point& B) const
@@ -163,9 +161,7 @@ bool Point::IsToTheRightOfLine(const Point& A, const Point& B) const
 {
 	Point H = B - A;
 	Point P = (*this) - A;
-	if (H.x * P.y < H.y * P.x)
-		return true;
-	return false;
+	return H.x * P.y < H.y * P.x;
 }
 
 bool Point::operator!=(const Point& vec) const { return ((x != vec.x) || (y != vec.y)); }
@@ -192,18 +188,18 @@ std::ostream& operator<<(std::ostream& os, const Point& rhs)
 	return os;
 }
 
-Point Point::Polar(real r, real theta) { return Point(r * cos(theta), r * sin(theta)); }
+Point Point::Polar(real r, real theta) { return {r * cos(theta), r * sin(theta)}; }
 
 Point Point::RandomPoint(real maxLength)
 {
-	real r	 = random_real(0.0, maxLength);
+	real r = random_real(0.0, maxLength);
 	real theta = random_real(-pi, pi);
 	return Polar(r, theta);
 }
 
 Point Point::RandomPoint(real minLength, real maxLength)
 {
-	real r	 = random_real((minLength), (maxLength));
+	real r = random_real((minLength), (maxLength));
 	real theta = random_real((-pi), (pi));
 	return Polar(r, theta);
 }
@@ -215,8 +211,8 @@ Point Point::LocalToGlobal(const Point& origin, const Point& U, const Point& V) 
 
 Point Point::GlobalToLocal(const Point& origin, const Point& U, const Point& V) const
 {
-	Point L			  = *this - origin;
-	real  determinant = (U.x * V.y - U.y * V.x);
+	Point L = *this - origin;
+	real determinant = (U.x * V.y - U.y * V.x);
 
 	// check to see if they U and V are linearly dependent
 	if (std::abs(determinant) != 0)
@@ -224,7 +220,7 @@ Point Point::GlobalToLocal(const Point& origin, const Point& U, const Point& V) 
 
 	real locx = (L.x * V.y - L.y * V.x) / determinant;
 	real locy = -(L.x * U.y - L.y * U.x) / determinant;
-	return Point(locx, locy);
+	return {locx, locy};
 }
 
 bool operator<(const Point& A, const Point& B)

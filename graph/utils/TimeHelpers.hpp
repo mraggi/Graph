@@ -44,7 +44,7 @@ public:
 	double Reset()
 	{
 		auto tlast = m_timer;
-		m_timer	= std::chrono::steady_clock::now();
+		m_timer = std::chrono::steady_clock::now();
 
 		return std::chrono::duration_cast<std::chrono::duration<double>>(m_timer - tlast).count();
 	}

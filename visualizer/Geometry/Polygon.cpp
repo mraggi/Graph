@@ -21,9 +21,9 @@ Polygon::Polygon(const VP& SomePoints, bool alreadyconvex)
 	m_pPosition = Sum(m_vPoints) / m_vPoints.size();
 
 	// 	cout << "substracting" << endl;
-	for (unsigned i = 0; i < m_vPoints.size(); ++i)
+	for (auto& m_vPoint : m_vPoints)
 	{
-		m_vPoints[i] -= m_pPosition;
+		m_vPoint -= m_pPosition;
 	}
 	// 	cout << "done" << endl;
 }
@@ -103,9 +103,9 @@ void Polygon::CreateFromCircle(const Circle& circle, unsigned numpoints)
 real Polygon::Radius() const
 {
 	real maxsofar = 0;
-	for (unsigned i = 0; i < m_vPoints.size(); ++i)
+	for (auto m_vPoint : m_vPoints)
 	{
-		real length = m_vPoints[i].Length();
+		real length = m_vPoint.Length();
 		if (maxsofar < length)
 		{
 			maxsofar = length;
@@ -195,21 +195,21 @@ real Polygon::MaxX() const
 	return bestsofar + Position().x;
 }
 
-void Polygon::Scale(real Xamount, real Yamount) { cout << "Not implemented" << endl; }
+void Polygon::Scale(real /*Xamount*/, real /*Yamount*/) { cout << "Not implemented" << endl; }
 
 void Polygon::Scale(real amount)
 {
-	for (unsigned i = 0; i < m_vPoints.size(); ++i)
+	for (auto& m_vPoint : m_vPoints)
 	{
-		m_vPoints[i] *= amount;
+		m_vPoint *= amount;
 	}
 }
 
 void Polygon::Rotate(real angle)
 {
-	for (unsigned i = 0; i < m_vPoints.size(); ++i)
+	for (auto& m_vPoint : m_vPoints)
 	{
-		m_vPoints[i].Rotate(angle);
+		m_vPoint.Rotate(angle);
 	}
 }
 
@@ -226,35 +226,35 @@ void Polygon::CreateFromPoints(const VP& SomePoints)
 
 	m_vPoints = ConvexHull(SomePoints);
 
-	for (unsigned i = 0; i < m_vPoints.size(); ++i)
+	for (auto& m_vPoint : m_vPoints)
 	{
-		m_vPoints[i] -= m_pPosition;
+		m_vPoint -= m_pPosition;
 	}
 }
 
 Point Polygon::FarthestPointAtAngle(real angle) const
 {
-	// TODO: Replace with Binary search implementation
+	// TODO(mraggi): Replace with Binary search implementation
 	unsigned n = NumPoints();
 
 	for (unsigned i = 0; i < n; ++i)
 	{
 		Point p1 = m_vPoints[i];
 		Point p2 = m_vPoints[(i + 1) % n];
-		real  a1 = p1.Angle();
-		real  a2 = p2.Angle();
+		real a1 = p1.Angle();
+		real a2 = p2.Angle();
 
 		if (isAngleBetweenAngles(angle, a1, a2))
 		{
 			Point hola;
-			Ray   ray(Ray(Point(0, 0), angle));
+			Ray ray(Ray(Point(0, 0), angle));
 			ray.Intersects(Segment(p1, p2), hola);
 			return hola + Position();
 		}
 	}
 	if (NumPoints() > 2)
 		cout << "ERROR IN Polygon::FarthestPointAtAngle" << endl;
-	return Point(0, 0);
+	return {0, 0};
 }
 
 Polygon Polygon::RegularPolygon(unsigned num, real radius, Point pos)
@@ -266,7 +266,7 @@ Polygon Polygon::RegularPolygon(unsigned num, real radius, Point pos)
 bool Polygon::Intersects(const Point& other) const
 {
 	const Polygon& B = *this;
-	unsigned	   n = NumPoints();
+	unsigned n = NumPoints();
 	if (n <= 2)
 		return false;
 	for (unsigned i = 0; i < n; ++i)
@@ -308,9 +308,9 @@ bool Polygon::Intersects(const Line& other, Point& intersection) const
 	return true;
 }
 
-bool Polygon::Intersects(const Line& other, Point& intersection, Point& normal) const
+bool Polygon::Intersects(const Line& other, Point& intersection, Point& /*normal*/) const
 {
-	// TODO: Normal
+	// TODO(mraggi): Normal
 
 	return Intersects(other, intersection);
 }
@@ -346,7 +346,7 @@ bool Polygon::Intersects(const Line& other, Segment& intersection) const
 				return true;
 			}
 
-			left				   = !left;
+			left = !left;
 			foundFirstIntersection = true;
 		}
 	}
@@ -370,9 +370,9 @@ bool Polygon::Intersects(const Circle& other) const
 	return false;
 }
 
-bool Polygon::Intersects(const Circle& other, Point& overlap) const
+bool Polygon::Intersects(const Circle& other, Point& /*overlap*/) const
 {
-	// TODO: Implement overlap!
+	// TODO(mraggi): Implement overlap!
 
 	return Intersects(other);
 }
@@ -396,7 +396,7 @@ bool Polygon::Intersects(const Polygon& other) const
 	{
 		// 		cout << "Polygon " << &other << " inside " << this << endl;
 		return true; // If I'm inside the other guy
-	}				 // If the other guy is inside me
+	} // If the other guy is inside me
 
 	// 	cout << "baaah" << endl;
 	for (unsigned i = 0; i < other.NumPoints() + 1; ++i)
@@ -417,9 +417,9 @@ bool Polygon::Intersects(const Polygon& other) const
 	return false;
 }
 
-bool Polygon::Intersects(const Polygon& other, Point& overlap) const
+bool Polygon::Intersects(const Polygon& other, Point& /*overlap*/) const
 {
-	// TODO: Implement overlap!
+	// TODO(mraggi): Implement overlap!
 
 	return Intersects(other);
 }
@@ -434,7 +434,7 @@ Point Polygon::ClosestPoint(const Point& point) const
 	for (unsigned i = 0; i < NumPoints(); ++i)
 	{
 		Segment seg(GetPoint(i), GetPoint(i + 1));
-		Point   closestNow = seg.ClosestPoint(point);
+		Point closestNow = seg.ClosestPoint(point);
 		if (point.IsCloserToFirstThanSecond(closestNow, closestSoFar))
 			closestSoFar = closestNow;
 	}

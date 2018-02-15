@@ -2,10 +2,11 @@
 #include "Misc.hpp"
 #include "Probability.hpp"
 
-using namespace std;
-
 int main()
 {
+	using std::cout;
+	using std::endl;
+
 	Graph G(4);
 	G.add_edge(0, 1);
 	G.add_edge(0, 3);

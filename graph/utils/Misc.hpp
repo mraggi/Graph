@@ -61,8 +61,8 @@ T gcd(T a, T b)
 	while (b != 0)
 	{
 		T r = a % b;
-		a   = b;
-		b   = r;
+		a = b;
+		b = r;
 	}
 	return a;
 }
@@ -91,13 +91,13 @@ T reduce_fraction(Container Numerator, Container Denominator)
 template <class Key,
 		  class Value,
 		  class Hash = std::hash<Key>,
-		  class Map  = std::unordered_map<Key, Value, Hash>>
+		  class Map = std::unordered_map<Key, Value, Hash>>
 class map_with_default : public Map
 {
 
 public:
 	// 	using Base = typename Map;
-	map_with_default(const Value& default_value) : m_default(default_value) {}
+	explicit map_with_default(const Value& default_value) : m_default(default_value) {}
 
 	Value operator()(const Key& key) const
 	{
@@ -112,7 +112,7 @@ public:
 		auto it = Map::find(key);
 		if (it == Map::end())
 		{
-			Map::		operator[](key) = m_default;
+			Map::operator[](key) = m_default;
 			return Map::operator[](key);
 		}
 		return it->second;
@@ -125,13 +125,13 @@ private:
 template <class Key,
 		  class Value,
 		  class Hash = std::hash<Key>,
-		  class Map  = std::unordered_map<Key, Value, Hash>>
+		  class Map = std::unordered_map<Key, Value, Hash>>
 class map_with_default_by_ref : public Map
 {
 
 public:
 	// 	using Base = typename Map;
-	map_with_default_by_ref(const Value& default_value) : m_default(default_value) {}
+	explicit map_with_default_by_ref(const Value& default_value) : m_default(default_value) {}
 
 	Value operator()(const Key& key) const
 	{

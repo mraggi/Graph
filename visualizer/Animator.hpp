@@ -48,10 +48,10 @@ public:
 	}
 
 	template <class GUI_t>
-	Scene* AddStartMessage(GUI_t&			  gui,
+	Scene* AddStartMessage(GUI_t& gui,
 						   const std::string& msg,
-						   const sf::Color&   color	= sf::Color::White,
-						   real				  duration = 5.0)
+						   const sf::Color& color = sf::Color::White,
+						   real duration = 5.0)
 	{
 		start.emplace_back(
 		  [&gui, msg, color, duration]() { gui.AddMessage(msg, color, duration); });
@@ -59,10 +59,10 @@ public:
 	}
 
 	template <class GUI_t>
-	Scene* AddFinishMessage(GUI_t&			   gui,
+	Scene* AddFinishMessage(GUI_t& gui,
 							const std::string& msg,
-							const sf::Color&   color	= sf::Color::White,
-							real			   duration = 5.0)
+							const sf::Color& color = sf::Color::White,
+							real duration = 5.0)
 	{
 		finish.emplace_back(
 		  [&gui, msg, color, duration]() { gui.AddMessage(msg, color, duration); });
@@ -124,9 +124,9 @@ public:
 	virtual ~InterpolatorScene() = default;
 
 private:
-	T*   m_val;
-	T	m_start;
-	T	m_end;
+	T* m_val;
+	T m_start;
+	T m_end;
 	bool set_start_on_start{false};
 };
 
@@ -134,7 +134,7 @@ template <class Client>
 class Animation
 {
 public:
-	Animation(Client* parent) : m_parent(parent)
+	explicit Animation(Client* parent) : m_parent(parent)
 	{
 		scenes.reserve(100);
 		current_scene = scenes.begin();
@@ -248,12 +248,12 @@ public:
 private:
 	Animation(const Animation& A) = delete;
 	void operator=(const Animation& A) = delete;
-	using scene_container			   = std::vector<std::unique_ptr<Scene>>;
-	using scene_iterator			   = scene_container::iterator;
+	using scene_container = std::vector<std::unique_ptr<Scene>>;
+	using scene_iterator = scene_container::iterator;
 	scene_container scenes;
-	scene_iterator  current_scene;
-	int				paused{0};
-	bool			pause_after_scene{false};
+	scene_iterator current_scene;
+	int paused{0};
+	bool pause_after_scene{false};
 
 	bool current_scene_has_started{false};
 

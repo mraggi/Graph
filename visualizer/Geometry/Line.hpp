@@ -16,14 +16,14 @@ public:
 			m_rAngle = 0;
 	}
 	explicit Line(const Segment& segment);
-	explicit Line(const Ray& segment);
+	explicit Line(const Ray& ray);
 	Line(const Point& origin, real angle) : Convex(origin), m_rAngle(MakeValidAngle(angle)) {}
 	~Line() {}
 
-	void		 Scale(real Xamount, real Yamount) {}
-	void		 Scale(real amount) {}
-	void		 Rotate(real angle) { m_rAngle += angle; }
-	shape		 Type() const { return shape_Line; }
+	void Scale(real Xamount, real Yamount) {}
+	void Scale(real amount) {}
+	void Rotate(real angle) { m_rAngle += angle; }
+	shape Type() const { return shape_Line; }
 	static shape ClassType() { return shape_Line; }
 
 	Point ClosestPointToPosition(const Segment& seg) const;

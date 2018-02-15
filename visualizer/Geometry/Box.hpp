@@ -22,7 +22,6 @@ public:
 	{}
 #endif
 
-	Box(const Box& box);
 	virtual ~Box() = default;
 
 	void SetWH(real w, real h)
@@ -51,7 +50,7 @@ public:
 
 	void Rotate(real angle) {}
 
-	shape		 Type() const { return shape_Box; }
+	shape Type() const { return shape_Box; }
 	static shape ClassType() { return shape_Box; }
 
 	Point FarthestPointAtAngle(real angle) const;

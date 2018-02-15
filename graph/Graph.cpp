@@ -1,13 +1,13 @@
 #include "Graph.hpp"
 #include "VectorHelpers.hpp"
 
-using vertex_t				  = Graph::vertex_t;
-using weight_t				  = Graph::weight_t;
-using size_type				  = Graph::size_type;
-using sumweight_t			  = Graph::sumweight_t;
-using Neighbor				  = Graph::Neighbor;
-using Edge					  = Graph::Edge;
-using neighbor_iterator		  = Graph::neighbor_iterator;
+using vertex_t = Graph::vertex_t;
+using weight_t = Graph::weight_t;
+using size_type = Graph::size_type;
+using sumweight_t = Graph::sumweight_t;
+using Neighbor = Graph::Neighbor;
+using Edge = Graph::Edge;
+using neighbor_iterator = Graph::neighbor_iterator;
 using neighbor_const_iterator = Graph::neighbor_const_iterator;
 
 Graph::Graph(vertex_t numberOfVertices)
@@ -91,31 +91,27 @@ bool Graph::is_neighbor(vertex_t from, vertex_t to) const
 	{
 		return std::binary_search(neighbors(from).begin(), neighbors(from).end(), to);
 	}
-	else
-	{
-		for (auto& a : neighbors(from))
-		{
-			if (a == to)
-				return true;
-		}
 
-		return false;
+	for (auto& a : neighbors(from))
+	{
+		if (a == to)
+			return true;
 	}
+
+	return false;
 }
 
 neighbor_iterator Graph::get_neighbor(vertex_t from, vertex_t to)
 {
 	auto first = m_graph[from].begin();
-	auto last  = m_graph[from].end();
+	auto last = m_graph[from].end();
 
 	if (m_neighbors_sorted)
 	{
 		return find_binary(first, last, to);
 	}
-	else
-	{
-		return std::find(first, last, to);
-	}
+
+	return std::find(first, last, to);
 }
 
 neighbor_const_iterator Graph::get_neighbor(vertex_t from, vertex_t to) const
@@ -131,11 +127,9 @@ neighbor_const_iterator Graph::get_neighbor(vertex_t from, vertex_t to) const
 
 		return it;
 	}
-	else
-	{
-		return std::find_if(
-		  m_graph[from].begin(), m_graph[from].end(), [to](auto& N) { return vertex_t(N) == to; });
-	}
+
+	return std::find_if(
+	  m_graph[from].begin(), m_graph[from].end(), [to](auto& N) { return vertex_t(N) == to; });
 }
 
 weight_t Graph::edge_value(vertex_t from, vertex_t to) const
@@ -198,8 +192,8 @@ void Graph::remove_vertex(vertex_t v)
 
 	for (auto u : neighbors(v))
 	{
-		auto& X  = m_graph[u];
-		auto  it = std::remove_if(X.begin(), X.end(), [v](auto& t) { return vertex_t(t) == v; });
+		auto& X = m_graph[u];
+		auto it = std::remove_if(X.begin(), X.end(), [v](auto& t) { return vertex_t(t) == v; });
 		m_numedges -= X.end() - it;
 		X.erase(it, X.end());
 	}

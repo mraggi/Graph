@@ -6,7 +6,7 @@
 class GraphApp : public Client<GraphApp> // using CRTP
 {
 public:
-	using Base	 = Client<GraphApp>;
+	using Base = Client<GraphApp>;
 	using vertex_t = Graph::vertex_t;
 
 	// options
@@ -22,7 +22,7 @@ public:
 	bool show_labels{false};
 	bool show_edge_labels{false};
 
-	GraphApp(const string& name = "Graph");
+	explicit GraphApp(const string& name = "Graph");
 
 	void SetGraph(const Graph& G)
 	{
@@ -57,7 +57,7 @@ public:
 	// This is for all "rare" events (joysticks?)
 
 	vertex_t VertexUnderMouse() const;
-	bool	 IsMouseOverVertex(vertex_t v) const;
+	bool IsMouseOverVertex(vertex_t v) const;
 
 	void FitGraphToScreen();
 
@@ -90,7 +90,7 @@ public:
 	};
 
 	map_with_default_by_ref<vertex_t, sf::Color> vertex_colors{default_vertex_color};
-	map_with_default_by_ref<vertex_t, real>		 vertex_sizes{default_vertex_size};
+	map_with_default_by_ref<vertex_t, real> vertex_sizes{default_vertex_size};
 
 	map_with_default_by_ref<Graph::Edge, sf::Color, edge_hash> edge_colors{default_edge_color};
 	map_with_default_by_ref<Graph::Edge, real, edge_hash> edge_thicknesses{default_edge_thickness};
@@ -101,11 +101,11 @@ private:
 	vertex_t selected_vertex{Graph::INVALID_VERTEX};
 	vertex_t edge_start{Graph::INVALID_VERTEX};
 
-	int  num_rand_verts{500};
+	int num_rand_verts{500};
 	real avg_degree{1.1};
 
 	void DrawGraph();
-	Box  GetBoundingBoxOfGraph() const;
+	Box GetBoundingBoxOfGraph() const;
 
 	void CreateGUI();
 

@@ -5,7 +5,7 @@
 
 using Base = GraphApp::Base;
 
-GraphApp::GraphApp(const string& name) : Base(name), P()
+GraphApp::GraphApp(const string& name) : Base(name)
 {
 	SetGraph(Graph(0));
 
@@ -157,8 +157,8 @@ void GraphApp::DrawGraph()
 
 bool GraphApp::IsMouseOverVertex(vertex_t v) const
 {
-	auto   MP  = MousePosition();
-	double vs  = vertex_sizes(v) + 3; // leave 3 pixels to grab the vertex
+	auto MP = MousePosition();
+	double vs = vertex_sizes(v) + 3; // leave 3 pixels to grab the vertex
 	double vs2 = vs * vs;
 	return distancesq(MP, P[v]) < vs2;
 }
@@ -237,7 +237,7 @@ void GraphApp::FitGraphToScreen()
 	SynchronizeCameraWithView();
 }
 
-void GraphApp::OnKeyPress(sf::Keyboard::Key key) {}
+void GraphApp::OnKeyPress(sf::Keyboard::Key /*key*/) {}
 
 Box GraphApp::GetBoundingBoxOfGraph() const
 {
@@ -259,7 +259,7 @@ Box GraphApp::GetBoundingBoxOfGraph() const
 		maxY = max(maxY, p.y);
 	}
 
-	real  b = 5 + 2 * default_vertex_size;
+	real b = 5 + 2 * default_vertex_size;
 	Point border(b, b);
 
 	Box B(Point(minX, minY) - border, Point(maxX, maxY) + border);

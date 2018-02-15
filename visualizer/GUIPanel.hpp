@@ -19,7 +19,7 @@ struct GuiElement
 {
 	GuiElement(const string& name_, const sf::Color& color_) : name(name_), color(color_) {}
 	std::string name;
-	sf::Color   color;
+	sf::Color color;
 
 	virtual std::string GetString() const { return name; }
 
@@ -43,16 +43,16 @@ template <class T>
 struct VarController : public GuiElement
 {
 public:
-	T*				  var;
+	T* var;
 	sf::Keyboard::Key increaseKey;
 	sf::Keyboard::Key decreaseKey;
-	T				  stepsize;
-	VarController(T&				 var_,
-				  sf::Keyboard::Key  increaseKey_,
-				  sf::Keyboard::Key  decreaseKey_,
-				  T					 stepsize_,
+	T stepsize;
+	VarController(T& var_,
+				  sf::Keyboard::Key increaseKey_,
+				  sf::Keyboard::Key decreaseKey_,
+				  T stepsize_,
 				  const std::string& name,
-				  const sf::Color&   color = sf::Color::White)
+				  const sf::Color& color = sf::Color::White)
 		: GuiElement(name, color)
 		, var(&var_)
 		, increaseKey(increaseKey_)
@@ -82,12 +82,12 @@ public:
 
 struct Checkbox : GuiElement
 {
-	bool*			  var;
+	bool* var;
 	sf::Keyboard::Key shortcut;
-	Checkbox(bool&				var_,
+	Checkbox(bool& var_,
 			 const std::string& name,
-			 sf::Keyboard::Key  key,
-			 const sf::Color&   color = sf::Color::White)
+			 sf::Keyboard::Key key,
+			 const sf::Color& color = sf::Color::White)
 		: GuiElement(name, color), var(&var_), shortcut(key)
 	{}
 
@@ -181,23 +181,23 @@ public:
 	}
 
 	template <class T>
-	void AddController(T&				  var,
+	void AddController(T& var,
 					   const std::string& name,
-					   T				  stepsize,
-					   sf::Keyboard::Key  decrKey,
-					   sf::Keyboard::Key  incrKey,
-					   const sf::Color&   color = sf::Color::Magenta);
+					   T stepsize,
+					   sf::Keyboard::Key decrKey,
+					   sf::Keyboard::Key incrKey,
+					   const sf::Color& color = sf::Color::Magenta);
 
-	void AddCheckbox(bool&				var,
+	void AddCheckbox(bool& var,
 					 const std::string& name,
-					 sf::Keyboard::Key  shortcut,
-					 const sf::Color&   color = sf::Color::White);
+					 sf::Keyboard::Key key,
+					 const sf::Color& color = sf::Color::White);
 
 	template <class Func>
 	void AddAction(const std::string& name,
-				   sf::Keyboard::Key  shortcut,
-				   Func				  f,
-				   const sf::Color&   color = sf::Color::Yellow);
+				   sf::Keyboard::Key shortcut,
+				   Func f,
+				   const sf::Color& color = sf::Color::Yellow);
 
 	void AddSpacer() { gui_elements.emplace_back(new Spacer()); }
 
@@ -247,26 +247,26 @@ private:
 	MessageBox m_message_box;
 
 	Circle GetCircle(int num);
-	Box	GetBox(int num);
+	Box GetBox(int num);
 };
 
 template <class Func>
 void GUIPanel::AddAction(const std::string& name,
-						 sf::Keyboard::Key  shortcut,
-						 Func				f,
-						 const sf::Color&   color)
+						 sf::Keyboard::Key shortcut,
+						 Func f,
+						 const sf::Color& color)
 {
 	gui_elements.emplace_back(new Action<Func>(name, shortcut, f, color));
 	shortcuts[shortcut].emplace_back(gui_elements.back().get());
 }
 
 template <class T>
-void GUIPanel::AddController(T&					var,
+void GUIPanel::AddController(T& var,
 							 const std::string& name,
-							 T					stepsize,
-							 sf::Keyboard::Key  decrKey,
-							 sf::Keyboard::Key  incrKey,
-							 const sf::Color&   color)
+							 T stepsize,
+							 sf::Keyboard::Key decrKey,
+							 sf::Keyboard::Key incrKey,
+							 const sf::Color& color)
 {
 	gui_elements.emplace_back(new VarController<T>(var, incrKey, decrKey, stepsize, name, color));
 	shortcuts[incrKey].emplace_back(gui_elements.back().get());

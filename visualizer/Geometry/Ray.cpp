@@ -4,10 +4,7 @@ Ray::Ray(const Segment& segment) : Convex(segment.Origin()), m_rAngle(segment.An
 
 bool Ray::PointInLineIntersectsMe(const Point& point) const
 {
-	if ((point - Position()) * (Direction()) < 0)
-		return false;
-
-	return true;
+	return (point - Position()) * (Direction()) < 0;
 }
 
 bool Ray::SegmentInLineIntersectsMe(const Point& A, const Point& B, Segment* intersection) const
@@ -15,12 +12,9 @@ bool Ray::SegmentInLineIntersectsMe(const Point& A, const Point& B, Segment* int
 	bool Aint = PointInLineIntersectsMe(A);
 	bool Bint = PointInLineIntersectsMe(B);
 
-	if (intersection == NULL)
+	if (intersection == nullptr)
 	{
-		if (Aint || Bint)
-			return true;
-
-		return false;
+		return Aint || Bint;
 	}
 
 	if (!Aint && !Bint)

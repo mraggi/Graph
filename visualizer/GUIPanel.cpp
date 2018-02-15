@@ -25,7 +25,7 @@ Circle GUIPanel::GetCircle(int num)
 
 Box GUIPanel::GetBox(int num)
 {
-	double r	  = CheckboxRadius();
+	double r = CheckboxRadius();
 	double height = (0.5 + num) * TextSeparation();
 
 	Point O(2 + r, height);
@@ -33,16 +33,16 @@ Box GUIPanel::GetBox(int num)
 	return Box(O, r, r);
 }
 
-void GUIPanel::AddCheckbox(bool&			 var,
-						   const string&	 name,
+void GUIPanel::AddCheckbox(bool& var,
+						   const string& name,
 						   sf::Keyboard::Key key,
-						   const sf::Color&  color)
+						   const sf::Color& color)
 {
 	gui_elements.emplace_back(new Checkbox(var, name, key, color));
 	shortcuts[key].emplace_back(gui_elements.back().get());
 }
 
-void GUIPanel::HandleMousePress(const Point& position, const sf::Mouse::Button& btn)
+void GUIPanel::HandleMousePress(const Point& position, const sf::Mouse::Button& /*btn*/)
 {
 	int num = 0;
 	for (auto& e : gui_elements)
@@ -72,8 +72,8 @@ void GUIPanel::AddText(const std::string& name, const sf::Color& color)
 
 std::string GUIPanel::AvailableShortcuts() const
 {
-	int A = static_cast<int>(sf::Keyboard::A);
-	int Z = static_cast<int>(sf::Keyboard::Z);
+	auto A = static_cast<int>(sf::Keyboard::A);
+	auto Z = static_cast<int>(sf::Keyboard::Z);
 
 	std::stringstream s;
 	for (int key = A; key <= Z; ++key)

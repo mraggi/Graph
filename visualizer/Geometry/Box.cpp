@@ -4,8 +4,6 @@
 
 Box::Box(const Point& pos, real w, real h) : FConvex(pos), m_pLR(w, h) {}
 
-Box::Box(const Box& box) : FConvex(box.Position()), m_pLR(box.m_pLR) {}
-
 Box::Box(const Point& corner1, const Point& corner2)
 	: FConvex((corner1 + corner2) / 2)
 	, m_pLR(abs(corner1.x - corner2.x) / 2, abs(corner1.y - corner2.y) / 2)
@@ -13,10 +11,10 @@ Box::Box(const Point& corner1, const Point& corner2)
 
 Point Box::FarthestPointAtAngle(real angle) const
 {
-	angle	  = MakeValidAngle(angle);
-	real theta = MakeValidAngle(atan2(m_pLR.y, m_pLR.x));
-	real w	 = m_pLR.x;
-	real h	 = m_pLR.y;
+	angle = MakeValidAngle(angle);
+	real theta = MakeValidAngle(m_pLR.Angle());
+	real w = m_pLR.x;
+	real h = m_pLR.y;
 
 	if (abs(angle) <= theta)
 		return Position() + Point(w, w * tan(angle));
@@ -30,7 +28,7 @@ Point Box::FarthestPointAtAngle(real angle) const
 	if (angle < 0)
 		return Position() + Point(-h * tan(pi / 2 - angle), -h);
 
-	return Point(0, 0);
+	return {0, 0};
 }
 
 bool Box::Intersects(const Point& other) const
@@ -73,9 +71,9 @@ bool Box::Intersects(const Line& other, Segment& intersection) const
 bool Box::Intersects(const Circle& other) const
 {
 	Point overlap = Point();
-	real  x		  = 0;
-	real  y		  = 0;
-	real  aux;
+	real x = 0;
+	real y = 0;
+	real aux;
 	aux = MinX() - other.Position().x;
 	if (aux > 0)
 		x = aux;
@@ -95,17 +93,15 @@ bool Box::Intersects(const Circle& other) const
 			y = aux;
 	}
 	overlap = -Point(x, y);
-	aux		= other.Radius() * other.Radius();
-	if (overlap.LengthSq() > aux)
-		return false;
-	return true;
+	aux = other.Radius() * other.Radius();
+	return overlap.LengthSq() <= aux;
 }
 
 bool Box::Intersects(const Circle& other, Point& overlap) const
 {
 	overlap = Point();
-	real x  = 0;
-	real y  = 0;
+	real x = 0;
+	real y = 0;
 	real xInterior
 	  = 0; // Estos son para el caso en que el centro del circulo esta dentro del cuadro.
 	real yInterior = 0; // No sirven para determinar colision, pero si para determinar el
@@ -117,7 +113,7 @@ bool Box::Intersects(const Circle& other, Point& overlap) const
 	else
 	{
 		xInterior = aux;
-		aux		  = MaxX() - other.Position().x;
+		aux = MaxX() - other.Position().x;
 		if (aux < 0)
 			x = aux;
 		else if (-xInterior > aux)
@@ -129,7 +125,7 @@ bool Box::Intersects(const Circle& other, Point& overlap) const
 	else
 	{
 		yInterior = aux;
-		aux		  = MaxY() - other.Position().y;
+		aux = MaxY() - other.Position().y;
 		if (aux < 0)
 			y = aux;
 		else if (-yInterior > aux)
@@ -138,7 +134,7 @@ bool Box::Intersects(const Circle& other, Point& overlap) const
 	if (abs(x) > tolerance || abs(y) > tolerance)
 	{
 		overlap = Point(x, y);
-		aux		= other.Radius() * other.Radius();
+		aux = other.Radius() * other.Radius();
 		if (overlap.LengthSq() > aux)
 			return false;
 
@@ -147,7 +143,7 @@ bool Box::Intersects(const Circle& other, Point& overlap) const
 		overlap.Scale(aux - other.Radius());
 		return true;
 	}
-	else if (abs(xInterior) < abs(yInterior))
+	if (abs(xInterior) < abs(yInterior))
 		overlap = Point(xInterior, 0);
 	else
 		overlap = Point(0, yInterior);
@@ -187,8 +183,8 @@ bool Box::Intersects(const Box& other, Point& overlap) const
 	real y2 = other.MinY() - MaxY();
 	if (y1 < 0 || y2 > 0)
 		return false;
-	real x	= 0;
-	real y	= 0;
+	real x = 0;
+	real y = 0;
 	real aux1 = MaxX() - other.MaxX();
 	real aux2 = MinX() - other.MinX();
 	if (aux1 > 0 && aux2 > 0)

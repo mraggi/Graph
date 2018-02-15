@@ -59,7 +59,7 @@ bool Segment::SegmentInLineIntersectsMe(const Point& A, const Point& B, Segment*
 
 	if (PointInLineIntersectsMe((p[1] + p[2]) / 2))
 	{
-		if (intersection != NULL)
+		if (intersection != nullptr)
 			intersection->SetOriginAndEnd(p[1], p[2]);
 
 		return true;

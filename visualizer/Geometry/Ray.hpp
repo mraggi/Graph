@@ -13,13 +13,13 @@ public:
 	Ray(const Point& pointA, const Point& pointB)
 		: Convex(pointA), m_rAngle((pointB - pointA).Angle())
 	{}
-	Ray(const Segment& segment);
+	explicit Ray(const Segment& segment);
 	Ray(const Point& origin, real angle) : Convex(origin), m_rAngle(MakeValidAngle(angle)) {}
 	~Ray() {}
 
-	void  Scale(real Xamount, real Yamount) {}
-	void  Scale(real amount) {}
-	void  Rotate(real angle) { m_rAngle += angle; }
+	void Scale(real Xamount, real Yamount) {}
+	void Scale(real amount) {}
+	void Rotate(real angle) { m_rAngle += angle; }
 	shape Type() const { return shape_Ray; }
 
 	static shape ClassType() { return shape_Ray; }
@@ -44,7 +44,7 @@ public:
 	}
 
 	bool Intersects(const Point& other) const;
-	bool Intersects(const Point& other, Point& overlap) const;
+	bool Intersects(const Point& other, Point& intersection) const;
 
 	bool Intersects(const Line& other) const;
 	bool Intersects(const Line& other, Point& intersection) const;
@@ -52,13 +52,13 @@ public:
 	bool Intersects(const Line& other, Segment& intersection) const;
 
 	bool Intersects(const Circle& other) const;
-	bool Intersects(const Circle& other, Point& overlap) const;
+	bool Intersects(const Circle& other, Point& intersection) const;
 
 	bool Intersects(const Box& other) const;
-	bool Intersects(const Box& other, Point& overlap) const;
+	bool Intersects(const Box& other, Point& intersection) const;
 
 	bool Intersects(const Polygon& other) const;
-	bool Intersects(const Polygon& other, Point& overlap) const;
+	bool Intersects(const Polygon& other, Point& intersection) const;
 
 	Point ClosestPoint(const Point& point) const;
 };

@@ -22,7 +22,7 @@ public:
 	Point DownLeft() const { return Point(MinX(), MaxY()); }
 	Point DownRight() const { return Point(MaxX(), MaxY()); }
 
-	virtual real Area() const	  = 0;
+	virtual real Area() const = 0;
 	virtual real Perimeter() const = 0;
 	// virtual shape Type() const = 0;
 
@@ -32,8 +32,8 @@ public:
 
 	virtual Point FarthestPointAtAngle(real angle) const = 0;
 
-	virtual Box	BoundingBox();
-	virtual Circle BoundingCircle();
+	virtual Box BoundingBox() const;
+	virtual Circle BoundingCircle() const;
 
 	virtual bool Intersects(const Point& other, Point& overlap) const;
 

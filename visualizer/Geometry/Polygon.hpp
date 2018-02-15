@@ -9,7 +9,7 @@
 class Polygon : public FConvex
 {
 private:
-	VP	m_vPoints;
+	VP m_vPoints;
 	Point GetPoint(unsigned index) const;
 
 public:
@@ -19,7 +19,7 @@ public:
 	explicit Polygon(const Segment& segment);
 	explicit Polygon(const Point& point);
 	explicit Polygon(const Circle& circle,
-					 unsigned	  num); // creates a regular polygon
+					 unsigned num); // creates a regular polygon
 	explicit Polygon(const FConvex& fconvex);
 
 	real Radius() const;

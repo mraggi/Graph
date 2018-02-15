@@ -22,7 +22,7 @@ inline real MakeValidAngle(real theta)
 
 inline bool isAngleBetweenAngles(real a, real b1, real b2)
 {
-	real c  = MakeValidAngle(a - b1 + pi);
+	real c = MakeValidAngle(a - b1 + pi);
 	real c2 = MakeValidAngle(b2 - b1 + pi);
 
 	return c2 <= c;

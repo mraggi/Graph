@@ -27,7 +27,7 @@ struct Message
 			t = 1.0;
 
 		auto transparent = start_color;
-		transparent.a	= 0;
+		transparent.a = 0;
 
 		return interpolate(t, start_color, transparent);
 	}
@@ -38,8 +38,8 @@ struct Message
 
 private:
 	sf::Color start_color;
-	real	  time_since_start{0.0};
-	real	  duration{2.0};
+	real time_since_start{0.0};
+	real duration{2.0};
 };
 
 class MessageBox
@@ -70,7 +70,7 @@ private:
 template <class C>
 void MessageBox::Render(C& client)
 {
-	auto ts  = client.GUI.TextSize();
+	auto ts = client.GUI.TextSize();
 	auto sep = client.GUI.TextSeparation();
 
 	auto w = client.WindowWidth();

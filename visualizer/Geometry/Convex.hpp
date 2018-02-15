@@ -39,27 +39,27 @@ public:
 
 	// Center of mass in inherited classes
 	Point Position() const { return m_pPosition; }
-	void  SetPosition(Point newpos) { m_pPosition = newpos; }
+	void SetPosition(Point newpos) { m_pPosition = newpos; }
 
-	void		 Translate(const Point& T) { m_pPosition += T; }
+	void Translate(const Point& T) { m_pPosition += T; }
 	virtual void Rotate(real angle) = 0;
 
 	// Scale equally x and y
-	virtual void Scale(real amount)				   = 0;
+	virtual void Scale(real amount) = 0;
 	virtual void Scale(real Xamount, real Yamount) = 0;
 
-	virtual bool Intersects(const Convex& other) const		   = 0;
+	virtual bool Intersects(const Convex& other) const = 0;
 	virtual bool Intersects(const Convex& other, Point&) const = 0;
 
-	virtual bool Intersects(const Point& other) const				  = 0;
+	virtual bool Intersects(const Point& other) const = 0;
 	virtual bool Intersects(const Point& other, Point& overlap) const = 0;
 
 	virtual bool Intersects(const CPoint& other);
 	virtual bool Intersects(const CPoint& other, Point& overlap);
 
-	virtual bool Intersects(const Line& other) const									 = 0;
-	virtual bool Intersects(const Line& other, Point& intersection) const				 = 0;
-	virtual bool Intersects(const Line& other, Segment& intersection) const				 = 0;
+	virtual bool Intersects(const Line& other) const = 0;
+	virtual bool Intersects(const Line& other, Point& intersection) const = 0;
+	virtual bool Intersects(const Line& other, Segment& intersection) const = 0;
 	virtual bool Intersects(const Line& other, Point& intersection, Point& normal) const = 0;
 
 	virtual bool Intersects(const Ray& other) const;
@@ -72,13 +72,13 @@ public:
 	virtual bool Intersects(const Segment& other, Segment& intersection) const;
 	virtual bool Intersects(const Segment& other, Point& intersection, Point& normal) const;
 
-	virtual bool Intersects(const Circle& other) const				   = 0;
+	virtual bool Intersects(const Circle& other) const = 0;
 	virtual bool Intersects(const Circle& other, Point& overlap) const = 0;
 
-	virtual bool Intersects(const Box& other) const					= 0;
+	virtual bool Intersects(const Box& other) const = 0;
 	virtual bool Intersects(const Box& other, Point& overlap) const = 0;
 
-	virtual bool Intersects(const Polygon& other) const					= 0;
+	virtual bool Intersects(const Polygon& other) const = 0;
 	virtual bool Intersects(const Polygon& other, Point& overlap) const = 0;
 
 	virtual Point ClosestPoint(const Point& point) const = 0;

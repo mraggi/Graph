@@ -6,7 +6,7 @@
 class disjoint_sets
 {
 public:
-	disjoint_sets(long n) : parent(n) { std::iota(parent.begin(), parent.end(), 0); }
+	explicit disjoint_sets(long n) : parent(n) { std::iota(parent.begin(), parent.end(), 0); }
 
 	long find_root(long t)
 	{
@@ -38,9 +38,9 @@ public:
 	{
 		while (x != parent[x])
 		{
-			long t	= parent[x];
+			long t = parent[x];
 			parent[x] = p;
-			x		  = t;
+			x = t;
 		}
 		parent[x] = p;
 	}

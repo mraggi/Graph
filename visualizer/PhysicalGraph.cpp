@@ -54,7 +54,7 @@ void PhysicalGraph::Update(double time)
 		{
 			for (vertex_t y = x + 1; y < num_vertices(); ++y)
 			{
-				auto F  = p(x) - p(y);
+				auto F = p(x) - p(y);
 				auto f2 = F.LengthSq();
 
 				if (f2 == 0)

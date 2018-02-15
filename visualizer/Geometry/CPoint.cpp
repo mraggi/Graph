@@ -51,9 +51,9 @@ bool CPoint::Intersects(const Line& other, Segment& intersection) const
 	return true;
 }
 
-bool CPoint::Intersects(const Line& other, Point& intersection, Point& normal) const
+bool CPoint::Intersects(const Line& other, Point& /*intersection*/, Point& /*normal*/) const
 {
 	return other.Intersects(Position());
 }
 
-Point CPoint::ClosestPoint(const Point& point) const { return Position(); }
+Point CPoint::ClosestPoint(const Point& /*point*/) const { return Position(); }

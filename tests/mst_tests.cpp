@@ -6,14 +6,14 @@
 TEST(MST, Prim0)
 {
 	Graph G(0);
-	auto  T = prim(G);
+	auto T = prim(G);
 	ASSERT_TRUE(T.empty());
 }
 
 TEST(MST, Prim1)
 {
 	Graph G(1);
-	auto  T = prim(G);
+	auto T = prim(G);
 	ASSERT_TRUE(T.empty());
 }
 

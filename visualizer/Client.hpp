@@ -11,16 +11,16 @@ class GUIPanel;
 const real CameraMoveSpeed = 0.25;
 const real CameraZoomSpeed = 0.12;
 
-const int ColorDepth   = 24;
+const int ColorDepth = 24;
 const int AntiAliasing = 8;
-const int Stencil	  = 8;
+const int Stencil = 8;
 
 template <class Derived>
 class Client
 {
 private:
 	friend Derived;
-	Client(const string& Name = "Window"); // Standard way to do CRTP
+	explicit Client(const string& Name = "Window"); // Standard way to do CRTP
 
 public:
 	using animation = Animation<Client<Derived>>;
@@ -44,17 +44,17 @@ public:
 	/// ************** Start Geometry rendering
 	void Render(const Point& origin, const sf::Color& color = sf::Color::Blue, real thickness = 5);
 
-	void Render(const Segment&   A,
-				const sf::Color& color	 = sf::Color::Green,
-				real			 thickness = 1,
-				bool			 directed  = false);
+	void Render(const Segment& A,
+				const sf::Color& color = sf::Color::Green,
+				real thickness = 1,
+				bool directed = false);
 
 	void Render(const Circle& circle, const sf::Color& color = sf::Color::Red, real thickness = 2);
 
-	void Render(const Circle&	circle,
+	void Render(const Circle& circle,
 				const sf::Color& fillcolor,
 				const sf::Color& outlinecolor,
-				int				 thickness = 2);
+				int thickness = 2);
 
 	void Render(const VP& polygon, const sf::Color& color = sf::Color::Magenta, real thickness = 1);
 
@@ -66,10 +66,10 @@ public:
 	void Render(const Ray& ray, const sf::Color& color = sf::Color::Yellow, real thickness = 1);
 
 	void Render(const Box& box, const sf::Color& color = sf::Color::Cyan, real thickness = 1);
-	void Render(const Box&		 box,
+	void Render(const Box& box,
 				const sf::Color& fillcolor,
 				const sf::Color& outlinecolor,
-				int				 thickness = 0);
+				int thickness = 0);
 
 	void Render(const Convex& conv, const sf::Color& color = sf::Color::White, real thickness = 1);
 
@@ -145,8 +145,8 @@ public:
 	void SynchronizeCameraWithView();
 
 	Point WindowSize() const { return m_Window.getSize(); }
-	real  WindowWidth() const { return m_Window.getSize().x; }
-	real  WindowHeight() const { return m_Window.getSize().y; }
+	real WindowWidth() const { return m_Window.getSize().x; }
+	real WindowHeight() const { return m_Window.getSize().y; }
 
 	Point GlobalToLocalScreen(const Point& P)
 	{
@@ -167,13 +167,13 @@ private:
 	Point m_vMousePosition;
 
 	sf::RenderWindow m_Window;
-	sf::View		 m_View;
-	Box				 m_Camera;
+	sf::View m_View;
+	Box m_Camera;
 
 	sf::Font m_Font;
-	bool	 m_bShouldClose;
+	bool m_bShouldClose;
 
-	Derived&	   underlying() { return static_cast<Derived&>(*this); }
+	Derived& underlying() { return static_cast<Derived&>(*this); }
 	Derived const& underlying() const { return static_cast<Derived const&>(*this); }
 
 	string m_title;
@@ -212,7 +212,7 @@ Client<Derived>::Client(const string& Name)
 
 	m_Window.setKeyRepeatEnabled(true);
 
-	auto width  = sf::VideoMode::getDesktopMode().width;
+	auto width = sf::VideoMode::getDesktopMode().width;
 	auto height = sf::VideoMode::getDesktopMode().height;
 
 	Resize(width, height);
@@ -267,13 +267,13 @@ void Client<Derived>::Run()
 
 	long numframes = 0;
 
-	const int fps_numframes_before_reset = 30;
+	// 	const int fps_numframes_before_reset = 30;
 
 	while (!ShouldClose())
 	{
 		if (fps_clock.Peek() > 0.5)
 		{
-			fps		  = numframes / fps_clock.Reset();
+			fps = numframes / fps_clock.Reset();
 			numframes = 0;
 		}
 
@@ -303,7 +303,7 @@ void Client<Derived>::ClientUpdate(real time)
 		ClientOnEvent(event);
 	}
 
-	real  power = CameraMoveSpeed * m_Camera.Perimeter() * time;
+	real power = CameraMoveSpeed * m_Camera.Perimeter() * time;
 	Point X(power, 0);
 	Point Y(0, power);
 
@@ -507,7 +507,7 @@ void Client<Derived>::Resize(real w, real h)
 template <class Derived>
 void Client<Derived>::Render(const Point& origin, const sf::Color& color, real thickness)
 {
-	real			radius = thickness;
+	real radius = thickness;
 	sf::CircleShape circle(radius, 48);
 
 	circle.setPosition(origin.x - radius, origin.y - radius);
@@ -522,8 +522,8 @@ class sfLine : public sf::Drawable
 public:
 	sfLine(const sf::Vector2f& point1,
 		   const sf::Vector2f& point2,
-		   const sf::Color&	color	 = sf::Color::White,
-		   real				   thickness = 1.0)
+		   const sf::Color& color = sf::Color::White,
+		   real thickness = 1.0)
 		: P(point1), Q(point2)
 	{
 		setFillColor(color);
@@ -560,15 +560,15 @@ public:
 
 private:
 	sf::Vertex vertices[4];
-	Point	  P;
-	Point	  Q;
+	Point P;
+	Point Q;
 };
 
 template <class Derived>
-void Client<Derived>::Render(const Segment&   A,
+void Client<Derived>::Render(const Segment& A,
 							 const sf::Color& color,
-							 real			  thickness,
-							 bool			  directed)
+							 real thickness,
+							 bool directed)
 {
 	sfLine S(A.Origin(), A.End(), color, thickness);
 	m_Window.draw(S);
@@ -585,9 +585,9 @@ void Client<Derived>::Render(const Segment&   A,
 
 	if (directed)
 	{
-		auto  T   = sf::ConvexShape(3);
+		auto T = sf::ConvexShape(3);
 		Point dir = (A.End() - A.Origin()).Normalized();
-		Point D   = (A.Origin() + A.End()) / 2 + dir * 6;
+		Point D = (A.Origin() + A.End()) / 2 + dir * 6;
 		T.setPoint(0, D - dir.Rotated(pi / 2) * 7 * thickness);
 		T.setPoint(1, D - dir.Rotated(-pi / 2) * 7 * thickness);
 		T.setPoint(2, D + dir * 18 * thickness);
@@ -599,12 +599,12 @@ void Client<Derived>::Render(const Segment&   A,
 }
 
 template <class Derived>
-void Client<Derived>::Render(const Circle&	circle,
+void Client<Derived>::Render(const Circle& circle,
 							 const sf::Color& fill,
 							 const sf::Color& outline,
-							 int			  thickness)
+							 int thickness)
 {
-	real  r = circle.Radius();
+	real r = circle.Radius();
 	Point O = circle.Position();
 
 	sf::CircleShape circleshape(r, 48);
@@ -678,10 +678,10 @@ void Client<Derived>::Render(const Box& box, const sf::Color& color, real thickn
 }
 
 template <class Derived>
-void Client<Derived>::Render(const Box&		  box,
+void Client<Derived>::Render(const Box& box,
 							 const sf::Color& fillcolor,
 							 const sf::Color& outlinecolor,
-							 int			  thickness)
+							 int thickness)
 {
 	sf::RectangleShape rectangle(Point(box.Width(), box.Height()));
 	rectangle.move(box.UpLeft());
@@ -692,10 +692,10 @@ void Client<Derived>::Render(const Box&		  box,
 }
 
 template <class Derived>
-void Client<Derived>::Render(const string&	txt,
-							 const Point&	 point,
+void Client<Derived>::Render(const string& txt,
+							 const Point& point,
 							 const sf::Color& color,
-							 int			  size)
+							 int size)
 {
 	sf::Text mytext(txt, m_Font, size);
 	mytext.setFillColor(color);

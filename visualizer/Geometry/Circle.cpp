@@ -3,8 +3,6 @@
 
 Circle::Circle(const Point& p, real r) : FConvex(p), m_rRadius(r) {}
 
-Circle::Circle(const Circle& circle) : FConvex(circle.Position()), m_rRadius(circle.m_rRadius) {}
-
 Point Circle::FarthestPointAtAngle(real angle) const
 {
 	return Position() + Point::Polar(Radius(), angle);
@@ -40,7 +38,7 @@ bool Circle::Intersects(const Point& other) const
 bool Circle::Intersects(const Circle& other) const
 {
 	real distcenterssq = Position().DistanceSq(other.Position());
-	real sumradius	 = Radius() + other.Radius();
+	real sumradius = Radius() + other.Radius();
 
 	return (distcenterssq < sumradius * sumradius);
 }
@@ -50,7 +48,7 @@ bool Circle::Intersects(const Circle& other, Point& overlap) const
 	if (!Intersects(other))
 		return false;
 
-	overlap		  = other.Position() - Position();
+	overlap = other.Position() - Position();
 	real longitud = -overlap.Length() + other.Radius() + Radius();
 	overlap.SetLength(longitud);
 	return true;
@@ -103,11 +101,11 @@ bool Circle::Intersects(const Line& other, Segment& intersection) const
 	Point p1 = other.Position() - Position();
 	Point p2 = other.SecondPoint() - Position();
 
-	real dx  = p2.x - p1.x;
-	real dy  = p2.y - p1.y;
+	real dx = p2.x - p1.x;
+	real dy = p2.y - p1.y;
 	real dr2 = dx * dx + dy * dy;
-	real D   = p1.x * p2.y - p2.x * p1.y;
-	real r2  = RadiusSq();
+	real D = p1.x * p2.y - p2.x * p1.y;
+	real r2 = RadiusSq();
 
 	real Delta = r2 * dr2 - D * D;
 
@@ -144,7 +142,7 @@ bool Circle::Intersects(const Line& other, Point& intersection, Point& normal) c
 
 	Point P = other.Position();
 	Point Q = P.ProjectionToLine(Position(), intersection);
-	normal  = 2 * Q - P - intersection;
+	normal = 2 * Q - P - intersection;
 
 	return true;
 }

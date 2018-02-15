@@ -61,7 +61,7 @@ public:
 	bool PointInLineIntersectsMe(const Point& point) const;
 
 	bool
-		 SegmentInLineIntersectsMe(const Point& A, const Point& B, Segment* intersection = NULL) const;
+	SegmentInLineIntersectsMe(const Point& A, const Point& B, Segment* intersection = NULL) const;
 	bool SegmentInLineIntersectsMe(const Segment& A, Segment* intersection = NULL) const;
 
 	Point FarthestPointAtAngle(real angle) const;
@@ -77,7 +77,7 @@ public:
 	}
 
 	bool Intersects(const Point& other) const;
-	bool Intersects(const Point& other, Point& overlap) const;
+	bool Intersects(const Point& other, Point& intersection) const;
 
 	bool Intersects(const Line& other) const;
 	bool Intersects(const Line& other, Point& intersection) const;
@@ -85,13 +85,13 @@ public:
 	bool Intersects(const Line& other, Segment& intersection) const;
 
 	bool Intersects(const Circle& other) const;
-	bool Intersects(const Circle& other, Point& overlap) const;
+	bool Intersects(const Circle& other, Point& intersection) const;
 
 	bool Intersects(const Box& other) const;
-	bool Intersects(const Box& other, Point& overlap) const;
+	bool Intersects(const Box& other, Point& intersection) const;
 
 	bool Intersects(const Polygon& other) const;
-	bool Intersects(const Polygon& other, Point& overlap) const;
+	bool Intersects(const Polygon& other, Point& intersection) const;
 
 	Point ClosestPoint(const Point& point) const;
 };

@@ -2,7 +2,7 @@
 #include "utils/disjoint_sets.hpp"
 #include <queue>
 
-using Edge	 = Graph::Edge;
+using Edge = Graph::Edge;
 using vertex_t = Graph::vertex_t;
 
 struct by_reverse_weight
@@ -45,6 +45,7 @@ std::vector<Graph::Edge> prim(const Graph& G)
 			continue;
 
 		T.emplace_back(s);
+
 		--num_tree_edges;
 		if (num_tree_edges == 0)
 			return T;
@@ -61,7 +62,7 @@ std::vector<Graph::Edge> prim(const Graph& G)
 
 std::vector<Graph::Edge> kruskal(const Graph& G)
 {
-	auto	 n				= G.num_vertices();
+	auto n = G.num_vertices();
 	vertex_t num_tree_edges = n - 1;
 
 	std::vector<Graph::Edge> T;

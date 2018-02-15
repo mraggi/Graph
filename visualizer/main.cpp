@@ -43,7 +43,7 @@ void AnimatePrim()
 {
 	const real animation_speed = 0.3;
 
-	using Edge	 = Graph::Edge;
+	using Edge = Graph::Edge;
 	using vertex_t = Graph::vertex_t;
 
 	APP.ClearToDefaults();
@@ -55,12 +55,12 @@ void AnimatePrim()
 	auto& Prim = APP.CreateAnimation();
 	Prim.PauseAfterEveryScene(true);
 
-	const auto grey			 = sf::Color(120, 120, 120);
-	const auto black		 = sf::Color(36, 36, 36);
-	APP.default_edge_color   = grey;
+	const auto grey = sf::Color(120, 120, 120);
+	const auto black = sf::Color(36, 36, 36);
+	APP.default_edge_color = grey;
 	APP.default_vertex_color = grey;
 
-	auto n				= G.num_vertices();
+	auto n = G.num_vertices();
 	auto num_tree_edges = n - 1;
 
 	if (n == 0)
@@ -70,7 +70,7 @@ void AnimatePrim()
 
 	std::priority_queue<Edge, std::vector<Edge>, by_reverse_weight> EdgesToExplore;
 
-	explored[0] = true;
+	explored[0] = 1;
 
 	Prim.AddScene(APP.vertex_colors[0], sf::Color::Blue, animation_speed)
 	  ->AddStartMessage(APP.GUI, "Considering vertex 0", sf::Color::Blue);
@@ -91,7 +91,7 @@ void AnimatePrim()
 		EdgesToExplore.pop();
 		auto S = Prim.AddScene(APP.edge_colors[s], sf::Color::Green, animation_speed);
 		S->AddStartMessage(APP.GUI, "Considering edge " + to_string(s), sf::Color::Green);
-		if (explored[s.to])
+		if (explored[s.to] != 0)
 		{
 			auto T = Prim.AddScene(APP.edge_colors[s], black, animation_speed);
 			T->AddStartMessage(APP.GUI,
@@ -105,8 +105,8 @@ void AnimatePrim()
 		--num_tree_edges;
 		if (num_tree_edges == 0)
 			break;
-		explored[s.to] = true;
-		auto V		   = Prim.AddScene(APP.vertex_colors[s.to], sf::Color::Blue, animation_speed);
+		explored[s.to] = 1;
+		auto V = Prim.AddScene(APP.vertex_colors[s.to], sf::Color::Blue, animation_speed);
 		V->AddStartMessage(
 		  APP.GUI, "Marking vertex " + std::to_string(s.to) + " as explored", sf::Color::Blue);
 		for (auto v : G.neighbors(s.to))
@@ -122,7 +122,7 @@ void AnimatePrim()
 
 void AnimateKruskal()
 {
-	using Edge	 = Graph::Edge;
+	using Edge = Graph::Edge;
 	using vertex_t = Graph::vertex_t;
 
 	const real animation_speed = 0.3;
@@ -147,11 +147,11 @@ void AnimateKruskal()
 	auto& Kruskal = APP.CreateAnimation();
 	Kruskal.PauseAfterEveryScene(true);
 
-	const auto grey			 = sf::Color(120, 120, 120);
-	const auto black		 = sf::Color(36, 36, 36);
-	const auto consider		 = sf::Color::Green;
-	const auto tree			 = sf::Color::Red;
-	APP.default_edge_color   = grey;
+	const auto grey = sf::Color(120, 120, 120);
+	const auto black = sf::Color(36, 36, 36);
+	const auto consider = sf::Color::Green;
+	const auto tree = sf::Color::Red;
+	APP.default_edge_color = grey;
 	APP.default_vertex_color = grey;
 
 	auto num_tree_edges = G.num_vertices() - 1;
@@ -186,10 +186,10 @@ void AnimateKruskal()
 
 void SetUpAnimationExamples()
 {
-	auto start_edge_color   = APP.default_edge_color;
-	auto new_edge_color		= sf::Color::Green;
+	auto start_edge_color = APP.default_edge_color;
+	auto new_edge_color = sf::Color::Green;
 	auto start_vertex_color = APP.default_vertex_color;
-	auto new_vertex_color   = sf::Color::Red;
+	auto new_vertex_color = sf::Color::Red;
 
 	auto& A = APP.CreateAnimation();
 	A.PauseAfterEveryScene(false);

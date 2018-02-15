@@ -12,8 +12,8 @@ void GradientStep(Vector& X, Gradient g, double alpha = 0.001)
 template <class Vector, class Function, class Gradient>
 Vector GradientDescent(const Vector& InitialPoint, Function f, Gradient g)
 {
-	double alpha	 = 1.0;
-	Vector X		 = InitialPoint;
+	double alpha = 1.0;
+	Vector X = InitialPoint;
 	double currvalue = f(X);
 
 	const long max_num_times = 100000;
@@ -39,7 +39,7 @@ public:
 
 	MultiDimVector(const std::vector<double>& V) : data(V) {} // implicit!!
 
-	double  operator[](size_t i) const { return data[i]; }
+	double operator[](size_t i) const { return data[i]; }
 	double& operator[](size_t i) { return data[i]; }
 
 	size_type size() const { return data.size(); }
@@ -83,7 +83,7 @@ public:
 	void resize(int k) { data.resize(k); }
 
 	using const_iterator = std::vector<double>::const_iterator;
-	using iterator		 = std::vector<double>::iterator;
+	using iterator = std::vector<double>::iterator;
 
 	const_iterator begin() const { return data.cbegin(); }
 	const_iterator end() const { return data.cend(); }

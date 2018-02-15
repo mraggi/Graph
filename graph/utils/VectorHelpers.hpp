@@ -15,7 +15,7 @@
 template <typename T, typename U>
 std::vector<T> Convert(const std::vector<U>& G)
 {
-	auto		   n = G.size();
+	auto n = G.size();
 	std::vector<T> toReturn(n);
 
 	for (size_t i = 0; i < n; ++i)

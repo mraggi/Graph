@@ -26,17 +26,18 @@ inline sf::Color interpolate(real t, const sf::Color& from, const sf::Color& to)
 	real b = interpolate(t, b1, b2);
 	real a = interpolate(t, a1, a2);
 
-	auto clamp = [](real& t, real a, real b) {
-		if (t < a)
-			t = a;
-		if (t > b)
-			t = b;
+	auto clamp = [](real* t, real a, real b) {
+		if (*t < a)
+			*t = a;
+
+		if (*t > b)
+			*t = b;
 	};
 
-	clamp(r, 1, 254);
-	clamp(g, 1, 254);
-	clamp(b, 1, 254);
-	clamp(a, 1, 254);
+	clamp(&r, 1, 254);
+	clamp(&g, 1, 254);
+	clamp(&b, 1, 254);
+	clamp(&a, 1, 254);
 
 	sf::Uint8 ur = static_cast<unsigned char>(r);
 	sf::Uint8 ug = static_cast<unsigned char>(g);

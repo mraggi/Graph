@@ -6,3 +6,6 @@ build*
 *cmake_install*
 *CMakeFiles*
 Makefile
+.idea
+ct-build
+cppcheck-build

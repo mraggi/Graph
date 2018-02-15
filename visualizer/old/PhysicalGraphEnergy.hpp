@@ -5,12 +5,12 @@
 #include "Probability.hpp"
 #include "SimpleGradientDescent.hpp"
 #include "TimeHelpers.hpp"
-using Row	= std::vector<char>;
+using Row = std::vector<char>;
 using Matrix = std::vector<Row>;
 
 inline Matrix adjacency_matrix(const Graph& G)
 {
-	int	n = G.num_vertices();
+	int n = G.num_vertices();
 	Matrix A(n, Row(n, 0));
 	for (auto& e : G.edges())
 	{
@@ -60,8 +60,8 @@ public:
 
 	Point p(vertex_t v) const { return Point(X[2 * v], X[2 * v + 1]); }
 
-	Matrix				A;
-	MultiDimVector		X;
+	Matrix A;
+	MultiDimVector X;
 	vector<Graph::Edge> E;
 
 	double TimeSinceLastDamp() const

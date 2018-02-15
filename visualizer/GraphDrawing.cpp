@@ -2,16 +2,16 @@
 
 vector<Point> CalculateForces(size_t n, const vector<edge_t>& E, double R, const vector<Point>& P)
 {
-	const double  k = 0.005;
+	const double k = 0.005;
 	vector<Point> toReturn(n);
 	for (auto e : E)
 	{
 		vertex_t a = e[0];
 		vertex_t b = e[1];
-		Point	A = P[a];
-		Point	B = P[b];
-		double   D = A.Distance(B);
-		Point	F = k * (D - R) * (B - A) / D;
+		Point A = P[a];
+		Point B = P[b];
+		double D = A.Distance(B);
+		Point F = k * (D - R) * (B - A) / D;
 		toReturn[a] += F;
 		toReturn[b] -= F;
 	}
@@ -21,7 +21,7 @@ vector<Point> CalculateForces(size_t n, const vector<edge_t>& E, double R, const
 		for (int b = a + 1; b < n; ++b)
 		{
 			double D2 = (P[a] - P[b]).LengthSq();
-			Point  F  = (P[a] - P[b]) * c / D2;
+			Point F = (P[a] - P[b]) * c / D2;
 			toReturn[a] += F;
 			toReturn[b] -= F;
 		}
@@ -57,7 +57,7 @@ vector<Point> GridGraphDrawing(int n, int m, double R)
 vector<Point> GoodDrawing(const Graph& G, double R)
 {
 	auto n = G.num_vertices();
-	VP   P(n);
+	VP P(n);
 
 	// 	for (int i = 0; i < n; ++i)
 	// 		P[i] = Point::RandomPoint(0,R*n/2.0);
@@ -84,7 +84,7 @@ vector<Point> GoodDrawing(const Graph& G, double R)
 vector<Point> TreeDrawing(const Graph& G, int start, double R)
 {
 	auto n = G.num_vertices();
-	VP   P(n);
+	VP P(n);
 
 	// TODO
 
@@ -108,9 +108,9 @@ void DrawGraph(Client& C, const Graph& G, const vector<Point>& P, const sf::Colo
 	}
 }
 
-void DrawGraph(Client&					C,
-			   const Graph&				G,
-			   const vector<Point>&		P,
+void DrawGraph(Client& C,
+			   const Graph& G,
+			   const vector<Point>& P,
 			   const vector<sf::Color>& vertex_colors)
 {
 	for (vertex_t n = 0; n < G.num_vertices(); ++n)
@@ -145,9 +145,9 @@ void DrawGraph(Client& C, const DiGraph& G, const vector<Point>& P, const sf::Co
 	}
 }
 
-void DrawGraph(Client&					C,
-			   const DiGraph&			G,
-			   const vector<Point>&		P,
+void DrawGraph(Client& C,
+			   const DiGraph& G,
+			   const vector<Point>& P,
 			   const vector<sf::Color>& vertex_colors)
 {
 	for (vertex_t n = 0; n < G.num_vertices(); ++n)
