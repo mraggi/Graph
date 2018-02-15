@@ -127,13 +127,13 @@ Point Point::Projection(const Point& H) const
 Point Point::ProjectionToLine(const Point& A, const Point& B) const
 {
 	Point me = *this;
-	
-    Point meMinusA = me - A;
+
+	Point meMinusA = me - A;
 	Point BMinusA  = B - A;
 
-    Point temp = meMinusA.Projection(BMinusA);
-	
-    return temp + A;
+	Point temp = meMinusA.Projection(BMinusA);
+
+	return temp + A;
 }
 
 Point Point::ForwardProjection(const Point& H) const

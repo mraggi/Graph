@@ -214,19 +214,16 @@ public:
 	//  void Watch(real var, const std::string& name, sf::Color col = sf::Color(100, 100, 255));
 
 	//  void Watch(const std::string& var, sf::Color col = sf::Color(100, 255, 10));
-    
+
 	real text_size{16};
-    
-    real TextSize() const { return text_size; }
-    real TextSeparation() const { return text_size*1.2; }
-    real CheckboxRadius() const { return text_size/2.5; }
-    
+
+	real TextSize() const { return text_size; }
+	real TextSeparation() const { return text_size * 1.2; }
+	real CheckboxRadius() const { return text_size / 2.5; }
+
 	std::string AvailableShortcuts() const;
 
-	void Update(real time)
-	{
-		m_message_box.Update(time);
-	}
+	void Update(real time) { m_message_box.Update(time); }
 
 	void
 	AddMessage(const string& s = "", const sf::Color& c = sf::Color::White, real duration = 5.0)

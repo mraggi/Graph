@@ -46,7 +46,7 @@ public:
 
 	void Render(const Segment&   A,
 				const sf::Color& color	 = sf::Color::Green,
-				real				 thickness = 1,
+				real			 thickness = 1,
 				bool			 directed  = false);
 
 	void Render(const Circle& circle, const sf::Color& color = sf::Color::Red, real thickness = 2);
@@ -73,7 +73,7 @@ public:
 
 	void Render(const Convex& conv, const sf::Color& color = sf::Color::White, real thickness = 1);
 
-	void Render(const string& filename, const FConvex& conv, real angle = 0);
+	// 	void Render(const string& filename, const FConvex& conv, real angle = 0);
 
 	void Render(const string& txt, const Point& point, const sf::Color& color, int size);
 
@@ -83,6 +83,8 @@ public:
 
 		return (*m_animations.back());
 	}
+
+	void ClearAnimations() { m_animations.clear(); }
 
 	/// *************** End Geometry rendering
 private:
@@ -181,8 +183,8 @@ private:
 	real time_dilation{1.0};
 
 	std::vector<std::unique_ptr<animation>> m_animations;
-    
-    void NextFont();
+
+	void NextFont();
 
 }; // class client definition
 
@@ -232,7 +234,7 @@ Client<Derived>::Client(const string& Name)
 	  time_dilation, "Time scale", 0.1, sf::Keyboard::Comma, sf::Keyboard::Period, orange);
 	GUI.AddAction("Toggle Fullscreen", sf::Keyboard::F, [this]() { ToggleFullScreen(); }, orange);
 	GUI.AddController(GUI.text_size, "Text size", 0.5, sf::Keyboard::N, sf::Keyboard::M, orange);
-	GUI.AddAction("Change font",sf::Keyboard::F1,[this](){NextFont();},orange);
+	GUI.AddAction("Change font", sf::Keyboard::F1, [this]() { NextFont(); }, orange);
 	GUI.AddAction("Animation step",
 				  sf::Keyboard::Space,
 				  [this]() {
@@ -518,63 +520,68 @@ void Client<Derived>::Render(const Point& origin, const sf::Color& color, real t
 class sfLine : public sf::Drawable
 {
 public:
-    sfLine(const sf::Vector2f& point1, const sf::Vector2f& point2, const sf::Color& color = sf::Color::White, real thickness = 1.0) :  P(point1), Q(point2)
-    {
-        setFillColor(color);
-        setThickness(thickness);
-    }
+	sfLine(const sf::Vector2f& point1,
+		   const sf::Vector2f& point2,
+		   const sf::Color&	color	 = sf::Color::White,
+		   real				   thickness = 1.0)
+		: P(point1), Q(point2)
+	{
+		setFillColor(color);
+		setThickness(thickness);
+	}
 
-    void draw(sf::RenderTarget &target, sf::RenderStates states) const
-    {
-        target.draw(vertices,4,sf::Quads);
-    }
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const
+	{
+		target.draw(vertices, 4, sf::Quads);
+	}
 
-    void setFillColor(const sf::Color& color)
-    {
-        for (size_t i=0; i < 4; ++i)
-            vertices[i].color = color;
-    }
-    
-    void setOutlineColor(const sf::Color& color)
-    {
-        setFillColor(color);
-    }
-    
-    void setThickness(real t)
-    {
-        sf::Vector2f direction = P - Q;
-        sf::Vector2f unitDirection = direction/std::sqrt(direction.x*direction.x+direction.y*direction.y);
-        sf::Vector2f unitPerpendicular(-unitDirection.y,unitDirection.x);
+	void setFillColor(const sf::Color& color)
+	{
+		for (size_t i = 0; i < 4; ++i)
+			vertices[i].color = color;
+	}
 
-        sf::Vector2f offset = (t/2.f)*unitPerpendicular;
+	void setOutlineColor(const sf::Color& color) { setFillColor(color); }
 
-        vertices[0].position = Q + offset;
-        vertices[1].position = P + offset;
-        vertices[2].position = P - offset;
-        vertices[3].position = Q - offset;
-    }
+	void setThickness(real t)
+	{
+		sf::Vector2f direction = P - Q;
+		sf::Vector2f unitDirection
+		  = direction / std::sqrt(direction.x * direction.x + direction.y * direction.y);
+		sf::Vector2f unitPerpendicular(-unitDirection.y, unitDirection.x);
+
+		sf::Vector2f offset = (t / 2.f) * unitPerpendicular;
+
+		vertices[0].position = Q + offset;
+		vertices[1].position = P + offset;
+		vertices[2].position = P - offset;
+		vertices[3].position = Q - offset;
+	}
 
 private:
-    sf::Vertex vertices[4];
-    Point P;
-    Point Q;
+	sf::Vertex vertices[4];
+	Point	  P;
+	Point	  Q;
 };
 
 template <class Derived>
-void Client<Derived>::Render(const Segment& A, const sf::Color& color, real thickness, bool directed)
+void Client<Derived>::Render(const Segment&   A,
+							 const sf::Color& color,
+							 real			  thickness,
+							 bool			  directed)
 {
-    sfLine S(A.Origin(), A.End(),color,thickness);
-    m_Window.draw(S);
-    
-    //TODO: This sucks.
-// 	sf::RectangleShape hola(Point(A.Length(), 0));
-// 	hola.setOutlineColor(color);
-// 	hola.setOutlineThickness(thickness);
-// 
-// 	hola.rotate(RadiansToDegrees(A.Angle()));
-// 	hola.move(A.Origin());
-// 
-// 	m_Window.draw(hola);
+	sfLine S(A.Origin(), A.End(), color, thickness);
+	m_Window.draw(S);
+
+	// TODO: This sucks.
+	// 	sf::RectangleShape hola(Point(A.Length(), 0));
+	// 	hola.setOutlineColor(color);
+	// 	hola.setOutlineThickness(thickness);
+	//
+	// 	hola.rotate(RadiansToDegrees(A.Angle()));
+	// 	hola.move(A.Origin());
+	//
+	// 	m_Window.draw(hola);
 
 	if (directed)
 	{
@@ -761,17 +768,17 @@ void Client<Derived>::ClientRenderGUIPanel()
 template <class Derived>
 void Client<Derived>::NextFont()
 {
-    static int font = 0;
+	static int font = 0;
 
-    ++font;
+	++font;
 
-    if (font == 3)
-        font = 0;
+	if (font == 3)
+		font = 0;
 
-    if (font == 0)
-        m_Font.loadFromFile("font.ttf");
-    else if (font == 1)
-        m_Font.loadFromFile("font-mono.ttf");
-    else
-        m_Font.loadFromFile("font-serif.ttf");
+	if (font == 0)
+		m_Font.loadFromFile("font.ttf");
+	else if (font == 1)
+		m_Font.loadFromFile("font-mono.ttf");
+	else
+		m_Font.loadFromFile("font-serif.ttf");
 }

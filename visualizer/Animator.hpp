@@ -13,7 +13,11 @@ class Scene
 public:
 	virtual ~Scene() = default;
 
-	explicit Scene(real duration = 5.0) : m_duration(duration) {}
+	explicit Scene(real duration = 0.0) : m_duration(duration)
+	{
+		if (m_duration < 0.0001) // to avoid divisions by 0 and weird negative number durations.
+			m_duration = 0.0001;
+	}
 
 	void Update(real t)
 	{
@@ -80,7 +84,7 @@ public:
 	}
 
 protected:
-	virtual void ChildUpdate() = 0;
+	virtual void ChildUpdate(){};
 
 private:
 	real m_time{0};
@@ -95,10 +99,8 @@ class InterpolatorScene : public Scene
 {
 public:
 	InterpolatorScene(T& val, const T& end, real duration)
-		: Scene(duration), m_val(&val), m_start(val), m_end(end)
-	{
-		set_start_on_start = true;
-	}
+		: Scene(duration), m_val(&val), m_start(val), m_end(end), set_start_on_start(true)
+	{}
 
 	InterpolatorScene(T& val, const T& start, const T& end, real duration)
 		: Scene(duration), m_val(&val), m_start(start), m_end(end)
@@ -113,6 +115,7 @@ public:
 			m_start = *(m_val);
 
 			set_start_on_start = false;
+			return;
 		}
 
 		*(m_val) = interpolate(t, m_start, m_end);
@@ -208,9 +211,29 @@ public:
 		return scenes.back().get();
 	}
 
-	bool Paused() const { return paused; }
-	void Pause() { paused = true; }
-	void Play() { paused = false; }
+	template <class GUI_t>
+	Scene* AddScene(GUI_t& gui, const std::string& message, const sf::Color& color)
+	{
+		scenes.emplace_back(new Scene(1.0));
+		scenes.back()->AddStartMessage(gui, message, color);
+		Reset();
+		return scenes.back().get();
+	}
+
+	bool Paused() const { return paused == 0; }
+
+	void Pause()
+	{
+		if (paused > 0 && !sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			--paused;
+	}
+
+	void Play()
+	{
+		if (paused < 2)
+			++paused;
+	}
+
 	void PauseAfterEveryScene(bool paes)
 	{
 		pause_after_scene = paes;
@@ -219,6 +242,7 @@ public:
 	}
 
 	void SetLoop(bool in_loop = true) { loop = in_loop; }
+
 	bool InALoop() const { return loop; }
 
 private:
@@ -228,7 +252,7 @@ private:
 	using scene_iterator			   = scene_container::iterator;
 	scene_container scenes;
 	scene_iterator  current_scene;
-	bool			paused{false};
+	int				paused{0};
 	bool			pause_after_scene{false};
 
 	bool current_scene_has_started{false};

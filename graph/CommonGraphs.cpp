@@ -41,29 +41,32 @@ Graph Path(int n)
 
 Graph Cycle(int n)
 {
-    Graph G = Path(n-1);
-    G.add_edge(0,n-1);
-    return G;
+	Graph G = Path(n - 1);
+	if (n > 2)
+	{
+		G.add_edge(0, n - 1);
+	}
+	return G;
 }
 
 Graph Complete(int n)
 {
-    Graph G(n);
-    
-    for (vertex_t i = 0; i+1 < n; ++i)
-    {
-        for (vertex_t j = i+1; j < n; ++j)
-        {
-            G.add_edge(i,j);
-        }
-    }
-    
-    return G;
+	Graph G(n);
+
+	for (vertex_t i = 0; i + 1 < n; ++i)
+	{
+		for (vertex_t j = i + 1; j < n; ++j)
+		{
+			G.add_edge(i, j);
+		}
+	}
+
+	return G;
 }
 
 Graph CompleteBipartite(int n, int m);
 
-Graph RandomGraph(int n, double p)
+Graph Random(int n, double p)
 {
 	Graph G(n);
 
@@ -78,7 +81,7 @@ Graph RandomGraph(int n, double p)
 	return G;
 }
 
-Graph RandomWeightedGraph(int n, double p)
+Graph RandomWeighted(int n, double p)
 {
 	Graph G(n);
 

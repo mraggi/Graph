@@ -146,13 +146,13 @@ public:
 		auto it = Map::find(key);
 		if (it == Map::end())
 		{
-			Map::		operator[](key) = m_default;
-			return Map::operator[](key);
+			it = Map::insert({key, m_default}).first;
+			// 			Map::operator[](key) = m_default;
 		}
 		return it->second;
 	}
 
-	void set_default(const Value& new_value) { m_default = new_value; }
+	// 	void set_default(const Value& new_value) { m_default = new_value; }
 
 private:
 	const Value& m_default;

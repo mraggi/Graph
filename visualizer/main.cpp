@@ -2,6 +2,7 @@
 #include "Graph.hpp"
 #include "GraphApp.hpp"
 #include "Misc.hpp"
+#include "PrintUtils.hpp"
 #include "Probability.hpp"
 #include "disjoint_sets.hpp"
 
@@ -14,7 +15,8 @@ void AnimateKruskal();
 
 int main()
 {
-	// 	AnimatePrim();
+	APP.GUI.AddAction("Run Prim's Algorithm", sf::Keyboard::Q, AnimatePrim);
+	APP.GUI.AddAction("Run Kruskal's Algorithm", sf::Keyboard::W, AnimateKruskal);
 	APP.Run();
 
 	return 0;
@@ -39,12 +41,16 @@ std::vector<sf::Color*> neighbor_colors(const Graph& G, Graph::vertex_t v)
 
 void AnimatePrim()
 {
+	const real animation_speed = 0.3;
+
 	using Edge	 = Graph::Edge;
 	using vertex_t = Graph::vertex_t;
 
-	Graph G = graphs::RandomWeightedGraph(7, 0.7);
+	APP.ClearToDefaults();
 
-	APP.SetGraph(G);
+	APP.GUI.AddMessage("Starting Prim's Algorithm. Press [Space] to continue!");
+
+	auto G = APP.GetGraph().GetGraph();
 
 	auto& Prim = APP.CreateAnimation();
 	Prim.PauseAfterEveryScene(true);
@@ -54,7 +60,8 @@ void AnimatePrim()
 	APP.default_edge_color   = grey;
 	APP.default_vertex_color = grey;
 
-	auto n = G.num_vertices();
+	auto n				= G.num_vertices();
+	auto num_tree_edges = n - 1;
 
 	if (n == 0)
 		return;
@@ -65,7 +72,7 @@ void AnimatePrim()
 
 	explored[0] = true;
 
-	Prim.AddScene(APP.vertex_colors[0], sf::Color::Blue, 0.5)
+	Prim.AddScene(APP.vertex_colors[0], sf::Color::Blue, animation_speed)
 	  ->AddStartMessage(APP.GUI, "Considering vertex 0", sf::Color::Blue);
 
 	// 	auto E0 = neighbor_colors(G,0);
@@ -82,27 +89,34 @@ void AnimatePrim()
 	{
 		Edge s = EdgesToExplore.top();
 		EdgesToExplore.pop();
-		auto S = Prim.AddScene(APP.edge_colors[s], sf::Color::Green, 0.5);
-		S->AddStartMessage(APP.GUI, "Considering edge", sf::Color::Green);
+		auto S = Prim.AddScene(APP.edge_colors[s], sf::Color::Green, animation_speed);
+		S->AddStartMessage(APP.GUI, "Considering edge " + to_string(s), sf::Color::Green);
 		if (explored[s.to])
 		{
-			auto T = Prim.AddScene(APP.edge_colors[s], black, 0.5);
-			T->AddStartMessage(APP.GUI, "Discarding because node was already explored");
+			auto T = Prim.AddScene(APP.edge_colors[s], black, animation_speed);
+			T->AddStartMessage(APP.GUI,
+							   "Discarding " + to_string(s) + " because node was already explored");
 			continue;
 		}
 		// 		T.emplace_back(s.from,s.to,s.weight());
 
-		auto T = Prim.AddScene(APP.edge_colors[s], sf::Color::Red, 0.5);
-		T->AddStartMessage(APP.GUI, "Adding to tree!", sf::Color::Red);
+		auto T = Prim.AddScene(APP.edge_colors[s], sf::Color::Red, animation_speed);
+		T->AddStartMessage(APP.GUI, "Adding " + to_string(s) + " to tree!", sf::Color::Red);
+		--num_tree_edges;
+		if (num_tree_edges == 0)
+			break;
 		explored[s.to] = true;
-		auto V		   = Prim.AddScene(APP.vertex_colors[s.to], sf::Color::Blue, 0.5);
-		V->AddStartMessage(APP.GUI, "Marking vertex as explored", sf::Color::Blue);
+		auto V		   = Prim.AddScene(APP.vertex_colors[s.to], sf::Color::Blue, animation_speed);
+		V->AddStartMessage(
+		  APP.GUI, "Marking vertex " + std::to_string(s.to) + " as explored", sf::Color::Blue);
 		for (auto v : G.neighbors(s.to))
 		{
 			if (explored[v] == 0)
 				EdgesToExplore.push(Edge(s.to, v, v.weight()));
 		}
 	}
+	auto Finish = Prim.AddScene(APP.default_edge_color, black, animation_speed);
+	Finish->AddFinishMessage(APP.GUI, "Done with Prim", sf::Color(255, 100, 200));
 	//     return T;
 }
 
@@ -111,9 +125,13 @@ void AnimateKruskal()
 	using Edge	 = Graph::Edge;
 	using vertex_t = Graph::vertex_t;
 
-	Graph G = graphs::RandomWeightedGraph(7, 0.7);
+	const real animation_speed = 0.3;
 
-	APP.SetGraph(G);
+	APP.ClearToDefaults();
+	APP.GUI.AddMessage("Starting Kruskal's Algorithm. Press [Space] to continue!");
+
+	auto G = APP.GetGraph().GetGraph();
+
 	auto E = G.edges();
 
 	std::sort(E.begin(), E.end(), [](const Edge& a, const Edge& b) {
@@ -129,35 +147,41 @@ void AnimateKruskal()
 	auto& Kruskal = APP.CreateAnimation();
 	Kruskal.PauseAfterEveryScene(true);
 
-	const auto grey		   = sf::Color(120, 120, 120);
-	const auto black	   = sf::Color(26, 26, 26);
-	APP.default_edge_color = grey;
+	const auto grey			 = sf::Color(120, 120, 120);
+	const auto black		 = sf::Color(36, 36, 36);
+	const auto consider		 = sf::Color::Green;
+	const auto tree			 = sf::Color::Red;
+	APP.default_edge_color   = grey;
+	APP.default_vertex_color = grey;
+
+	auto num_tree_edges = G.num_vertices() - 1;
 
 	for (auto& e : E)
 	{
 		vertex_t a = e.from;
 		vertex_t b = e.to;
 
-		auto S = Kruskal.AddScene(APP.edge_colors[e], sf::Color::Green, 0.5);
-		S->AddStartMessage(APP.GUI,
-						   "Considering edge " + to_string(a) + "-" + to_string(b) + " with weight "
-							 + to_string(e.weight()),
-						   sf::Color::Green);
+		auto S = Kruskal.AddScene(APP.edge_colors[e], consider, animation_speed);
+		S->AddStartMessage(APP.GUI, "Considering edge " + to_string(e), consider);
 
 		if (D.are_in_same_connected_component(a, b))
 		{
-			auto NA = Kruskal.AddScene(APP.edge_colors[e], sf::Color::Green, black, 0.5);
-			NA->AddStartMessage(
-			  APP.GUI, "Not adding " + to_string(a) + "-" + to_string(b), sf::Color::White);
+			auto NA = Kruskal.AddScene(APP.edge_colors[e], black, animation_speed);
+			NA->AddStartMessage(APP.GUI, "Not adding " + to_string(e), sf::Color::White);
 		}
 		else
 		{
-			auto A = Kruskal.AddScene(APP.edge_colors[e], sf::Color::Green, sf::Color::Red, 0.5);
-			A->AddStartMessage(
-			  APP.GUI, "Adding " + to_string(a) + "-" + to_string(b), sf::Color::Red);
+			auto A = Kruskal.AddScene(APP.edge_colors[e], tree, animation_speed);
+			A->AddStartMessage(APP.GUI, "Adding " + to_string(e), tree);
+			--num_tree_edges;
+			if (num_tree_edges == 0)
+				break;
 			D.merge(a, b);
 		}
 	}
+	auto Finish = Kruskal.AddScene(APP.default_edge_color, black, animation_speed);
+	Finish->AddFinishMessage(APP.GUI, "Done with Kruskal", sf::Color(255, 100, 200));
+	Kruskal.AddScene(APP.default_vertex_color, sf::Color(255, 100, 200), animation_speed);
 }
 
 void SetUpAnimationExamples()

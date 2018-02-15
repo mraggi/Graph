@@ -22,14 +22,14 @@ struct Message
 		{
 			t = (time_since_start - duration) / duration;
 		}
-		
+
 		if (t > 1.0)
 			t = 1.0;
-		
-        auto transparent = start_color;
+
+		auto transparent = start_color;
 		transparent.a	= 0;
-		
-        return interpolate(t, start_color, transparent);
+
+		return interpolate(t, start_color, transparent);
 	}
 
 	int NumLines() const { return 1 + std::count(message.begin(), message.end(), '\n'); }

@@ -35,6 +35,9 @@ void GraphApp::CreateGUI()
 	GUI.AddCheckbox(P.attract_to_center, "Attract toward center", sf::Keyboard::A);
 	GUI.AddCheckbox(P.repulsion_on, "Repulsion", sf::Keyboard::R);
 	GUI.AddCheckbox(show_labels, "Show Vertex Labels", sf::Keyboard::L);
+	GUI.AddCheckbox(show_edge_labels, "Show Edge Labels", sf::Keyboard::E);
+
+	// 	GUI.AddWatcher(m_animations);
 
 	GUI.AddSpacer();
 
@@ -59,11 +62,20 @@ void GraphApp::CreateGUI()
 					  sf::Keyboard::H,
 					  dark_orange);
 
-	GUI.AddAction("Path Graph", sf::Keyboard::Num2, [this]() { SetGraph(graphs::Path(num_rand_verts)); });
-    
-	GUI.AddAction("Cycle Graph", sf::Keyboard::Num3, [this]() { SetGraph(graphs::Cycle(num_rand_verts)); });
-    
-	GUI.AddAction("Complete Graph", sf::Keyboard::Num4, [this]() { SetGraph(graphs::Complete(num_rand_verts)); });
+	GUI.AddAction(
+	  "Path Graph", sf::Keyboard::Num2, [this]() { SetGraph(graphs::Path(num_rand_verts)); });
+
+	GUI.AddAction(
+	  "Cycle Graph", sf::Keyboard::Num3, [this]() { SetGraph(graphs::Cycle(num_rand_verts)); });
+
+	GUI.AddAction("Complete Graph", sf::Keyboard::Num4, [this]() {
+		if (num_rand_verts > 100)
+		{
+			num_rand_verts = 100;
+			GUI.AddMessage("Capping complete graph at 100 vertices");
+		}
+		SetGraph(graphs::Complete(num_rand_verts));
+	});
 
 	// Fill here with path and cycle with shortcuts 2 and 3, respectively!
 
@@ -77,7 +89,7 @@ void GraphApp::CreateGUI()
 					  dark_orange);
 
 	GUI.AddAction("Random Graph", sf::Keyboard::Num6, [this]() {
-		SetGraph(graphs::RandomGraph(num_rand_verts, avg_degree / num_rand_verts));
+		SetGraph(graphs::RandomWeighted(num_rand_verts, avg_degree / num_rand_verts));
 	});
 
 	GUI.AddSpacer();
@@ -112,7 +124,16 @@ void GraphApp::DrawGraph()
 {
 	for (auto e : P.edges())
 	{
-		Base::Render(Segment(P[e.from], P[e.to]), edge_colors(e), edge_thicknesses(e));
+		auto S = Segment(P[e.from], P[e.to]);
+		Base::Render(S, edge_colors(e), edge_thicknesses(e));
+		if (show_edge_labels)
+		{
+			auto ls = edge_thicknesses(e) * 8;
+			Render(std::to_string(e.weight()),
+				   S.Position() - Point(ls, ls) / 2,
+				   sf::Color(255, 255, 100),
+				   ls);
+		}
 	}
 
 	for (auto v : P.vertices())
@@ -231,17 +252,17 @@ Box GraphApp::GetBoundingBoxOfGraph() const
 	for (auto v : P.vertices())
 	{
 		auto p = P[v];
-        
-		minX   = min(minX, p.x);
-		minY   = min(minY, p.y);
-		maxX   = max(maxX, p.x);
-		maxY   = max(maxY, p.y);
+
+		minX = min(minX, p.x);
+		minY = min(minY, p.y);
+		maxX = max(maxX, p.x);
+		maxY = max(maxY, p.y);
 	}
 
-	real b = 5 + 2 * default_vertex_size;
-	Point border(b,b);
-    
-	Box   B(Point(minX, minY) - border, Point(maxX, maxY) + border);
-	
-    return B;
+	real  b = 5 + 2 * default_vertex_size;
+	Point border(b, b);
+
+	Box B(Point(minX, minY) - border, Point(maxX, maxY) + border);
+
+	return B;
 }

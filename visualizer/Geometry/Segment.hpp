@@ -45,7 +45,7 @@ public:
 	void Scale(real amount, real u)
 	{
 		m_pPosition += m_vDirection * (1 - amount) / 2;
-		m_vDirection.Scale(amount,u);
+		m_vDirection.Scale(amount, u);
 	}
 
 	real Area() const { return 0; }

@@ -6,7 +6,7 @@
 class GraphApp : public Client<GraphApp> // using CRTP
 {
 public:
-	using Base = Client<GraphApp>;
+	using Base	 = Client<GraphApp>;
 	using vertex_t = Graph::vertex_t;
 
 	// options
@@ -20,14 +20,21 @@ public:
 	sf::Color created_edge_color{sf::Color(255, 90, 0, 220)};
 
 	bool show_labels{false};
+	bool show_edge_labels{false};
 
 	GraphApp(const string& name = "Graph");
 
 	void SetGraph(const Graph& G)
 	{
-		cout << "Set graph with " << G.num_vertices() << " and " << G.num_edges() << endl;
+		std::cout << "Set graph with " << G.num_vertices() << " vertices and " << G.num_edges()
+				  << " edges." << std::endl;
 		P.SetGraph(G);
 		FitGraphToScreen();
+		if (G.num_edges() > 100000)
+		{
+			P.turn_physics_on = false;
+			GUI.AddMessage("Turning physics off because there are too many edges");
+		}
 	}
 
 	PhysicalGraph& GetGraph() { return P; }
@@ -60,22 +67,31 @@ public:
 		return GA;
 	}
 
+	void ClearToDefaults()
+	{
+		ClearAnimations();
+		vertex_colors.clear();
+		vertex_sizes.clear();
+		edge_colors.clear();
+		edge_thicknesses.clear();
+	}
+
 	struct edge_hash
 	{
 		size_t operator()(const Graph::Edge& E) const
 		{
-			size_t a = E.from;
-			size_t b = E.to;
+			long long a = E.from;
+			long long b = E.to;
 			if (a > b)
 				std::swap(a, b);
 
-			return a + (size_t(1) << 32) * b + (size_t(1) << 48) * E.weight();
+			return a + (1LL << 24) * b + (1LL << 48) * E.weight();
 		}
 	};
 
 	map_with_default_by_ref<vertex_t, sf::Color> vertex_colors{default_vertex_color};
-	map_with_default_by_ref<vertex_t, real>	vertex_sizes{default_vertex_size};
-    
+	map_with_default_by_ref<vertex_t, real>		 vertex_sizes{default_vertex_size};
+
 	map_with_default_by_ref<Graph::Edge, sf::Color, edge_hash> edge_colors{default_edge_color};
 	map_with_default_by_ref<Graph::Edge, real, edge_hash> edge_thicknesses{default_edge_thickness};
 
@@ -85,8 +101,8 @@ private:
 	vertex_t selected_vertex{Graph::INVALID_VERTEX};
 	vertex_t edge_start{Graph::INVALID_VERTEX};
 
-	int  num_rand_verts{1000};
-	real avg_degree{1.0};
+	int  num_rand_verts{500};
+	real avg_degree{1.1};
 
 	void DrawGraph();
 	Box  GetBoundingBoxOfGraph() const;

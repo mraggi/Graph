@@ -10,7 +10,8 @@ using Edge					  = Graph::Edge;
 using neighbor_iterator		  = Graph::neighbor_iterator;
 using neighbor_const_iterator = Graph::neighbor_const_iterator;
 
-Graph::Graph(vertex_t numberOfVertices) : m_numvertices(numberOfVertices), m_graph(numberOfVertices)
+Graph::Graph(vertex_t numberOfVertices)
+	: m_numvertices(std::max(vertex_t(0), numberOfVertices)), m_graph(m_numvertices)
 {}
 
 // Graph modification functions
