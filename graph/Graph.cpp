@@ -158,7 +158,7 @@ void Graph::delete_repeated_edges()
 	for (auto v : vertices())
 	{
 		auto newend = std::unique(m_graph[v].begin(), m_graph[v].end());
-		m_graph[v].erase(newend, neighbors(v).end());
+		m_graph[v].erase(newend, m_graph[v].end());
 	}
 }
 
