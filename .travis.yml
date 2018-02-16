@@ -27,15 +27,7 @@ matrix:
         
 before_install:
     - eval "${MATRIX_EVAL}"
-    - sudo apt-get -qq update
-    - sudo apt-get install -y libsfml-dev libgtest-dev cmake libboost-all-dev
-    - sudo wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz
-    - sudo tar xf release-1.8.0.tar.gz
-    - cd googletest-release-1.8.0
-    - sudo cmake -DBUILD_SHARED_LIBS=ON .
-    - sudo make
-    - sudo cp -a googletest/include/gtest /usr/include
-    - sudo cp -a googlemock/gtest/libgtest_main.so googlemock/gtest/libgtest.so /usr/lib/
+    - ./install_ubuntu1604.sh
     - cd "${TRAVIS_BUILD_DIR}"
     
 before_script:
