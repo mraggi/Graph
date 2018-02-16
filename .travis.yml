@@ -27,11 +27,11 @@ matrix:
         
 before_install:
     - eval "${MATRIX_EVAL}"
-    - ./install_ubuntu1604.sh
     - cd "${TRAVIS_BUILD_DIR}"
     
 before_script:
   - PARENTDIR=$(pwd)
+  - ./install_deps_ubuntu1604.sh
   - mkdir $PARENTDIR/build && cd $PARENTDIR/build
   
 
