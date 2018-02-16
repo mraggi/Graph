@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <sstream>
 #include <unordered_map>
+#include <memory>
 
 inline std::ostream& operator<<(std::ostream& os, const sf::Keyboard::Key& key);
 

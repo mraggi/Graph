@@ -8,10 +8,10 @@ sudo apt-get update
 sudo apt-get -y install build-essential cmake git software-properties-common python-software-properties libboost-dev libgtest-dev wget clang
 
 # Set up gtest
-# cd /usr/src/gtest/
-# sudo cmake .
-# sudo make
-# sudo cp *.a /usr/lib
+cd /usr/src/gtest/
+sudo cmake .
+sudo make
+sudo cp *.a /usr/lib
 
 # Prepare to install SFML
 sudo apt-get -y install libxrandr-dev libopenal-dev libfreetype6 libfreetype6-dev libflac-dev libogg-dev libvorbis-dev libopenal-dev libudev-dev libsndfile-dev libjpeg-dev libglew-dev
