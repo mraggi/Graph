@@ -195,7 +195,7 @@ void Graph::remove_vertex(vertex_t v)
 
 	if (v != last_vertex)
 	{
-		//Replace all occurrences of last_vertex to now be v
+		// Replace all occurrences of last_vertex to now be v
 		for (auto u : neighbors(last_vertex))
 		{
 			for (auto& w : m_graph[u])

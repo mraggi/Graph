@@ -1,40 +1,6 @@
 #include "Point.hpp"
 #include "Probability.hpp"
 
-void Point::Normalize()
-{
-	if (x != 0 || y != 0)
-	{
-		real length = Length();
-
-		x /= length;
-		y /= length;
-	}
-}
-
-Point Point::Normalized() const
-{
-	Point normalized(x, y);
-
-	normalized.Normalize();
-
-	return normalized;
-}
-
-real Point::Distance(const Point& vec) const
-{
-	real disX = vec.x - x;
-	real disY = vec.y - y;
-	return sqrt(disX * disX + disY * disY);
-}
-
-real Point::DistanceSq(const Point& vec) const
-{
-	real disX = (vec.x - x);
-	real disY = (vec.y - y);
-	return disX * disX + disY * disY;
-}
-
 Point Point::VectorWithAngle(real t) const
 {
 	Point withAngle;

@@ -116,7 +116,7 @@ void GraphApp::RenderWorld()
 
 	if (edge_start != Graph::INVALID_VERTEX)
 	{
-		Render(Segment(P[edge_start], MousePosition()), created_edge_color, default_edge_thickness);
+		RenderSegment(P[edge_start], MousePosition(), created_edge_color, default_edge_thickness);
 	}
 }
 
@@ -124,15 +124,13 @@ void GraphApp::DrawGraph()
 {
 	for (auto e : P.edges())
 	{
-		auto S = Segment(P[e.from], P[e.to]);
-		Base::Render(S, edge_colors(e), edge_thicknesses(e));
+		Base::RenderSegment(P[e.from], P[e.to], edge_colors(e), edge_thicknesses(e));
 		if (show_edge_labels)
 		{
+			auto edge_label_col = sf::Color(255, 255, 100);
+			auto Center = (P[e.from] + P[e.to]) / 2;
 			auto ls = edge_thicknesses(e) * 8;
-			Render(std::to_string(e.weight()),
-				   S.Position() - Point(ls, ls) / 2,
-				   sf::Color(255, 255, 100),
-				   ls);
+			Render(std::to_string(e.weight()), Center - Point(ls, ls) / 2, edge_label_col, ls);
 		}
 	}
 

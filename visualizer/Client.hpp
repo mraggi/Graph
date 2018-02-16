@@ -44,6 +44,12 @@ public:
 	/// ************** Start Geometry rendering
 	void Render(const Point& origin, const sf::Color& color = sf::Color::Blue, real thickness = 5);
 
+	void RenderSegment(const Point& A,
+					   const Point& B,
+					   const sf::Color& color = sf::Color::Green,
+					   real thickness = 1,
+					   bool directed = false);
+
 	void Render(const Segment& A,
 				const sf::Color& color = sf::Color::Green,
 				real thickness = 1,
@@ -520,8 +526,8 @@ void Client<Derived>::Render(const Point& origin, const sf::Color& color, real t
 class sfLine : public sf::Drawable
 {
 public:
-	sfLine(const sf::Vector2f& point1,
-		   const sf::Vector2f& point2,
+	sfLine(const Point& point1,
+		   const Point& point2,
 		   const sf::Color& color = sf::Color::White,
 		   real thickness = 1.0)
 		: P(point1), Q(point2)
@@ -532,25 +538,24 @@ public:
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
-		target.draw(vertices, 4, sf::Quads);
+		target.draw(vertices, 4, sf::Quads, states);
 	}
 
 	void setFillColor(const sf::Color& color)
 	{
-		for (size_t i = 0; i < 4; ++i)
-			vertices[i].color = color;
+		for (auto& v : vertices)
+			v.color = color;
 	}
 
 	void setOutlineColor(const sf::Color& color) { setFillColor(color); }
 
 	void setThickness(real t)
 	{
-		sf::Vector2f direction = P - Q;
-		sf::Vector2f unitDirection
-		  = direction / std::sqrt(direction.x * direction.x + direction.y * direction.y);
-		sf::Vector2f unitPerpendicular(-unitDirection.y, unitDirection.x);
+		Point direction = P - Q;
+		Point unitDirection = direction.Normalized();
+		Point unitPerpendicular = unitDirection.Perp();
 
-		sf::Vector2f offset = (t / 2.f) * unitPerpendicular;
+		Point offset = (t / 2.0) * unitPerpendicular;
 
 		vertices[0].position = Q + offset;
 		vertices[1].position = P + offset;
@@ -565,37 +570,34 @@ private:
 };
 
 template <class Derived>
+void Client<Derived>::RenderSegment(
+  const Point& A, const Point& B, const sf::Color& color, real thickness, bool directed)
+{
+	sfLine S(A, B, color, thickness);
+	m_Window.draw(S);
+
+	if (directed)
+	{
+		auto T = sf::ConvexShape(3);
+		Point dir = (B - A).Normalized();
+		Point D = (A + B) / 2 + dir * 6;
+		T.setPoint(0, D - dir.Rotated(pi / 2) * 2.5 * thickness);
+		T.setPoint(1, D - dir.Rotated(-pi / 2) * 2.5 * thickness);
+		T.setPoint(2, D + dir * 9 * thickness);
+		T.setFillColor(interpolate(0.5, color, sf::Color::White));
+		// 		T.setOutlineColor(sf::Color::Red);
+		T.setOutlineThickness(0);
+		m_Window.draw(T);
+	}
+}
+
+template <class Derived>
 void Client<Derived>::Render(const Segment& A,
 							 const sf::Color& color,
 							 real thickness,
 							 bool directed)
 {
-	sfLine S(A.Origin(), A.End(), color, thickness);
-	m_Window.draw(S);
-
-	// TODO: This sucks.
-	// 	sf::RectangleShape hola(Point(A.Length(), 0));
-	// 	hola.setOutlineColor(color);
-	// 	hola.setOutlineThickness(thickness);
-	//
-	// 	hola.rotate(RadiansToDegrees(A.Angle()));
-	// 	hola.move(A.Origin());
-	//
-	// 	m_Window.draw(hola);
-
-	if (directed)
-	{
-		auto T = sf::ConvexShape(3);
-		Point dir = (A.End() - A.Origin()).Normalized();
-		Point D = (A.Origin() + A.End()) / 2 + dir * 6;
-		T.setPoint(0, D - dir.Rotated(pi / 2) * 7 * thickness);
-		T.setPoint(1, D - dir.Rotated(-pi / 2) * 7 * thickness);
-		T.setPoint(2, D + dir * 18 * thickness);
-		T.setFillColor(color);
-		T.setOutlineColor(sf::Color::Red);
-		T.setOutlineThickness(0);
-		m_Window.draw(T);
-	}
+	RenderSegment(A.Origin(), A.End(), color, thickness, directed);
 }
 
 template <class Derived>

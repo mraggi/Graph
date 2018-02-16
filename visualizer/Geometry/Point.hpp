@@ -25,7 +25,16 @@ public:
 	bool isZero() const { return (LengthSq() == 0); }
 
 	inline real LengthSq() const { return x * x + y * y; }
-	inline real Length() const { return sqrt(LengthSq()); }
+	inline real Length() const { return std::sqrt(LengthSq()); }
+
+	inline real Distance(const Point& vec) const { return std::sqrt(DistanceSq(vec)); }
+
+	inline real DistanceSq(const Point& vec) const
+	{
+		real disX = (vec.x - x);
+		real disY = (vec.y - y);
+		return disX * disX + disY * disY;
+	}
 
 	inline real Angle() const { return atan2(y, x); }
 	inline real AngleTo(const Point& vec) const { return MakeValidAngle(vec.Angle() - Angle()); }
@@ -45,25 +54,40 @@ public:
 				real COS); // so that you don't calculate sin and cos again.
 	Point Rotated(real sint, real cost) const; // so that you don't calculate sin and cos again.
 
-	void Normalize();
-	Point Normalized() const;
+	inline void Normalize()
+	{
+		if (x != 0 || y != 0)
+		{
+			real length = Length();
 
-	void Scale(real factor)
+			x /= length;
+			y /= length;
+		}
+	}
+
+	inline Point Normalized() const
+	{
+		Point normalized(x, y);
+
+		normalized.Normalize();
+
+		return normalized;
+	}
+
+	inline void Scale(real factor)
 	{
 		x *= factor;
 		y *= factor;
 	}
-	void Scale(real xfactor, real yfactor)
+
+	inline void Scale(real xfactor, real yfactor)
 	{
 		x *= xfactor;
 		y *= yfactor;
 	}
 
-	real Distance(const Point& vec) const;
-	real DistanceSq(const Point& vec) const;
-
 	void SetLength(real r);
-	void SetLengthSq(real r2); // This computes sqrt only once, instead of twice
+	void SetLengthSq(real r2);
 	void SetPolar(real r, real t);
 
 	Point WithLength(real r) const;
@@ -72,11 +96,9 @@ public:
 	Point Projection(const Point& H) const;
 	Point ProjectionToLine(const Point& A, const Point& B) const;
 
-	bool IsToTheLeftOfLine(const Point& A,
-						   const Point& B) const; // strictly to the left
+	bool IsToTheLeftOfLine(const Point& A, const Point& B) const; // strictly
 	bool IsOnLine(const Point& A, const Point& B) const;
-	bool IsToTheRightOfLine(const Point& A,
-							const Point& B) const; // strictly to the right
+	bool IsToTheRightOfLine(const Point& A, const Point& B) const; // strictly
 
 	// This returns the projection if it's "positive" (wrt H) and returns 0 if
 	// it's negative
