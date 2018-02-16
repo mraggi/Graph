@@ -25,6 +25,6 @@ unzip SFML-2.4.2-sources.zip
 cd SFML-2.4.2
 mkdir build
 cd build
-cmake .. -DBUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr
 make
 sudo make install
