@@ -28,10 +28,10 @@ matrix:
 before_install:
     - eval "${MATRIX_EVAL}"
     - cd "${TRAVIS_BUILD_DIR}"
+    - wget https://raw.githubusercontent.com/mraggi/Graph/master/install_deps_ubuntu1604.sh && sudo bash ./install_deps_ubuntu1604.sh
     
 before_script:
   - PARENTDIR=$(pwd)
-  - ./install_deps_ubuntu1604.sh
   - mkdir $PARENTDIR/build && cd $PARENTDIR/build
   
 
