@@ -41,7 +41,7 @@ std::vector<sf::Color*> neighbor_colors(const Graph& G, Graph::vertex_t v)
 
 void AnimatePrim()
 {
-	const real animation_speed = 0.3;
+	const real animation_speed = 0.03;
 
 	using Edge = Graph::Edge;
 	using vertex_t = Graph::vertex_t;
@@ -125,7 +125,7 @@ void AnimateKruskal()
 	using Edge = Graph::Edge;
 	using vertex_t = Graph::vertex_t;
 
-	const real animation_speed = 0.3;
+	const real animation_speed = 0.03;
 
 	APP.ClearToDefaults();
 	APP.GUI.AddMessage("Starting Kruskal's Algorithm. Press [Space] to continue!");

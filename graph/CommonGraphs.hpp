@@ -18,4 +18,8 @@ Graph Random(int n, double p);
 
 Graph RandomWeighted(int n, double p);
 
+Graph Random(int num_verts, int num_edges);
+
+Graph Grid(int n, int m);
+
 }; // namespace graphs

@@ -91,6 +91,12 @@ void GraphApp::CreateGUI()
 	GUI.AddAction("Random Graph", sf::Keyboard::Num6, [this]() {
 		SetGraph(graphs::RandomWeighted(num_rand_verts, avg_degree / num_rand_verts));
 	});
+	
+	GUI.AddAction("Grid Graph", sf::Keyboard::Num7, [this]() 
+	{
+		int n = std::sqrt(num_rand_verts);
+		SetGraph(graphs::Grid(n,n));
+	});
 
 	GUI.AddSpacer();
 
