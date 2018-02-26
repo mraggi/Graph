@@ -101,7 +101,7 @@ private:
 	vertex_t selected_vertex{Graph::INVALID_VERTEX};
 	vertex_t edge_start{Graph::INVALID_VERTEX};
 
-	int num_rand_verts{500};
+	int num_rand_verts{50};
 	real avg_degree{1.1};
 
 	void DrawGraph();

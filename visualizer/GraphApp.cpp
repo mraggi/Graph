@@ -57,7 +57,7 @@ void GraphApp::CreateGUI()
 
 	GUI.AddController(num_rand_verts,
 					  "Num vertices for generator",
-					  10,
+					  1,
 					  sf::Keyboard::G,
 					  sf::Keyboard::H,
 					  dark_orange);
@@ -91,11 +91,10 @@ void GraphApp::CreateGUI()
 	GUI.AddAction("Random Graph", sf::Keyboard::Num6, [this]() {
 		SetGraph(graphs::RandomWeighted(num_rand_verts, avg_degree / num_rand_verts));
 	});
-	
-	GUI.AddAction("Grid Graph", sf::Keyboard::Num7, [this]() 
-	{
+
+	GUI.AddAction("Grid Graph", sf::Keyboard::Num7, [this]() {
 		int n = std::sqrt(num_rand_verts);
-		SetGraph(graphs::Grid(n,n));
+		SetGraph(graphs::Grid(n, n));
 	});
 
 	GUI.AddSpacer();

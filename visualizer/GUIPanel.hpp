@@ -3,9 +3,9 @@
 #include "Geometry/AllConvex.hpp"
 #include "MessageBox.hpp"
 #include <SFML/Graphics.hpp>
+#include <memory>
 #include <sstream>
 #include <unordered_map>
-#include <memory>
 
 inline std::ostream& operator<<(std::ostream& os, const sf::Keyboard::Key& key);
 
@@ -65,10 +65,21 @@ public:
 	{
 		if (key == increaseKey)
 		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)
+				|| sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			{
+				*var += 9 * stepsize;
+			}
 			*var += stepsize;
 		}
 		else if (key == decreaseKey)
 		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)
+				|| sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			{
+				*var -= 9 * stepsize;
+			}
+
 			*var -= stepsize;
 		}
 	}

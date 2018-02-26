@@ -47,13 +47,18 @@ if (${BUILD_VISUALIZER})
 # 	find_package(SFML REQUIRED)
 	add_definitions(-DUSE_SFML)
 	
+	include_directories(visualizer/)
+	include_directories(visualizer/Animations)
+	include_directories(visualizer/Animations/Geometry)
+	
 	file(GLOB GEOMETRY_FILES visualizer/Geometry/*.cpp)
 	add_library(geometry ${GEOMETRY_FILES})
-	
 	add_executable(visualizer 	visualizer/main.cpp
 								visualizer/GUIPanel.cpp
 								visualizer/GraphApp.cpp
-								visualizer/PhysicalGraph.cpp)
+								visualizer/PhysicalGraph.cpp
+								visualizer/Animations/MST.cpp
+								visualizer/Animations/Search.cpp)
 								
 	target_link_libraries(visualizer graph geometry sfml-window sfml-graphics sfml-system)
 	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/resources/SourceCodePro-Regular.ttf ${CMAKE_CURRENT_BINARY_DIR}/font-mono.ttf COPYONLY)
