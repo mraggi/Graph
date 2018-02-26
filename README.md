@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mraggi/Graph.svg?branch=master)](https://travis-ci.org/mraggi/Graph)
+
 # Intro
 
 This is graph-algorithm-visualization software made for my students at ENES Morelia. You can use it for your own purposes if you happen to find it, but bear in mind it's not finished yet.
