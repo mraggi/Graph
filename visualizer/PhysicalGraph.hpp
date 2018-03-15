@@ -7,13 +7,13 @@
 class PhysicalGraph
 {
 public:
-	using vertex_t = Graph::vertex_t;
+	using Vertex = Graph::Vertex;
 	using weight_t = Graph::weight_t;
 	using Edge = Graph::Edge;
 
 	explicit PhysicalGraph(const Graph& g);
 
-	explicit PhysicalGraph(vertex_t num_verts = 0);
+	explicit PhysicalGraph(Vertex num_verts = 0);
 
 	void SetGraph(const Graph& g);
 
@@ -24,14 +24,14 @@ public:
 
 	const std::vector<Edge>& edges() const { return E; }
 
-	using all_vertices = basic_natural_number<vertex_t>;
+	using all_vertices = basic_natural_number<Vertex>;
 	all_vertices vertices() const { return all_vertices(num_vertices()); }
 
-	vertex_t num_vertices() const { return G.num_vertices(); }
+	Vertex num_vertices() const { return G.num_vertices(); }
 	Graph::size_type num_edges() const { return G.num_edges(); }
 
 	// Graph modification functions
-	vertex_t add_vertex()
+	Vertex add_vertex()
 	{
 		M.emplace_back();
 		return G.add_vertex();
@@ -39,9 +39,9 @@ public:
 
 	void sort_neighbors() { G.sort_neighbors(); }
 
-	void remove_vertex(vertex_t v)
+	void remove_vertex(Vertex v)
 	{
-		vertex_t last = num_vertices() - 1;
+		Vertex last = num_vertices() - 1;
 		M[v] = M[last];
 		M.pop_back();
 		G.remove_vertex(v);
@@ -49,20 +49,20 @@ public:
 	}
 
 	// Graph modification functions
-	vertex_t add_vertex(const Point& position)
+	Vertex add_vertex(const Point& position)
 	{
 		cout << "Adding vertex at " << position << endl;
 		M.emplace_back(position, Point(), Point());
 		return G.add_vertex();
 	}
 
-	void add_edge(vertex_t from, vertex_t to, weight_t w = 1)
+	void add_edge(Vertex from, Vertex to, weight_t w = 1)
 	{
 		G.add_edge(from, to, w);
 		E.emplace_back(from, to, w);
 	}
 
-	void add_edge_no_repeat(vertex_t from, vertex_t to, weight_t w = 1)
+	void add_edge_no_repeat(Vertex from, Vertex to, weight_t w = 1)
 	{
 		if (G.add_edge_no_repeat(from, to, w))
 			E.emplace_back(from, to, w);
@@ -94,19 +94,19 @@ private:
 		Point acceleration;
 	};
 
-	Point& p(vertex_t v) { return M[v].position; }
-	Point& v(vertex_t v) { return M[v].velocity; }
-	Point& a(vertex_t v) { return M[v].acceleration; }
+	Point& p(Vertex v) { return M[v].position; }
+	Point& v(Vertex v) { return M[v].velocity; }
+	Point& a(Vertex v) { return M[v].acceleration; }
 
-	Point p(vertex_t v) const { return M[v].position; }
-	Point v(vertex_t v) const { return M[v].velocity; }
-	Point a(vertex_t v) const { return M[v].acceleration; }
+	Point p(Vertex v) const { return M[v].position; }
+	Point v(Vertex v) const { return M[v].velocity; }
+	Point a(Vertex v) const { return M[v].acceleration; }
 
 	Graph G;
 	std::vector<Edge> E;
 	std::vector<Motion> M;
 
-	real time_since_last_update{0.0}; // this is so it runs at fixed fps
+	real time_since_last_update{0.0}; //*this is so it runs at fixed fps
 private:
 	void AttractToCenter();
 	void Repell();

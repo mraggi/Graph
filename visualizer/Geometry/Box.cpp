@@ -102,8 +102,8 @@ bool Box::Intersects(const Circle& other, Point& overlap) const
 	overlap = Point();
 	real x = 0;
 	real y = 0;
-	real xInterior
-	  = 0; // Estos son para el caso en que el centro del circulo esta dentro del cuadro.
+	real xInterior =
+	  0; // Estos son para el caso en que el centro del circulo esta dentro del cuadro.
 	real yInterior = 0; // No sirven para determinar colision, pero si para determinar el
 						// desplazamiento en ese caso.
 	real aux;

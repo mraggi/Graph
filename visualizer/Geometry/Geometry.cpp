@@ -261,8 +261,8 @@ bool DoesConvexIntersectSegment(const VP& convex, Point A, Point B)
 		Point X = convex[i];
 		Point Y = convex[(i + 1) % n];
 		Point intersection;
-		if (DoSegmentsIntersect(A, B, X, Y, &intersection) && intersection != A && intersection != B
-			&& intersection != X && intersection != Y)
+		if (DoSegmentsIntersect(A, B, X, Y, &intersection) && intersection != A &&
+			intersection != B && intersection != X && intersection != Y)
 		{
 			// cout << "Yes, because the segment " << A << "---" << B << " intersects the " << i <<
 			// "th segment of the convex,  which goes from " << X << " to " << Y << " at " <<

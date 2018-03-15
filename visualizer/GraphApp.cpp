@@ -97,6 +97,18 @@ void GraphApp::CreateGUI()
 		SetGraph(graphs::Grid(n, n));
 	});
 
+	GUI.AddAction("Random Tree", sf::Keyboard::Num8, [this]() {
+		SetGraph(graphs::RandomTree(num_rand_verts));
+	});
+
+	GUI.AddAction("Random BinaryTree", sf::Keyboard::Num9, [this]() {
+		SetGraph(graphs::RandomBinaryTree(num_rand_verts));
+	});
+
+	GUI.AddAction("Albert Barabanasi", sf::Keyboard::Num0, [this]() {
+		SetGraph(graphs::AlbertBarabanasi(num_rand_verts, 2));
+	});
+
 	GUI.AddSpacer();
 
 	GUI.AddText("Available Shortcuts: " + GUI.AvailableShortcuts(), sf::Color(40, 40, 50));
@@ -149,16 +161,18 @@ void GraphApp::DrawGraph()
 			vcol = hover_vertex_color;
 
 		if (show_labels)
-			Base::Render(std::to_string(v),
-						 P[v] - Point(label_size(v) * 0.45, label_size(v) * 1.2) / 2,
-						 vcol,
-						 label_size(v));
+		{
+			Point pos = P[v] - Point(label_size(v) * 0.45, label_size(v) * 1.2) / 2;
+			Base::Render(std::to_string(v), pos, vcol, label_size(v));
+		}
 		else
+		{
 			Base::Render(P[v], vcol, vertex_sizes(v));
+		}
 	}
 }
 
-bool GraphApp::IsMouseOverVertex(vertex_t v) const
+bool GraphApp::IsMouseOverVertex(Vertex v) const
 {
 	auto MP = MousePosition();
 	double vs = vertex_sizes(v) + 3; // leave 3 pixels to grab the vertex
@@ -222,7 +236,7 @@ void GraphApp::OnMouseButtonRelease(sf::Mouse::Button btn)
 		edge_start = Graph::INVALID_VERTEX;
 }
 
-GraphApp::vertex_t GraphApp::VertexUnderMouse() const
+GraphApp::Vertex GraphApp::VertexUnderMouse() const
 {
 	for (auto v : P.vertices())
 	{
@@ -240,7 +254,7 @@ void GraphApp::FitGraphToScreen()
 	SynchronizeCameraWithView();
 }
 
-void GraphApp::OnKeyPress(sf::Keyboard::Key /*key*/) {}
+void GraphApp::OnKeyPress(sf::Keyboard::Key key) {}
 
 Box GraphApp::GetBoundingBoxOfGraph() const
 {

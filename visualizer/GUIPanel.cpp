@@ -42,8 +42,10 @@ void GUIPanel::AddCheckbox(bool& var,
 	shortcuts[key].emplace_back(gui_elements.back().get());
 }
 
-void GUIPanel::HandleMousePress(const Point& position, const sf::Mouse::Button& /*btn*/)
+void GUIPanel::HandleMousePress(const Point& position, const sf::Mouse::Button& btn)
 {
+	if (btn != sf::Mouse::Left)
+		return;
 	int num = 0;
 	for (auto& e : gui_elements)
 	{

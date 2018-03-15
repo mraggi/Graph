@@ -15,13 +15,13 @@ struct by_reverse_weight
 	bool operator()(const Edge& a, const Edge& b) { return a.weight() > b.weight(); }
 };
 
-std::vector<sf::Color*> neighbor_colors(const Graph& G, Graph::vertex_t v)
+std::vector<sf::Color> neighbor_colors(const Graph& G, Graph::Vertex v)
 {
-	std::vector<sf::Color*> result;
+	std::vector<sf::Color> result;
 	for (auto u : G.neighbors(v))
 	{
 		Graph::Edge E(v, u, u.weight());
-		result.emplace_back(&APP.edge_colors[E]);
+		result.emplace_back(APP.edge_colors[E]);
 	}
 	return result;
 }
@@ -31,7 +31,7 @@ void AnimatePrim()
 	const real animation_speed = 0.03;
 
 	using Edge = Graph::Edge;
-	using vertex_t = Graph::vertex_t;
+	using Vertex = Graph::Vertex;
 
 	APP.ClearToDefaults();
 
@@ -104,13 +104,13 @@ void AnimatePrim()
 	}
 	auto Finish = Prim.AddScene(APP.default_edge_color, black, animation_speed);
 	Finish->AddFinishMessage(APP.GUI, "Done with Prim", sf::Color(255, 100, 200));
-	//     return T;
+	// return T;
 }
 
 void AnimateKruskal()
 {
 	using Edge = Graph::Edge;
-	using vertex_t = Graph::vertex_t;
+	using Vertex = Graph::Vertex;
 
 	const real animation_speed = 0.03;
 
@@ -145,8 +145,8 @@ void AnimateKruskal()
 
 	for (auto& e : E)
 	{
-		vertex_t a = e.from;
-		vertex_t b = e.to;
+		Vertex a = e.from;
+		Vertex b = e.to;
 
 		auto S = Kruskal.AddScene(APP.edge_colors[e], consider, animation_speed);
 		S->AddStartMessage(APP.GUI, "Considering edge " + to_string(e), consider);

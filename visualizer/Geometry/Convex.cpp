@@ -70,8 +70,8 @@ bool Convex::Intersects(const Ray& other, Point& intersection) const
 
 bool Convex::Intersects(const Ray& other, Point& intersection, Point& normal) const
 {
-	return Intersects(Line(other), intersection, normal)
-	  && other.PointInLineIntersectsMe(intersection);
+	return Intersects(Line(other), intersection, normal) &&
+	  other.PointInLineIntersectsMe(intersection);
 }
 
 bool Convex::Intersects(const Segment& other, Segment& intersection) const

@@ -23,7 +23,7 @@ inline Matrix adjacency_matrix(const Graph& G)
 class PhysicalGraph
 {
 public:
-	using vertex_t = Graph::vertex_t;
+	using Vertex = Graph::Vertex;
 
 	PhysicalGraph(const Graph& g) : A(adjacency_matrix(g)), X(g.num_vertices() * 2), E(g.edges())
 	{
@@ -47,18 +47,18 @@ public:
 
 	void Update(double time);
 
-	Point operator[](vertex_t v) const { return p(v); }
+	Point operator[](Vertex v) const { return p(v); }
 
 	const std::vector<Graph::Edge>& edges() const { return E; }
 
-	using all_vertices = basic_natural_number<vertex_t>;
+	using all_vertices = basic_natural_number<Vertex>;
 	all_vertices vertices() const { return all_vertices(A.size()); }
 
 	size_t num_vertices() const { return A.size(); }
 
 	// private:
 
-	Point p(vertex_t v) const { return Point(X[2 * v], X[2 * v + 1]); }
+	Point p(Vertex v) const { return Point(X[2 * v], X[2 * v + 1]); }
 
 	Matrix A;
 	MultiDimVector X;

@@ -21,7 +21,12 @@ include_directories(graph/utils)
 # Add cpp files that have to do with graphs here
 add_library(graph graph/Graph.cpp
 				  graph/CommonGraphs.cpp
-				  graph/MinSpanningTree.cpp)
+				  graph/MinSpanningTree.cpp
+				  graph/ConnectedComponents.cpp
+				  graph/ShortestPaths.cpp
+				  graph/Clustering.cpp
+				  graph/IsSimple.cpp
+				  graph/TreeAlgorithms.cpp)
 
 if (${BUILD_TESTS})
 	find_package(GTest REQUIRED)
@@ -34,7 +39,11 @@ if (${BUILD_TESTS})
 	add_executable(${PROJECT_TEST_NAME} tests/main.cpp 
 										tests/basic_tests.cpp
 										tests/disjoint_set_tests.cpp
-										tests/mst_tests.cpp)
+										tests/mst_tests.cpp
+										tests/connected_component_tests.cpp
+										tests/shortest_path_tests.cpp
+										tests/clustering_tests.cpp
+										tests/graph_creation_tests.cpp)
 	
 	target_link_libraries(${PROJECT_TEST_NAME} ${GTEST_BOTH_LIBRARIES} Threads::Threads graph)
 	add_test(AllTests ${PROJECT_TEST_NAME})

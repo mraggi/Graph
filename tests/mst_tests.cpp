@@ -1,3 +1,5 @@
+#include "CommonGraphs.hpp"
+#include "ConnectedComponents.hpp"
 #include "MinSpanningTree.hpp"
 #include "VectorHelpers.hpp"
 #include <gtest/gtest.h>
@@ -40,5 +42,39 @@ TEST(MST, Prim5)
 	{
 		auto it = std::find(Correct.begin(), Correct.end(), e);
 		ASSERT_NE(it, Correct.end());
+	}
+}
+
+long total_weight(const std::vector<Graph::Edge>& X)
+{
+	long result = 0;
+	for (auto& x : X)
+		result += x.weight();
+	return result;
+}
+
+TEST(MST, PrimVsKruskal)
+{
+	for (int n = 1; n < 50; ++n)
+	{
+		auto G = graphs::RandomWeighted(n, 0.5);
+		while (!is_connected(G))
+		{
+			G = graphs::RandomWeighted(n, 0.5);
+		}
+
+		auto P = prim(G);
+		auto K = kruskal(G);
+
+		ASSERT_EQ(total_weight(P), total_weight(K));
+
+		Graph GP(n);
+		GP.add_edges(P);
+
+		Graph GK(n);
+		GK.add_edges(K);
+
+		ASSERT_TRUE(is_connected(GP));
+		ASSERT_TRUE(is_connected(GK));
 	}
 }

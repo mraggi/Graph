@@ -3,7 +3,7 @@
 #include <queue>
 
 using Edge = Graph::Edge;
-using vertex_t = Graph::vertex_t;
+using Vertex = Graph::Vertex;
 
 struct by_reverse_weight
 {
@@ -22,7 +22,7 @@ std::vector<Graph::Edge> prim(const Graph& G)
 	if (n < 2)
 		return T;
 
-	vertex_t num_tree_edges = n - 1;
+	Vertex num_tree_edges = n - 1;
 
 	T.reserve(num_tree_edges);
 
@@ -63,7 +63,7 @@ std::vector<Graph::Edge> prim(const Graph& G)
 std::vector<Graph::Edge> kruskal(const Graph& G)
 {
 	auto n = G.num_vertices();
-	vertex_t num_tree_edges = n - 1;
+	Vertex num_tree_edges = n - 1;
 
 	std::vector<Graph::Edge> T;
 	T.reserve(num_tree_edges);
@@ -82,8 +82,8 @@ std::vector<Graph::Edge> kruskal(const Graph& G)
 
 	for (auto& e : E)
 	{
-		vertex_t a = e.from;
-		vertex_t b = e.to;
+		Vertex a = e.from;
+		Vertex b = e.to;
 
 		if (!D.are_in_same_connected_component(a, b))
 		{

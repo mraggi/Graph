@@ -9,9 +9,10 @@
 class Graph
 {
 public:
-	using size_type = long;
-	using vertex_t = long;
-	static const vertex_t INVALID_VERTEX{-1};
+	using size_type = long long;
+
+	using Vertex = long;
+	static const Vertex INVALID_VERTEX = -1;
 
 	using weight_t = long;
 
@@ -19,74 +20,78 @@ public:
 	// properly hold a sum of weight_t (for example, if weight_t = char).
 	using sumweight_t = long long;
 
-	struct Neighbor; // Represents a half-edge with a vertex and (possibly) a
-	// weight
-	struct Edge; // Represents an edge, with two vertices and (possibly) a
-	// weight.
+	struct Neighbor; // Represents a half-edge (vertex,weight)
+
+	struct Edge; // (from,to,weight)
 
 	using neighbor_list = std::vector<Neighbor>;
 	using neighbor_const_iterator = neighbor_list::const_iterator;
 	using neighbor_iterator = neighbor_list::iterator;
 
 	// Constructor
-	explicit Graph(vertex_t numberOfVertices = 0);
+	explicit Graph(Vertex numberOfVertices = 0);
 
-	size_type degree(vertex_t a) const { return m_graph[a].size(); }
+	size_type degree(Vertex a) const { return m_graph[a].size(); }
 
 	// Graph modification functions
-	vertex_t add_vertex();
-	void add_edge(vertex_t from, vertex_t to, weight_t w = 1);
+	Vertex add_vertex();
+	void add_edge(Vertex from, Vertex to, weight_t w = 1);
 	void add_edge(const Edge& e);
+
+	template <class EdgeContainer>
+	void add_edges(const EdgeContainer& edges)
+	{
+		for (auto& e : edges)
+			add_edge(e);
+	}
+
 	void add_edges(const std::initializer_list<Edge>& edges);
 
-	bool add_edge_no_repeat(vertex_t from,
-							vertex_t to,
-							weight_t w
-							= 1); // only add if not already present. Returns true if added.
+	bool add_edge_no_repeat(Vertex from, Vertex to, weight_t w = 1);
 
-	void sort_neighbors(); // sorts them so that searching can later be done in log time
+	void sort_neighbors();
 
-	void remove_vertex(vertex_t v);
-	void remove_edge(vertex_t v, vertex_t u);
+	void remove_vertex(Vertex v);
+	void remove_edge(Vertex v, Vertex u);
 
 	void delete_loops();
 	void delete_repeated_edges();
 	void make_simple();
 
 	// Get Graph Info
-	vertex_t num_vertices() const { return m_numvertices; }
+	Vertex num_vertices() const { return m_numvertices; }
 	size_type num_edges() const { return m_numedges; }
 
-	inline const neighbor_list& neighbors(vertex_t n) const { return m_graph[n]; }
-	inline const neighbor_list& outneighbors(vertex_t n) const { return m_graph[n]; }
-	inline const neighbor_list& inneighbors(vertex_t n) const { return m_graph[n]; }
+	inline const neighbor_list& neighbors(Vertex n) const { return m_graph[n]; }
+	inline const neighbor_list& outneighbors(Vertex n) const { return m_graph[n]; }
+	inline const neighbor_list& inneighbors(Vertex n) const { return m_graph[n]; }
 
-	using all_vertices = basic_natural_number<vertex_t>;
+	using all_vertices = basic_natural_number<Vertex>;
 	all_vertices vertices() const { return all_vertices(num_vertices()); }
 
-	std::vector<Edge> edges() const; // TODO: make this lazy
+	std::vector<Edge> edges() const; // TODO: make*this lazy
 
-	bool is_neighbor(vertex_t from, vertex_t to) const;
+	bool is_neighbor(Vertex from, Vertex to) const;
 
-	weight_t edge_value(vertex_t from, vertex_t to) const;
+	weight_t edge_value(Vertex from, Vertex to) const;
 
-	neighbor_const_iterator get_neighbor(vertex_t from, vertex_t to) const;
-	neighbor_iterator get_neighbor(vertex_t from, vertex_t to);
+	neighbor_const_iterator get_neighbor(Vertex from, Vertex to) const;
+	neighbor_iterator get_neighbor(Vertex from, Vertex to);
 
 	// Start class definitions
 	struct Neighbor
 	{
 		explicit Neighbor() : vertex(INVALID_VERTEX), m_weight(0) {}
 
-		explicit Neighbor(vertex_t v, weight_t w = 1) : vertex(v), m_weight(w) {}
+		explicit Neighbor(Vertex v, weight_t w = 1) : vertex(v), m_weight(w) {}
 
-		inline operator vertex_t() const { return vertex; }
+		inline operator Vertex() const { return vertex; }
 
 		weight_t weight() const { return m_weight; }
 
 		void set_weight(weight_t w) { m_weight = w; }
 
-		vertex_t vertex{INVALID_VERTEX};
+		Vertex vertex{INVALID_VERTEX};
 
 	private:
 		// comment out if not needed, and make set_weight do nothing, and make
@@ -96,21 +101,22 @@ public:
 
 	struct Edge
 	{
+		Vertex from;
+		Vertex to;
+
 		Edge() : from(INVALID_VERTEX), to(INVALID_VERTEX), m_weight(0) {}
-		Edge(vertex_t f, vertex_t t, weight_t w = 1) : from(f), to(t), m_weight(w) {}
+		Edge(Vertex f, Vertex t, weight_t w = 1) : from(f), to(t), m_weight(w) {}
 
-		vertex_t operator[](bool i) const { return i ? to : from; }
+		Vertex operator[](bool i) const { return i ? to : from; }
 
-		// replace by return 1 if weight doesn't exist
+		// replace by "return 1" if weight doesn't exist
 		weight_t weight() const { return m_weight; }
-
-		vertex_t from;
-		vertex_t to;
+		void change_weight(weight_t w) { m_weight = w; }
 
 		bool operator==(const Edge& E) const
 		{
-			return ((from == E.from && to == E.to) || (from == E.to && to == E.from))
-			  && m_weight == E.m_weight;
+			return ((from == E.from && to == E.to) || (from == E.to && to == E.from)) &&
+			  m_weight == E.m_weight;
 		}
 
 	private:
@@ -118,7 +124,7 @@ public:
 	};
 
 private:
-	// Graph insides
+	// Graph member variables
 	size_type m_numvertices;
 	size_type m_numedges{0};
 

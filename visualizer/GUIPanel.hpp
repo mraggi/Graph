@@ -65,8 +65,8 @@ public:
 	{
 		if (key == increaseKey)
 		{
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)
-				|| sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
 			{
 				*var += 9 * stepsize;
 			}
@@ -74,8 +74,8 @@ public:
 		}
 		else if (key == decreaseKey)
 		{
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)
-				|| sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
 			{
 				*var -= 9 * stepsize;
 			}
@@ -185,10 +185,10 @@ class GUIPanel
 public:
 	GUIPanel()
 	{
-		//      AddElement(CheckboxRadius, "Check box radius", 1,
-		// sf::Keyboard::K, sf::Keyboard::L);       AddElement(TextSize,
+		// AddElement(CheckboxRadius, "Check box radius", 1,
+		// sf::Keyboard::K, sf::Keyboard::L); AddElement(TextSize,
 		// "TextSize", 1, sf::Keyboard::Z, sf::Keyboard::X);
-		//      AddElement(TextSeparation, "TextSeparation", 1, sf::Keyboard::C,
+		// AddElement(TextSeparation, "TextSeparation", 1, sf::Keyboard::C,
 		// sf::Keyboard::V);
 	}
 
@@ -223,9 +223,9 @@ public:
 
 	template <class C>
 	void Render(C& client);
-	//  void Watch(real var, const std::string& name, sf::Color col = sf::Color(100, 100, 255));
+	// void Watch(real var, const std::string& name, sf::Color col = sf::Color(100, 100, 255));
 
-	//  void Watch(const std::string& var, sf::Color col = sf::Color(100, 255, 10));
+	// void Watch(const std::string& var, sf::Color col = sf::Color(100, 255, 10));
 
 	real text_size{16};
 

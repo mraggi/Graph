@@ -6,8 +6,8 @@ vector<Point> CalculateForces(size_t n, const vector<edge_t>& E, double R, const
 	vector<Point> toReturn(n);
 	for (auto e : E)
 	{
-		vertex_t a = e[0];
-		vertex_t b = e[1];
+		Vertex a = e[0];
+		Vertex b = e[1];
 		Point A = P[a];
 		Point B = P[b];
 		double D = A.Distance(B);
@@ -60,7 +60,7 @@ vector<Point> GoodDrawing(const Graph& G, double R)
 	VP P(n);
 
 	// 	for (int i = 0; i < n; ++i)
-	// 		P[i] = Point::RandomPoint(0,R*n/2.0);
+	// 		P[i] = Point::RandomPoint(0,R n/2.0);
 	// 	vector<edge_t> E = G.edges();
 	//
 	// 	const int numtimes = 100;
@@ -73,7 +73,7 @@ vector<Point> GoodDrawing(const Graph& G, double R)
 	// 		cout << "\tP = " << P << endl;
 	// 		for (size_t v = 0; v < n; ++v)
 	// 		{
-	// 			P[v] += frame*F[v];
+	// 			P[v] += frame F[v];
 	// 		}
 	// 		cout << "\tP = " << P << endl;
 	// 	}
@@ -93,7 +93,7 @@ vector<Point> TreeDrawing(const Graph& G, int start, double R)
 
 void DrawGraph(Client& C, const Graph& G, const vector<Point>& P, const sf::Color& color)
 {
-	for (vertex_t n = 0; n < G.num_vertices(); ++n)
+	for (Vertex n = 0; n < G.num_vertices(); ++n)
 	{
 		for (auto u : G.neighbors(n))
 		{
@@ -102,7 +102,7 @@ void DrawGraph(Client& C, const Graph& G, const vector<Point>& P, const sf::Colo
 		}
 	}
 
-	for (vertex_t n = 0; n < G.num_vertices(); ++n)
+	for (Vertex n = 0; n < G.num_vertices(); ++n)
 	{
 		C.Render(P[n], color, 10);
 	}
@@ -113,7 +113,7 @@ void DrawGraph(Client& C,
 			   const vector<Point>& P,
 			   const vector<sf::Color>& vertex_colors)
 {
-	for (vertex_t n = 0; n < G.num_vertices(); ++n)
+	for (Vertex n = 0; n < G.num_vertices(); ++n)
 	{
 		for (auto u : G.neighbors(n))
 		{
@@ -122,7 +122,7 @@ void DrawGraph(Client& C,
 		}
 	}
 
-	for (vertex_t n = 0; n < G.num_vertices(); ++n)
+	for (Vertex n = 0; n < G.num_vertices(); ++n)
 	{
 		C.Render(P[n], vertex_colors[n], 10);
 	}
@@ -130,7 +130,7 @@ void DrawGraph(Client& C,
 
 void DrawGraph(Client& C, const DiGraph& G, const vector<Point>& P, const sf::Color& color)
 {
-	for (vertex_t n = 0; n < G.num_vertices(); ++n)
+	for (Vertex n = 0; n < G.num_vertices(); ++n)
 	{
 		for (auto u : G.outneighbors(n))
 		{
@@ -139,7 +139,7 @@ void DrawGraph(Client& C, const DiGraph& G, const vector<Point>& P, const sf::Co
 		}
 	}
 
-	for (vertex_t n = 0; n < G.num_vertices(); ++n)
+	for (Vertex n = 0; n < G.num_vertices(); ++n)
 	{
 		C.Render(P[n], color, 10);
 	}
@@ -150,7 +150,7 @@ void DrawGraph(Client& C,
 			   const vector<Point>& P,
 			   const vector<sf::Color>& vertex_colors)
 {
-	for (vertex_t n = 0; n < G.num_vertices(); ++n)
+	for (Vertex n = 0; n < G.num_vertices(); ++n)
 	{
 		for (auto u : G.outneighbors(n))
 		{
@@ -159,7 +159,7 @@ void DrawGraph(Client& C,
 		}
 	}
 
-	for (vertex_t n = 0; n < G.num_vertices(); ++n)
+	for (Vertex n = 0; n < G.num_vertices(); ++n)
 	{
 		C.Render(P[n], vertex_colors[n], 10);
 	}

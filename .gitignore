@@ -9,3 +9,4 @@ Makefile
 .idea
 ct-build
 cppcheck-build
+oclint-build

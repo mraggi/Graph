@@ -7,7 +7,7 @@ class GraphApp : public Client<GraphApp> // using CRTP
 {
 public:
 	using Base = Client<GraphApp>;
-	using vertex_t = Graph::vertex_t;
+	using Vertex = Graph::Vertex;
 
 	// options
 	real default_vertex_size{7.0};
@@ -56,8 +56,8 @@ public:
 	void OnEvent(const sf::Event& evt) {} // key presses and stuff are handled in other functions.
 	// This is for all "rare" events (joysticks?)
 
-	vertex_t VertexUnderMouse() const;
-	bool IsMouseOverVertex(vertex_t v) const;
+	Vertex VertexUnderMouse() const;
+	bool IsMouseOverVertex(Vertex v) const;
 
 	void FitGraphToScreen();
 
@@ -89,8 +89,8 @@ public:
 		}
 	};
 
-	map_with_default_by_ref<vertex_t, sf::Color> vertex_colors{default_vertex_color};
-	map_with_default_by_ref<vertex_t, real> vertex_sizes{default_vertex_size};
+	map_with_default_by_ref<Vertex, sf::Color> vertex_colors{default_vertex_color};
+	map_with_default_by_ref<Vertex, real> vertex_sizes{default_vertex_size};
 
 	map_with_default_by_ref<Graph::Edge, sf::Color, edge_hash> edge_colors{default_edge_color};
 	map_with_default_by_ref<Graph::Edge, real, edge_hash> edge_thicknesses{default_edge_thickness};
@@ -98,8 +98,8 @@ public:
 private:
 	PhysicalGraph P;
 
-	vertex_t selected_vertex{Graph::INVALID_VERTEX};
-	vertex_t edge_start{Graph::INVALID_VERTEX};
+	Vertex selected_vertex{Graph::INVALID_VERTEX};
+	Vertex edge_start{Graph::INVALID_VERTEX};
 
 	int num_rand_verts{50};
 	real avg_degree{1.1};
@@ -109,7 +109,7 @@ private:
 
 	void CreateGUI();
 
-	real label_size(vertex_t i) const { return vertex_sizes(i) * 3.8; }
+	real label_size(Vertex i) const { return vertex_sizes(i) * 3.8; }
 
 	// Temp while I add a proper watcher
 	int num_edges{0};

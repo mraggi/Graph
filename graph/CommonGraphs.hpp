@@ -18,8 +18,16 @@ Graph Random(int n, double p);
 
 Graph RandomWeighted(int n, double p);
 
-Graph Random(int num_verts, int num_edges);
+Graph RandomWithSpecifiedNumEdges(int num_verts, int num_edges);
+
+Graph RandomTree(int n);
 
 Graph Grid(int n, int m);
+
+Graph WeightedGrid(int n, int m);
+
+Graph RandomBinaryTree(int n);
+
+Graph AlbertBarabanasi(int n, int k);
 
 }; // namespace graphs

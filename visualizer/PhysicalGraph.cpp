@@ -3,7 +3,7 @@
 
 PhysicalGraph::PhysicalGraph(const Graph& g) : G(g), E(g.edges()), M(g.num_vertices()) {}
 
-PhysicalGraph::PhysicalGraph(vertex_t num_verts) : G(num_verts), E(num_verts), M(num_verts) {}
+PhysicalGraph::PhysicalGraph(Vertex num_verts) : G(num_verts), E(num_verts), M(num_verts) {}
 
 void PhysicalGraph::SetGraph(const Graph& g)
 {
@@ -32,7 +32,7 @@ void PhysicalGraph::Repell()
 	real r2 = repelling_force * repelling_force;
 	for (auto x : vertices())
 	{
-		for (vertex_t y = x + 1; y < num_vertices(); ++y)
+		for (Vertex y = x + 1; y < num_vertices(); ++y)
 		{
 			auto F = p(x) - p(y);
 			auto f2 = F.LengthSq();

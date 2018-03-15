@@ -53,3 +53,14 @@ FloatType random_real(FloatType from, FloatType upto)
 	using parm_t = decltype(d)::param_type;
 	return d(random_engine(), parm_t{from, upto});
 }
+
+template <class T>
+std::vector<T> random_sample(std::vector<T> population, int k)
+{
+	if (k > population.size())
+		k = population.size();
+
+	std::shuffle(population.begin(), population.end(), random_engine());
+
+	return std::vector<T>(population.begin(), population.begin() + k);
+}

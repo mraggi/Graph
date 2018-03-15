@@ -1,5 +1,4 @@
-#ifndef POLYGON_HPP
-#define POLYGON_HPP
+#pragma once
 
 #include "FConvex.hpp"
 #include "Geometry.hpp"
@@ -10,7 +9,7 @@ class Polygon : public FConvex
 {
 private:
 	VP m_vPoints;
-	Point GetPoint(unsigned index) const;
+	Point GetPoint(int index) const;
 
 public:
 	Polygon() : FConvex(Point()), m_vPoints(1) {}
@@ -18,9 +17,7 @@ public:
 	explicit Polygon(const Box& box);
 	explicit Polygon(const Segment& segment);
 	explicit Polygon(const Point& point);
-	explicit Polygon(const Circle& circle,
-					 unsigned num); // creates a regular polygon
-	explicit Polygon(const FConvex& fconvex);
+	explicit Polygon(const Circle& circle, int num); // regular polygon
 
 	real Radius() const;
 	real Perimeter() const;
@@ -35,9 +32,9 @@ public:
 
 	void AddPoint(const Point& p);
 
-	Point operator[](unsigned index) const { return GetPoint(index); }
+	Point operator[](int index) const { return GetPoint(index); }
 
-	unsigned NumPoints() const { return m_vPoints.size(); }
+	int NumPoints() const { return m_vPoints.size(); }
 
 	const VP& GetPoints() const;
 
@@ -46,7 +43,7 @@ public:
 	void CreateFromBox(const Box& box);
 	void CreateFromSegment(const Segment& segment);
 	void CreateFromPoint(const Point& point);
-	void CreateFromCircle(const Circle& circle, unsigned numpoints = 20);
+	void CreateFromCircle(const Circle& circle, int numpoints = 20);
 
 	Point FarthestPointAtAngle(real angle) const;
 
@@ -54,7 +51,7 @@ public:
 
 	static shape ClassType() { return shape_Polygon; }
 
-	static Polygon RegularPolygon(unsigned num, real radius = 1, Point pos = Point());
+	static Polygon RegularPolygon(int num, real radius = 1, Point pos = Point());
 
 	using FConvex::Intersects;
 
@@ -82,5 +79,3 @@ public:
 
 	Point ClosestPoint(const Point& point) const;
 };
-
-#endif // POLYGON_HPP

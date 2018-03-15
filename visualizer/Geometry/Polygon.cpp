@@ -2,6 +2,7 @@
 
 #include "AllConvex.hpp"
 #include "Geometry.hpp"
+#include "Polygon.hpp"
 
 Polygon::Polygon(const VP& SomePoints, bool alreadyconvex)
 {
@@ -44,7 +45,7 @@ Polygon::Polygon(const Segment& segment) : FConvex(segment.Position()), m_vPoint
 
 Polygon::Polygon(const Point& point) : FConvex(point), m_vPoints(1) { m_vPoints[0] = Point(0, 0); }
 
-Polygon::Polygon(const Circle& circle, unsigned num) : FConvex(circle.Position()), m_vPoints(num)
+Polygon::Polygon(const Circle& circle, int num) : FConvex(circle.Position()), m_vPoints(num)
 {
 	real angle = -2 * pi / num;
 
@@ -53,39 +54,10 @@ Polygon::Polygon(const Circle& circle, unsigned num) : FConvex(circle.Position()
 
 	Point current(-circle.Radius(), 0);
 
-	for (unsigned i = 0; i < num; ++i)
+	for (int i = 0; i < num; ++i)
 	{
 		m_vPoints[i] = current;
 		current.Rotate(sint, cost);
-	}
-}
-
-Polygon::Polygon(const FConvex& fconvex) : FConvex(fconvex), m_vPoints(1)
-{
-	switch (fconvex.Type())
-	{
-	case (shape_Circle):
-	{
-		CreateFromCircle(*(dynamic_cast<const Circle* const>(&fconvex)));
-		break;
-	}
-	case (shape_Box):
-	{
-		CreateFromBox(*(dynamic_cast<const Box* const>(&fconvex)));
-		break;
-	}
-	case (shape_Segment):
-	{
-		CreateFromSegment(*(dynamic_cast<const Segment* const>(&fconvex)));
-		break;
-	}
-	case (shape_Point):
-	{
-		CreateFromPoint(fconvex.Position());
-		break;
-	}
-	default:
-		break;
 	}
 }
 
@@ -95,7 +67,7 @@ void Polygon::CreateFromSegment(const Segment& segment) { *this = Polygon(segmen
 
 void Polygon::CreateFromPoint(const Point& point) { *this = Polygon(point); }
 
-void Polygon::CreateFromCircle(const Circle& circle, unsigned numpoints)
+void Polygon::CreateFromCircle(const Circle& circle, int numpoints)
 {
 	*this = Polygon(circle, numpoints);
 }
@@ -117,7 +89,7 @@ real Polygon::Radius() const
 real Polygon::Perimeter() const
 {
 	real perimeter = (m_vPoints[0] - m_vPoints[m_vPoints.size() - 1]).Length();
-	for (unsigned i = 0; i < m_vPoints.size() - 1; ++i)
+	for (int i = 0; i < m_vPoints.size() - 1; ++i)
 	{
 		perimeter += (m_vPoints[i] - m_vPoints[i + 1]).Length();
 	}
@@ -135,7 +107,7 @@ real Polygon::MinY() const
 {
 	real bestsofar = Position().y + m_vPoints[0].y;
 
-	for (unsigned i = 1; i < m_vPoints.size(); ++i)
+	for (int i = 1; i < m_vPoints.size(); ++i)
 	{
 		real current = m_vPoints[i].y;
 		if (current < bestsofar)
@@ -151,7 +123,7 @@ real Polygon::MaxY() const
 {
 	real bestsofar = Position().y + m_vPoints[0].y;
 
-	for (unsigned i = 1; i < m_vPoints.size(); ++i)
+	for (int i = 1; i < m_vPoints.size(); ++i)
 	{
 		real current = m_vPoints[i].y;
 		if (current > bestsofar)
@@ -167,7 +139,7 @@ real Polygon::MinX() const
 {
 	real bestsofar = Position().x + m_vPoints[0].x;
 
-	for (unsigned i = 1; i < m_vPoints.size(); ++i)
+	for (int i = 1; i < m_vPoints.size(); ++i)
 	{
 		real current = m_vPoints[i].x;
 		if (current < bestsofar)
@@ -183,7 +155,7 @@ real Polygon::MaxX() const
 {
 	real bestsofar = Position().x + m_vPoints[0].x;
 
-	for (unsigned i = 1; i < m_vPoints.size(); ++i)
+	for (int i = 1; i < m_vPoints.size(); ++i)
 	{
 		real current = m_vPoints[i].x;
 		if (current > bestsofar)
@@ -213,10 +185,7 @@ void Polygon::Rotate(real angle)
 	}
 }
 
-Point Polygon::GetPoint(unsigned index) const
-{
-	return Position() + m_vPoints[index % NumPoints()];
-}
+Point Polygon::GetPoint(int index) const { return Position() + m_vPoints[index % NumPoints()]; }
 
 const VP& Polygon::GetPoints() const { return m_vPoints; }
 
@@ -235,9 +204,9 @@ void Polygon::CreateFromPoints(const VP& SomePoints)
 Point Polygon::FarthestPointAtAngle(real angle) const
 {
 	// TODO(mraggi): Replace with Binary search implementation
-	unsigned n = NumPoints();
+	int n = NumPoints();
 
-	for (unsigned i = 0; i < n; ++i)
+	for (int i = 0; i < n; ++i)
 	{
 		Point p1 = m_vPoints[i];
 		Point p2 = m_vPoints[(i + 1) % n];
@@ -257,7 +226,7 @@ Point Polygon::FarthestPointAtAngle(real angle) const
 	return {0, 0};
 }
 
-Polygon Polygon::RegularPolygon(unsigned num, real radius, Point pos)
+Polygon Polygon::RegularPolygon(int num, real radius, Point pos)
 {
 	Circle circ(pos, radius);
 	return Polygon(circ, num);
@@ -266,10 +235,10 @@ Polygon Polygon::RegularPolygon(unsigned num, real radius, Point pos)
 bool Polygon::Intersects(const Point& other) const
 {
 	const Polygon& B = *this;
-	unsigned n = NumPoints();
+	int n = NumPoints();
 	if (n <= 2)
 		return false;
-	for (unsigned i = 0; i < n; ++i)
+	for (int i = 0; i < n; ++i)
 	{
 		Point X = B[i];
 		Point Y = B[(i + 1) % n];
@@ -289,7 +258,7 @@ bool Polygon::Intersects(const Line& other) const
 
 	bool left = B[0].IsToTheLeftOfLine(p, q);
 
-	for (unsigned i = 1; i < B.NumPoints(); ++i)
+	for (int i = 1; i < B.NumPoints(); ++i)
 	{
 		if (B[i].IsToTheLeftOfLine(p, q) != left)
 			return true;
@@ -326,7 +295,7 @@ bool Polygon::Intersects(const Line& other, Segment& intersection) const
 
 	bool foundFirstIntersection = false;
 
-	for (unsigned i = 0; i < B.NumPoints() + 1; ++i)
+	for (int i = 0; i < B.NumPoints() + 1; ++i)
 	{
 		if (B[i].IsToTheLeftOfLine(p, q) != left)
 		{
@@ -361,7 +330,7 @@ bool Polygon::Intersects(const Circle& other) const
 	if (Intersects(other.Position()))
 		return true; // If the center of the circle is inside the polygon
 
-	for (unsigned i = 0; i < B.NumPoints(); ++i)
+	for (int i = 0; i < B.NumPoints(); ++i)
 	{
 		if (other.Intersects(Segment(B[i], B[i + 1])))
 			return true;
@@ -399,7 +368,7 @@ bool Polygon::Intersects(const Polygon& other) const
 	} // If the other guy is inside me
 
 	// 	cout << "baaah" << endl;
-	for (unsigned i = 0; i < other.NumPoints() + 1; ++i)
+	for (int i = 0; i < other.NumPoints() + 1; ++i)
 	{
 		// 		cout << "i = " << i << endl;
 		// 		cout << "other[i] = " << other[i] << endl;
@@ -431,7 +400,7 @@ Point Polygon::ClosestPoint(const Point& point) const
 
 	Point closestSoFar = GetPoint(0);
 
-	for (unsigned i = 0; i < NumPoints(); ++i)
+	for (int i = 0; i < NumPoints(); ++i)
 	{
 		Segment seg(GetPoint(i), GetPoint(i + 1));
 		Point closestNow = seg.ClosestPoint(point);

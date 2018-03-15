@@ -44,3 +44,18 @@ TEST(DisjointSets, HardTest)
 
 	ASSERT_NE(A.find_root(0), A.find_root(7));
 }
+
+TEST(DisjointSets, BigTest)
+{
+	int n = 10000;
+	disjoint_sets A(n);
+	for (int i = 0; i + 1 < n / 2; ++i)
+		A.merge(i, i + 1);
+
+	for (int i = n / 2; i + 1 < n; ++i)
+		A.merge(i, i + 1);
+
+	ASSERT_FALSE(A.are_in_same_connected_component(0, n - 1));
+	ASSERT_TRUE(A.are_in_same_connected_component(0, n / 2 - 1));
+	ASSERT_TRUE(A.are_in_same_connected_component(n / 2, n - 1));
+}

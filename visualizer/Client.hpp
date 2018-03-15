@@ -41,7 +41,7 @@ public:
 	void Close() { m_bShouldClose = true; }
 	void Kill() { Close(); }
 
-	/// ************** Start Geometry rendering
+	///********Start Geometry rendering
 	void Render(const Point& origin, const sf::Color& color = sf::Color::Blue, real thickness = 5);
 
 	void RenderSegment(const Point& A,
@@ -92,7 +92,7 @@ public:
 
 	void ClearAnimations() { m_animations.clear(); }
 
-	/// *************** End Geometry rendering
+	///******** End Geometry rendering
 private:
 	void Update(real time) { underlying().Update(time); }
 
@@ -101,7 +101,7 @@ private:
 
 	void ClientRenderGUIPanel();
 
-	// ********** EVENT HANDLING
+	//******EVENT HANDLING
 
 	void ClientUpdate(real time);
 	void ClientRender();
@@ -362,7 +362,7 @@ void Client<Derived>::SynchronizeCameraWithView()
 	m_View.setSize(m_Camera.Width(), m_Camera.Height());
 }
 
-/************************************* START KEY EVENTS */
+/*******************START KEY EVENTS*/
 template <class Derived>
 void Client<Derived>::ClientOnKeyPress(sf::Keyboard::Key key)
 {
@@ -425,7 +425,7 @@ void Client<Derived>::ClientOnKeyRelease(sf::Keyboard::Key key)
 	OnKeyRelease(key);
 }
 
-/******************************************** START MOUSE EVENTS */
+/********************** START MOUSE EVENTS*/
 template <class Derived>
 void Client<Derived>::ClientOnMouseButtonRelease(sf::Mouse::Button btn)
 {
@@ -704,61 +704,6 @@ void Client<Derived>::Render(const string& txt,
 
 	mytext.setPosition(point);
 	m_Window.draw(mytext);
-}
-
-template <class Derived>
-void Client<Derived>::Render(const Convex& conv, const sf::Color& color, real thickness)
-{
-	if (conv.Type() == shape_Point)
-	{
-		Render(conv.Position(), color, thickness);
-
-		return;
-	}
-
-	if (conv.Type() == shape_Line)
-	{
-		const Line* oy = dynamic_cast<const Line*>(&conv);
-
-		Render(*oy, color, thickness);
-
-		return;
-	}
-
-	if (conv.Type() == shape_Ray)
-	{
-		Render(*dynamic_cast<const Ray*>(&conv), color, thickness);
-
-		return;
-	}
-
-	if (conv.Type() == shape_Segment)
-	{
-		Render(*dynamic_cast<const Segment*>(&conv), color, thickness);
-
-		return;
-	}
-
-	if (conv.Type() == shape_Circle)
-	{
-		Render(*dynamic_cast<const Circle*>(&conv), color, thickness);
-
-		return;
-	}
-
-	if (conv.Type() == shape_Box)
-	{
-		Render(*dynamic_cast<const Box*>(&conv), color, thickness);
-
-		return;
-	}
-
-	if (conv.Type() == shape_Polygon)
-	{
-		Render(*dynamic_cast<const Polygon*>(&conv), color, thickness);
-
-		return;
-	}
 }
 
 template <class Derived>

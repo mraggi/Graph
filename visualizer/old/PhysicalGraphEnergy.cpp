@@ -9,7 +9,7 @@ void PhysicalGraph::Update(double time)
 
 		for (auto a : vertices())
 		{
-			for (vertex_t b = a + 1; b < num_vertices(); ++b)
+			for (Vertex b = a + 1; b < num_vertices(); ++b)
 			{
 				auto P = p(a);
 				auto Q = p(b);
