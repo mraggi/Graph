@@ -1,7 +1,6 @@
 #pragma once
 #include "Misc.hpp"
 #include <algorithm>
-#include <boost/iterator/iterator_facade.hpp>
 #include <cassert>
 #include <vector>
 
@@ -33,33 +32,40 @@ public:
 	////////////////////////////////////////////////////////////
 	/// \brief Random access iterator class.
 	////////////////////////////////////////////////////////////
-	class iterator
-		: public boost::
-			iterator_facade<iterator, const IntType&, boost::random_access_traversal_tag>
+	class iterator : public std::iterator<std::random_access_iterator_tag, value_type>
 	{
 	public:
 		explicit iterator(IntType t = 0) : m_ID(t) {}
 
-	private:
-		void increment() { ++m_ID; }
-
-		void decrement() { --m_ID; }
-
-		const IntType& dereference() const { return m_ID; }
-
-		void advance(difference_type n) { m_ID += n; }
-
-		bool equal(const iterator& it) const { return m_ID == it.m_ID; }
-
-		difference_type distance_to(const iterator& it) const
+		inline iterator& operator++()
 		{
-			return (static_cast<difference_type>(it.m_ID) - static_cast<difference_type>(m_ID));
+			++m_ID;
+			return *this;
 		}
+		inline iterator& operator--()
+		{
+			--m_ID;
+			return *this;
+		}
+		inline const IntType& operator*() const { return m_ID; }
+
+		inline iterator& operator+=(difference_type n)
+		{
+			m_ID += n;
+			return *this;
+		}
+
+		inline iterator& operator-=(difference_type n) { return operator+=(-n); }
+
+		inline bool operator==(const iterator& it) { return *it == m_ID; }
+
+		inline bool operator!=(const iterator& it) { return *it != m_ID; }
+
+		inline difference_type operator-(const iterator& it) { return *it - m_ID; }
 
 	private:
 		IntType m_ID{0};
 
-		friend class boost::iterator_core_access;
 		friend class basic_natural_number;
 	}; // end class iterator
 
@@ -78,6 +84,24 @@ public:
 private:
 	IntType m_n;
 }; // end class basic_natural_number
+
+template <class IntType>
+inline typename basic_natural_number<IntType>::iterator
+operator+(typename basic_natural_number<IntType>::iterator it,
+		  typename basic_natural_number<IntType>::difference_type n)
+{
+	it += n;
+	return it;
+}
+
+template <class IntType>
+inline typename basic_natural_number<IntType>::iterator
+operator-(typename basic_natural_number<IntType>::iterator it,
+		  typename basic_natural_number<IntType>::difference_type n)
+{
+	it -= n;
+	return it;
+}
 
 using natural_number = basic_natural_number<int>;
 using big_natural_number = basic_natural_number<long long>;

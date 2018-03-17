@@ -132,3 +132,9 @@ TEST(ShortestPaths, GridGraph)
 		ASSERT_EQ(std::count(D.begin(), D.end(), i), i + 1);
 	}
 }
+
+// TEST(ShortestPaths, MediumGraph)
+// {
+// 	Graph G(8);
+// 	G.add_edge(0,1,2);
+// }

@@ -13,8 +13,7 @@ struct DummyPath
 
 inline bool operator<(const DummyPath& a, const DummyPath& b) { return a.length > b.length; }
 
-std::vector<Graph::sumweight_t>
-DijkstraCost(const Graph& G, Graph::Vertex origin, Graph::Vertex destination)
+std::vector<Distance> DijkstraCost(const Graph& G, Graph::Vertex origin, Graph::Vertex destination)
 {
 	std::vector<Distance> distance(G.num_vertices(), INF);
 	distance[origin] = 0;
@@ -47,7 +46,7 @@ DijkstraCost(const Graph& G, Graph::Vertex origin, Graph::Vertex destination)
 
 	return distance;
 }
-#include "VectorHelpers.hpp"
+
 Path Dijkstra(const Graph& G, Graph::Vertex origin, Graph::Vertex destination)
 {
 	Path P;
@@ -57,7 +56,7 @@ Path Dijkstra(const Graph& G, Graph::Vertex origin, Graph::Vertex destination)
 	Distance remaining = distance[destination];
 	// 	std::cout << "distance = " << distance << std::endl;
 
-	if (remaining == INF) // not in the same fucking connected component
+	if (remaining == INF) // not in the same connected component
 		return P;
 
 	P.emplace_back(destination, 0);

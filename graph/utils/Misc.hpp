@@ -1,7 +1,5 @@
 #pragma once
 
-#include <boost/container/vector.hpp>
-#include <boost/iterator/iterator_facade.hpp>
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
