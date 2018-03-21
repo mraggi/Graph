@@ -7,20 +7,32 @@ const auto INF = std::numeric_limits<Distance>::max();
 
 struct DummyPath
 {
+	DummyPath(Vertex v, Distance d) : last(v), length(d) {}
 	Vertex last;
 	Distance length;
 };
 
 inline bool operator<(const DummyPath& a, const DummyPath& b) { return a.length > b.length; }
 
+template <class T>
+class PriorityQueueWithReserve : public std::priority_queue<T>
+{
+public:
+	void reserve(size_t amount)
+	{
+		this->c.reserve(amount);
+	}
+};
+
 std::vector<Distance> DijkstraCost(const Graph& G, Graph::Vertex origin, Graph::Vertex destination)
 {
 	std::vector<Distance> distance(G.num_vertices(), INF);
 	distance[origin] = 0;
 
-	std::priority_queue<DummyPath> frontier;
+	PriorityQueueWithReserve<DummyPath> frontier;
+	frontier.reserve(G.num_vertices()-1);
 
-	frontier.push({origin, 0});
+	frontier.emplace(origin, 0);
 
 	while (!frontier.empty())
 	{
@@ -39,7 +51,7 @@ std::vector<Distance> DijkstraCost(const Graph& G, Graph::Vertex origin, Graph::
 			if (distance[v] > d)
 			{
 				distance[v] = d;
-				frontier.push({v, d});
+				frontier.emplace(v, d);
 			}
 		}
 	}
