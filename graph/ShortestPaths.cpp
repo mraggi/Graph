@@ -1,9 +1,7 @@
 #include "ShortestPaths.hpp"
 
-using Distance = Graph::sumweight_t;
-using Vertex = Graph::Vertex;
-
-const auto INF = std::numeric_limits<Distance>::max();
+// using Distance = Graph::sumweight_t;
+// using Vertex = Vertex;
 
 struct DummyPath
 {
@@ -18,19 +16,18 @@ template <class T>
 class PriorityQueueWithReserve : public std::priority_queue<T>
 {
 public:
-	void reserve(size_t amount)
-	{
-		this->c.reserve(amount);
-	}
+	void reserve(size_t amount) { this->c.reserve(amount); }
 };
+#include "VectorHelpers.hpp"
 
-std::vector<Distance> DijkstraCost(const Graph& G, Graph::Vertex origin, Graph::Vertex destination)
+DistanceAndParent DijkstraDistance(const Graph& G, Vertex origin, Vertex destination)
 {
-	std::vector<Distance> distance(G.num_vertices(), INF);
-	distance[origin] = 0;
+	DistanceAndParent result(G.num_vertices());
+
+	result.distance[origin] = 0;
 
 	PriorityQueueWithReserve<DummyPath> frontier;
-	frontier.reserve(G.num_vertices()-1);
+	frontier.reserve(G.num_vertices() - 1);
 
 	frontier.emplace(origin, 0);
 
@@ -39,7 +36,7 @@ std::vector<Distance> DijkstraCost(const Graph& G, Graph::Vertex origin, Graph::
 		auto P = frontier.top();
 		frontier.pop();
 
-		if (P.length > distance[P.last])
+		if (P.length > result.distance[P.last])
 			continue;
 
 		if (P.last == destination)
@@ -48,44 +45,45 @@ std::vector<Distance> DijkstraCost(const Graph& G, Graph::Vertex origin, Graph::
 		for (auto& v : G.neighbors(P.last))
 		{
 			auto d = P.length + v.weight();
-			if (distance[v] > d)
+			if (result.distance[v] > d)
 			{
-				distance[v] = d;
+				result.distance[v] = d;
+				result.parent[v] = P.last;
 				frontier.emplace(v, d);
 			}
 		}
 	}
 
-	return distance;
+	return result;
 }
 
-Path Dijkstra(const Graph& G, Graph::Vertex origin, Graph::Vertex destination)
+Path Dijkstra(const Graph& G, Vertex origin, Vertex destination)
 {
 	Path P;
 
-	auto distance = DijkstraCost(G, origin, destination);
+	if (origin == destination)
+	{
+		P.emplace_back(origin, 0);
+		return P;
+	}
 
-	Distance remaining = distance[destination];
-	// 	std::cout << "distance = " << distance << std::endl;
+	auto result = DijkstraDistance(G, origin, destination);
+	auto& parent = result.parent;
 
-	if (remaining == INF) // not in the same connected component
+	auto remaining = result.distance[destination];
+
+	if (remaining == INF)
 		return P;
 
-	P.emplace_back(destination, 0);
-
-	while (P.front() != origin)
+	do
 	{
-		auto l = P.front();
-		for (const auto& v : G.inneighbors(l))
-		{
-			if (remaining == distance[v] + v.weight())
-			{
-				P.emplace_front(v, v.weight());
-				remaining -= v.weight();
-				break;
-			}
-		}
-	}
+		auto previous = destination;
+		destination = parent[destination];
+		auto d = result.distance[previous] - result.distance[destination];
+		P.emplace_front(previous, d);
+	} while (destination != origin);
+
+	P.emplace_front(origin, 0);
 
 	return P;
 }

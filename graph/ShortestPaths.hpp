@@ -4,10 +4,20 @@
 #include <queue>
 
 using Distance = Graph::sumweight_t;
-std::vector<Distance> DijkstraCost(const Graph& G,
-								   Graph::Vertex origin,
-								   Graph::Vertex destination = Graph::INVALID_VERTEX);
+using Vertex = Graph::Vertex;
+
+const auto INF = std::numeric_limits<Distance>::max();
+
+struct DistanceAndParent
+{
+	DistanceAndParent(Graph::size_type n) : distance(n, INF), parent(n, Graph::INVALID_VERTEX) {}
+	std::vector<Distance> distance;
+	std::vector<Vertex> parent;
+};
+
+DistanceAndParent
+DijkstraDistance(const Graph& G, Vertex origin, Vertex destination = Graph::INVALID_VERTEX);
 
 using Path = std::deque<Graph::Neighbor>;
 
-Path Dijkstra(const Graph& G, Graph::Vertex origin, Graph::Vertex destination);
+Path Dijkstra(const Graph& G, Vertex origin, Vertex destination);
