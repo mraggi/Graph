@@ -21,3 +21,6 @@ DijkstraDistance(const Graph& G, Vertex origin, Vertex destination = Graph::INVA
 using Path = std::deque<Graph::Neighbor>;
 
 Path Dijkstra(const Graph& G, Vertex origin, Vertex destination);
+
+template <class Objective, class Heuristic>
+DistanceAndParent AstarDistance(const Graph& G, Vertex origin, Objective obj, Heuristic h);

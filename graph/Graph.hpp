@@ -12,7 +12,7 @@ public:
 	using size_type = long long;
 
 	using Vertex = long;
-	static const Vertex INVALID_VERTEX = -1;
+	static const Vertex INVALID_VERTEX {-1};
 
 	using weight_t = long;
 

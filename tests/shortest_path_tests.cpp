@@ -121,7 +121,6 @@ TEST(ShortestPaths, GridGraph)
 
 	for (int i = 0; i < n; ++i)
 	{
-		// 		std::cout << "i = " << i << std::endl;
 		auto P = Dijkstra(G, 0, i);
 		check_path(G, P);
 		ASSERT_EQ(TotalWeight(P), D[i]);
