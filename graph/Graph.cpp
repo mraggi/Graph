@@ -133,6 +133,7 @@ void Graph::delete_loops()
 	{
 		auto& NV = m_graph[v];
 		auto newend = std::remove(NV.begin(), NV.end(), v);
+		m_numedges -= NV.end() - newend;
 		NV.erase(newend, NV.end());
 	}
 }
@@ -144,6 +145,7 @@ void Graph::delete_repeated_edges()
 	for (auto& adj_list : m_graph)
 	{
 		auto newend = std::unique(adj_list.begin(), adj_list.end());
+		m_numedges -= adj_list.end() - newend;
 		adj_list.erase(newend, adj_list.end());
 	}
 }

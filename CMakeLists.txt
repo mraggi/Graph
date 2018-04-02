@@ -43,7 +43,8 @@ if (${BUILD_TESTS})
 										tests/connected_component_tests.cpp
 										tests/shortest_path_tests.cpp
 										tests/clustering_tests.cpp
-										tests/graph_creation_tests.cpp)
+										tests/graph_creation_tests.cpp
+										tests/tree_tests.cpp)
 	
 	target_link_libraries(${PROJECT_TEST_NAME} ${GTEST_BOTH_LIBRARIES} Threads::Threads graph)
 	add_test(AllTests ${PROJECT_TEST_NAME})

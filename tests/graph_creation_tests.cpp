@@ -4,6 +4,7 @@
 #include "Graph.hpp"
 #include "IsSimple.hpp"
 #include "TreeAlgorithms.hpp"
+#include "sanity_check.hpp"
 #include <gtest/gtest.h>
 #include <iostream>
 
@@ -24,6 +25,16 @@ TEST(CommonGraphs, RandomTree)
 {
 	Graph G = graphs::RandomTree(100);
 
+	ASSERT_EQ(G.num_edges(), 99);
+	ASSERT_TRUE(is_tree(G));
+	ASSERT_TRUE(is_simple(G));
+}
+
+TEST(CommonGraphs, RandomBinaryTree)
+{
+	Graph G = graphs::RandomBinaryTree(100);
+
+	ASSERT_TRUE(check_graph(G));
 	ASSERT_EQ(G.num_edges(), 99);
 	ASSERT_TRUE(is_tree(G));
 	ASSERT_TRUE(is_simple(G));

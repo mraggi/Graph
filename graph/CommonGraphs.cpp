@@ -255,10 +255,12 @@ void ProduceRandomBinaryTreeEdges(Graph* G, Vertex start, Vertex end)
 {
 	if (end - start < 2)
 		return;
-
-	Vertex mid = random_int(start, end + 1);
-
-	if (mid != start)
+	
+	Vertex mid = random_int(start+1, end);
+	
+	// [start+1,mid)----- start ----- [mid,end)
+	
+	if (mid != start+1)
 	{
 		G->add_edge(start, start + 1);
 		ProduceRandomBinaryTreeEdges(G, start + 1, mid);
@@ -269,12 +271,12 @@ void ProduceRandomBinaryTreeEdges(Graph* G, Vertex start, Vertex end)
 		G->add_edge(start, mid);
 		ProduceRandomBinaryTreeEdges(G, mid, end);
 	}
+// 	G->make_simple();
 }
 
 Graph RandomBinaryTree(int n)
 {
 	Graph G(n);
-
 	ProduceRandomBinaryTreeEdges(&G, 0, n);
 	return G;
 }
