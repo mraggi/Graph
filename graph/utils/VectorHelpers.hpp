@@ -128,6 +128,14 @@ inline std::ostream& operator<<(std::ostream& os, const std::vector<std::vector<
 	return os;
 }
 
+template <class T>
+std::vector<T> make_reserved_vector(size_t n)
+{
+	std::vector<T> A;
+	A.reserve(n);
+	return A;
+}
+
 template <class T, class Iter>
 inline void remove_unordered(std::vector<T>& X, Iter it)
 {

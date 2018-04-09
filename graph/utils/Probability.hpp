@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Misc.hpp"
+#include <algorithm>
 #include <ctime>
 #include <random>
 // Who came up with the dumb C++11 way of getting random stuff?

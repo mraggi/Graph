@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Graph.hpp"
+#include <sstream>
 
 inline std::ostream& operator<<(std::ostream& os, const Graph::Neighbor& N)
 {
@@ -26,4 +27,15 @@ inline std::string to_string(const Graph::Edge& E)
 	std::stringstream ss;
 	ss << E;
 	return ss.str();
+}
+
+inline void print_for_sage(const Graph& G)
+{
+	using std::cout;
+	using std::endl;
+	cout << "G = Graph(" << G.num_vertices() << ")" << endl;
+	for (auto e : G.edges())
+	{
+		cout << "G.add_edge(" << e.from << "," << e.to << ")\n";
+	}
 }
