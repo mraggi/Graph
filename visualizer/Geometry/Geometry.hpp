@@ -6,9 +6,12 @@ using VP = std::vector<Point>;
 
 VP GenerateRandomPoints(unsigned n, real mincoord = -1.0, real maxcoord = 1.0);
 
-bool DoSegmentsIntersect(Point p1, Point p2, Point p3, Point p4, Point* intersection = NULL);
-bool DoesSegmentIntersectLine(Point p1, Point p2, Point p3, Point p4, Point* intersection = NULL);
-bool DoLinesIntersect(Point p1, Point p2, Point p3, Point p4, Point* intersection = NULL);
+bool DoSegmentsIntersect(
+  Point p1, Point p2, Point p3, Point p4, Point* intersection = nullptr);
+bool DoesSegmentIntersectLine(
+  Point p1, Point p2, Point p3, Point p4, Point* intersection = nullptr);
+bool DoLinesIntersect(
+  Point p1, Point p2, Point p3, Point p4, Point* intersection = nullptr);
 
 VP ConvexHull(const VP& SetOfPoints);
 

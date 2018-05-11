@@ -5,49 +5,62 @@
 class CPoint : public FConvex
 {
 public:
-	CPoint() : FConvex(Point(0, 0)) {}
-	explicit CPoint(const Point& point) : FConvex(point) {}
-	Point FarthestPointAtAngle(real angle) const { return Position(); }
-	real Radius() const { return 0; }
-	real Perimeter() const { return 0; }
-	real Area() const { return 0; }
-	real MinY() const { return Position().y; }
-	real MaxY() const { return Position().y; }
-	real MinX() const { return Position().x; }
-	real MaxX() const { return Position().x; }
-	real Width() const { return 0; }
-	real Height() const { return 0; }
-	void Scale(real Xamount, real Yamount) {}
-	void Scale(real amount) {}
-	void Rotate(real angle) {}
-	shape Type() const { return shape_Point; }
-	static shape ClassType() { return shape_Point; }
+    CPoint() : FConvex(Point(0, 0)) {}
+    explicit CPoint(const Point& point) : FConvex(point) {}
+    ~CPoint() override = default;
 
-	//	operator const Point&() const { return m_pPosition; }
+    Point FarthestPointAtAngle(real angle) const override { return Position(); }
 
-	using FConvex::Intersects;
+    real Radius() const override { return 0; }
+    real Perimeter() const override { return 0; }
+    real Area() const override { return 0; }
 
-	bool Intersects(const Convex& other) const { return other.Intersects(Position()); }
-	bool Intersects(const Convex& other, Point& overlap) const
-	{
-		return other.Intersects(Position(), overlap);
-	}
+    real MinY() const override { return Position().y; }
+    real MaxY() const override { return Position().y; }
+    real MinX() const override { return Position().x; }
+    real MaxX() const override { return Position().x; }
 
-	bool Intersects(const Point& other) const;
+    real Width() const override { return 0; }
+    real Height() const override { return 0; }
 
-	bool Intersects(const Line& other) const;
-	bool Intersects(const Line& other, Point& intersection) const;
-	bool Intersects(const Line& other, Point& intersection, Point& normal) const;
-	bool Intersects(const Line& other, Segment& intersection) const;
+    void Scale(real Xamount, real Yamount) override {}
+    void Scale(real amount) override {}
 
-	bool Intersects(const Circle& other) const;
-	bool Intersects(const Circle& other, Point& overlap) const;
+    void Rotate(real angle) override {}
 
-	bool Intersects(const Box& other) const;
-	bool Intersects(const Box& other, Point& overlap) const;
+    shape Type() const override { return shape_Point; }
+    static shape ClassType() { return shape_Point; }
 
-	bool Intersects(const Polygon& other) const;
-	bool Intersects(const Polygon& other, Point& overlap) const;
+    //	operator const Point&() const { return m_pPosition; }
 
-	Point ClosestPoint(const Point& point) const;
+    using FConvex::Intersects;
+
+    bool Intersects(const Convex& other) const override
+    {
+        return other.Intersects(Position());
+    }
+    bool Intersects(const Convex& other, Point& overlap) const override
+    {
+        return other.Intersects(Position(), overlap);
+    }
+
+    bool Intersects(const Point& other) const override;
+
+    bool Intersects(const Line& other) const override;
+    bool Intersects(const Line& other, Point& intersection) const override;
+    bool Intersects(const Line& other,
+                    Point& intersection,
+                    Point& normal) const override;
+    bool Intersects(const Line& other, Segment& intersection) const override;
+
+    bool Intersects(const Circle& other) const override;
+    bool Intersects(const Circle& other, Point& overlap) const override;
+
+    bool Intersects(const Box& other) const override;
+    bool Intersects(const Box& other, Point& overlap) const override;
+
+    bool Intersects(const Polygon& other) const override;
+    bool Intersects(const Polygon& other, Point& overlap) const override;
+
+    Point ClosestPoint(const Point& point) const override;
 };

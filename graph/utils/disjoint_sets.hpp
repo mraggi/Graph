@@ -6,44 +6,68 @@
 class disjoint_sets
 {
 public:
-	explicit disjoint_sets(long n) : parent(n) { std::iota(parent.begin(), parent.end(), 0); }
+    using size_type = std::int64_t;
+    using index_type = std::int64_t;
 
-	long find_root(long t)
-	{
-		std::vector<long> branch;
-		branch.emplace_back(t);
-		while (t != parent[t])
-		{
-			t = parent[t];
-			branch.emplace_back(t);
-		}
-		for (auto u : branch)
-			parent[u] = t;
-		return t;
-	}
+    explicit disjoint_sets(index_type n) : parent(n), m_num_components(n)
+    {
+        std::iota(parent.begin(), parent.end(), 0L);
+    }
 
-	void merge(long a, long b)
-	{
-		long ra = find_root(a);
-		set_parent(b, ra);
-	}
+    index_type find_root(index_type t)
+    {
+        std::vector<index_type> branch;
+        branch.emplace_back(t);
+        while (t != parent[t])
+        {
+            t = parent[t];
+            branch.emplace_back(t);
+        }
+        for (auto u : branch)
+            parent[u] = t;
+        return t;
+    }
 
-	bool are_in_same_connected_component(long a, long b) { return find_root(a) == find_root(b); }
+    void reset()
+    {
+        std::iota(parent.begin(), parent.end(), 0);
+        m_num_components = size();
+    }
 
-	long size() const { return parent.size(); }
+    void merge(index_type a, index_type b)
+    {
+        index_type ra = find_root(a);
+        index_type rb = set_parent(b, ra);
 
-	// private:
+        if (ra != rb)
+            --m_num_components;
+    }
 
-	void set_parent(long x, long p)
-	{
-		while (x != parent[x])
-		{
-			long t = parent[x];
-			parent[x] = p;
-			x = t;
-		}
-		parent[x] = p;
-	}
+    bool are_in_same_connected_component(index_type a, index_type b)
+    {
+        return find_root(a) == find_root(b);
+    }
 
-	std::vector<long> parent;
+    size_type num_components() const { return m_num_components; }
+
+    index_type size() const { return parent.size(); }
+
+    auto& parents() const { return parent; }
+
+private:
+    // returns ORIGINAL parent of x
+    index_type set_parent(index_type x, index_type p)
+    {
+        while (x != parent[x])
+        {
+            index_type t = parent[x];
+            parent[x] = p;
+            x = t;
+        }
+        parent[x] = p;
+        return x;
+    }
+
+    std::vector<index_type> parent;
+    size_type m_num_components;
 };

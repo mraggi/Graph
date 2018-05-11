@@ -3,89 +3,90 @@
 
 void GUIPanel::HandleKeyPress(const sf::Keyboard::Key& key)
 {
-	auto it = shortcuts.find(key);
-	if (it == shortcuts.end())
-		return;
-	for (auto& t : it->second)
-	{
-		t->HandleKeyPress(key);
-	}
+    auto it = shortcuts.find(key);
+    if (it == shortcuts.end())
+        return;
+    for (auto& t : it->second)
+    {
+        t->HandleKeyPress(key);
+    }
 }
 
 Circle GUIPanel::GetCircle(int num)
 {
-	double r = CheckboxRadius();
+    double r = CheckboxRadius();
 
-	double height = (0.5 + num) * TextSeparation();
+    double height = (0.5 + num)*TextSeparation();
 
-	Point O(2 + r, height);
+    Point O(2 + r, height);
 
-	return Circle(O, r);
+    return Circle(O, r);
 }
 
 Box GUIPanel::GetBox(int num)
 {
-	double r = CheckboxRadius();
-	double height = (0.5 + num) * TextSeparation();
+    double r = CheckboxRadius();
+    double height = (0.5 + num)*TextSeparation();
 
-	Point O(2 + r, height);
+    Point O(2 + r, height);
 
-	return Box(O, r, r);
+    return Box(O, r, r);
 }
 
 void GUIPanel::AddCheckbox(bool& var,
-						   const string& name,
-						   sf::Keyboard::Key key,
-						   const sf::Color& color)
+                           const std::string& name,
+                           sf::Keyboard::Key key,
+                           const sf::Color& color)
 {
-	gui_elements.emplace_back(new Checkbox(var, name, key, color));
-	shortcuts[key].emplace_back(gui_elements.back().get());
+    gui_elements.emplace_back(new Checkbox(var, name, key, color));
+    shortcuts[key].emplace_back(gui_elements.back().get());
 }
 
-void GUIPanel::HandleMousePress(const Point& position, const sf::Mouse::Button& btn)
+void GUIPanel::HandleMousePress(const Point& position,
+                                const sf::Mouse::Button& btn)
 {
-	if (btn != sf::Mouse::Left)
-		return;
-	int num = 0;
-	for (auto& e : gui_elements)
-	{
-		if (e->Shape() == ShapeType::CircleShape)
-		{
-			if (GetCircle(num).Intersects(position))
-			{
-				e->Activate();
-			}
-		}
-		else if (e->Shape() == ShapeType::BoxShape)
-		{
-			if (GetBox(num).Intersects(position))
-			{
-				e->Activate();
-			}
-		}
-		++num;
-	}
+    if (btn != sf::Mouse::Left)
+        return;
+    int num = 0;
+    for (auto& e : gui_elements)
+    {
+        if (e->Shape() == ShapeType::CircleShape)
+        {
+            if (GetCircle(num).Intersects(position))
+            {
+                e->Activate();
+            }
+        }
+        else if (e->Shape() == ShapeType::BoxShape)
+        {
+            if (GetBox(num).Intersects(position))
+            {
+                e->Activate();
+            }
+        }
+        ++num;
+    }
 }
 
 void GUIPanel::AddText(const std::string& name, const sf::Color& color)
 {
-	gui_elements.emplace_back(new StringWatcher(name, color));
+    gui_elements.emplace_back(new StringWatcher(name, color));
 }
 
 std::string GUIPanel::AvailableShortcuts() const
 {
-	auto A = static_cast<int>(sf::Keyboard::A);
-	auto Z = static_cast<int>(sf::Keyboard::Z);
+    auto A = static_cast<int>(sf::Keyboard::A);
+    auto Z = static_cast<int>(sf::Keyboard::Z);
 
-	std::stringstream s;
-	for (int key = A; key <= Z; ++key)
-	{
-		auto Key = static_cast<sf::Keyboard::Key>(key);
-		if (shortcuts.find(Key) == shortcuts.end())
-			s << Key;
-	}
+    std::stringstream s;
+    for (int key = A; key <= Z; ++key)
+    {
+        auto Key = static_cast<sf::Keyboard::Key>(key);
+        if (shortcuts.find(Key) == shortcuts.end())
+            s << Key;
+    }
 
-	return s.str();
+    return s.str();
 }
 
 //

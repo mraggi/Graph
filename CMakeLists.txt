@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 
 project(Graph) 
 
+# set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_BUILD_TYPE Release)
 
 option(BUILD_VISUALIZER "Build visualizer (requires SFML)" ON)
@@ -11,8 +12,11 @@ set(BUILD_SHARED_LIBS ON)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 
+set(CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+
+add_definitions(-Wall -Wpedantic)
 
 link_directories (${PROJECT_BINARY_DIR})
 include_directories(graph)
@@ -26,7 +30,10 @@ add_library(graph graph/Graph.cpp
 				  graph/ShortestPaths.cpp
 				  graph/Clustering.cpp
 				  graph/IsSimple.cpp
-				  graph/TreeAlgorithms.cpp)
+				  graph/TreeAlgorithms.cpp
+				  graph/Bipartite.cpp
+				  graph/BipartiteMatching.cpp
+				  graph/LCA.cpp)
 
 if (${BUILD_TESTS})
 	find_package(GTest REQUIRED)
@@ -44,7 +51,10 @@ if (${BUILD_TESTS})
 										tests/shortest_path_tests.cpp
 										tests/clustering_tests.cpp
 										tests/graph_creation_tests.cpp
-										tests/tree_tests.cpp)
+										tests/tree_tests.cpp
+										tests/rmq_tests.cpp
+										tests/bipartite_tests.cpp
+										tests/bipartite_matching_tests.cpp)
 	
 	target_link_libraries(${PROJECT_TEST_NAME} ${GTEST_BOTH_LIBRARIES} Threads::Threads graph)
 	add_test(AllTests ${PROJECT_TEST_NAME})

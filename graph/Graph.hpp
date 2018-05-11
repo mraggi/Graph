@@ -9,125 +9,139 @@
 class Graph
 {
 public:
-	using size_type = long long;
+    using size_type = long long; // NOLINT
 
-	using Vertex = long;
-	static const Vertex INVALID_VERTEX {-1};
+    using Vertex = std::int64_t;
 
-	using weight_t = long;
+    enum WORKAROUND_UNTIL_CPP17
+    {
+        INVALID_VERTEX = -1
+    };
+    // 	inline static constexpr Vertex INVALID_VERTEX = -1; // Uncomment with
+    // c++17
 
-	// something larger than weight_t, for when you have that weight_t doesn't
-	// properly hold a sum of weight_t (for example, if weight_t = char).
-	using sumweight_t = long long;
+    using weight_t = std::int64_t;
 
-	struct Neighbor; // Represents a half-edge (vertex,weight)
+    // something larger than weight_t, for when you have that weight_t doesn't
+    // properly hold a sum of weight_t (for example, if weight_t = char).
+    using sumweight_t = std::int64_t;
 
-	struct Edge; // (from,to,weight)
+    struct Neighbor; // Represents a half-edge (vertex,weight)
 
-	using neighbor_list = std::vector<Neighbor>;
-	using neighbor_const_iterator = neighbor_list::const_iterator;
-	using neighbor_iterator = neighbor_list::iterator;
+    struct Edge; // (from,to,weight)
 
-	// Constructor
-	explicit Graph(Vertex numberOfVertices = 0);
+    using neighbor_list = std::vector<Neighbor>;
+    using neighbor_const_iterator = neighbor_list::const_iterator;
+    using neighbor_iterator = neighbor_list::iterator;
 
-	size_type degree(Vertex a) const { return m_graph[a].size(); }
+    // Constructor
+    explicit Graph(Vertex numberOfVertices = 0);
 
-	// Graph modification functions
-	Vertex add_vertex();
-	void add_edge(Vertex from, Vertex to, weight_t w = 1);
-	void add_edge(const Edge& e);
+    size_type degree(Vertex a) const { return m_graph[a].size(); }
 
-	template <class EdgeContainer>
-	void add_edges(const EdgeContainer& edges)
-	{
-		for (auto& e : edges)
-			add_edge(e);
-	}
+    // Graph modification functions
+    Vertex add_vertex();
+    void add_edge(Vertex from, Vertex to, weight_t w = 1);
+    void add_edge(const Edge& e);
 
-	void add_edges(const std::initializer_list<Edge>& edges);
+    template <class EdgeContainer>
+    void add_edges(const EdgeContainer& edges)
+    {
+        for (auto& e : edges)
+            add_edge(e);
+    }
 
-	bool add_edge_no_repeat(Vertex from, Vertex to, weight_t w = 1);
+    void add_edges(const std::initializer_list<Edge>& edges);
 
-	void sort_neighbors();
+    bool add_edge_no_repeat(Vertex from, Vertex to, weight_t w = 1);
 
-	void remove_vertex(Vertex v);
-	void remove_edge(Vertex v, Vertex u);
+    void sort_neighbors();
 
-	void delete_loops();
-	void delete_repeated_edges();
-	void make_simple();
+    void remove_vertex(Vertex v);
+    void remove_edge(Vertex v, Vertex u);
 
-	// Get Graph Info
-	Vertex num_vertices() const { return m_numvertices; }
-	size_type num_edges() const { return m_numedges; }
+    void delete_loops();
+    void delete_repeated_edges();
+    void make_simple();
 
-	inline const neighbor_list& neighbors(Vertex n) const { return m_graph[n]; }
-	inline const neighbor_list& outneighbors(Vertex n) const { return m_graph[n]; }
-	inline const neighbor_list& inneighbors(Vertex n) const { return m_graph[n]; }
+    // Get Graph Info
+    Vertex num_vertices() const { return m_numvertices; }
+    size_type num_edges() const { return m_numedges; }
 
-	using all_vertices = basic_natural_number<Vertex>;
-	all_vertices vertices() const { return all_vertices(num_vertices()); }
+    inline const neighbor_list& neighbors(Vertex n) const { return m_graph[n]; }
+    inline const neighbor_list& outneighbors(Vertex n) const
+    {
+        return m_graph[n];
+    }
+    inline const neighbor_list& inneighbors(Vertex n) const
+    {
+        return m_graph[n];
+    }
 
-	std::vector<Edge> edges() const; // TODO: make*this lazy
+    using all_vertices = basic_natural_number<Vertex>;
+    auto vertices() const { return all_vertices{num_vertices()}; }
 
-	bool is_neighbor(Vertex from, Vertex to) const;
+    std::vector<Edge> edges() const; // TODO(mraggi): make*this lazy
 
-	weight_t edge_value(Vertex from, Vertex to) const;
+    bool is_neighbor(Vertex from, Vertex to) const;
 
-	neighbor_const_iterator get_neighbor(Vertex from, Vertex to) const;
-	neighbor_iterator get_neighbor(Vertex from, Vertex to);
+    weight_t edge_value(Vertex from, Vertex to) const;
 
-	// Start class definitions
-	struct Neighbor
-	{
-		explicit Neighbor() : vertex(INVALID_VERTEX), m_weight(0) {}
+    neighbor_const_iterator get_neighbor(Vertex from, Vertex to) const;
+    neighbor_iterator get_neighbor(Vertex from, Vertex to);
 
-		explicit Neighbor(Vertex v, weight_t w = 1) : vertex(v), m_weight(w) {}
+    // Start class definitions
+    struct Neighbor
+    {
+        explicit Neighbor() : vertex(INVALID_VERTEX), m_weight(0) {}
 
-		inline operator Vertex() const { return vertex; }
+        explicit Neighbor(Vertex v, weight_t w = 1) : vertex(v), m_weight(w) {}
 
-		weight_t weight() const { return m_weight; }
+        inline operator Vertex() const { return vertex; }
 
-		void set_weight(weight_t w) { m_weight = w; }
+        weight_t weight() const { return m_weight; }
 
-		Vertex vertex{INVALID_VERTEX};
+        void set_weight(weight_t w) { m_weight = w; }
 
-	private:
-		// comment out if not needed, and make set_weight do nothing, and make
-		// weight() return 1
-		weight_t m_weight{1};
-	};
+        Vertex vertex{INVALID_VERTEX};
 
-	struct Edge
-	{
-		Vertex from;
-		Vertex to;
+    private:
+        // comment out if not needed, and make set_weight do nothing, and make
+        // weight() return 1
+        weight_t m_weight{1};
+    };
 
-		Edge() : from(INVALID_VERTEX), to(INVALID_VERTEX), m_weight(0) {}
-		Edge(Vertex f, Vertex t, weight_t w = 1) : from(f), to(t), m_weight(w) {}
+    struct Edge
+    {
+        Vertex from{INVALID_VERTEX};
+        Vertex to{INVALID_VERTEX};
 
-		Vertex operator[](bool i) const { return i ? to : from; }
+        Edge() : m_weight(0) {}
+        Edge(Vertex f, Vertex t, weight_t w = 1) : from(f), to(t), m_weight(w)
+        {}
 
-		// replace by "return 1" if weight doesn't exist
-		weight_t weight() const { return m_weight; }
-		void change_weight(weight_t w) { m_weight = w; }
+        Vertex operator[](bool i) const { return i ? to : from; }
 
-		bool operator==(const Edge& E) const
-		{
-			return ((from == E.from && to == E.to) || (from == E.to && to == E.from)) &&
-			  m_weight == E.m_weight;
-		}
+        // replace by "return 1" if weight doesn't exist
+        weight_t weight() const { return m_weight; }
+        void change_weight(weight_t w) { m_weight = w; }
 
-	private:
-		weight_t m_weight{1};
-	};
+        bool operator==(const Edge& E) const
+        {
+            return ((from == E.from && to == E.to) ||
+                    (from == E.to && to == E.from)) &&
+              m_weight == E.m_weight;
+        }
+
+    private:
+        weight_t m_weight{1};
+    };
 
 private:
-	// Graph member variables
-	size_type m_numvertices;
-	size_type m_numedges{0};
+    // Graph member variables
+    size_type m_numvertices;
+    size_type m_numedges{0};
 
-	std::vector<neighbor_list> m_graph;
-	bool m_neighbors_sorted{false};
+    std::vector<neighbor_list> m_graph;
+    bool m_neighbors_sorted{false};
 };

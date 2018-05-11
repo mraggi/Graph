@@ -1,2 +1,5 @@
 #!/bin/bash
-find . -iname "*.h" -o -iname "*.cpp" -o -iname "*.hpp" | xargs clang-format -i
+fd "\.[hc]pp" | xargs -d '\n' clang-format -i
+fd "\.[hc]pp" | xargs -d '\n' sed -i 's/ \* /\*/g'
+fd "\.[hc]pp" | xargs -d '\n' sed -i 's/ \/ /\//g'
+fd "\.[hc]pp" | xargs -d '\n' sed -i 's/ \% /%/g'
