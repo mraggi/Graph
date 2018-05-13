@@ -110,18 +110,15 @@ TEST(TreeAlgorithms, LCASparsePath)
     using Vertex = Graph::Vertex;
     for (int i = 0; i < 10; ++i)
     {
-        std::cout << "i = " << i << std::endl;
         Graph G = graphs::Path(random_int(1, 100));
         auto root = random_int<Vertex>(0, G.num_vertices());
 
         LCAWithPowersOfTwo LCA(G, root);
-        std::cout << "Done with creating lca " << i << std::endl;
 
         for (auto u : G.vertices())
         {
             for (auto v = u + 1; v < G.num_vertices(); ++v)
             {
-                std::cout << '\t' << u << " " << v << std::endl;
                 if (v <= root)
                     ASSERT_EQ(LCA.FindLCA(u, v), v);
                 else if (u <= root)

@@ -7,7 +7,7 @@ using Vertex = Graph::Vertex;
 using Edge = Graph::Edge;
 using Distance = Graph::sumweight_t;
 
-const auto INF = std::numeric_limits<Distance>::max();
+constexpr auto INF = std::numeric_limits<Distance>::max();
 
 // Used by both A* and Dijkstra
 template <class Path = std::deque<Graph::Neighbor>>
@@ -260,3 +260,10 @@ Path Astar(const Graph& G, Vertex origin, Objective objective, Heuristic h)
 {
     return AstarSearcher(G, origin, objective, h).GetPath<Path>();
 }
+
+using Row = std::vector<Distance>;
+using Matrix = std::vector<Row>;
+
+
+// Warning: This algo is O(V^3)!!
+Matrix AllPairsShortestPaths(const Graph& G);

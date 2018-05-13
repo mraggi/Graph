@@ -33,7 +33,8 @@ add_library(graph graph/Graph.cpp
 				  graph/TreeAlgorithms.cpp
 				  graph/Bipartite.cpp
 				  graph/BipartiteMatching.cpp
-				  graph/LCA.cpp)
+				  graph/LCA.cpp
+				  graph/Centrality.cpp)
 
 if (${BUILD_TESTS})
 	find_package(GTest REQUIRED)
@@ -54,7 +55,8 @@ if (${BUILD_TESTS})
 										tests/tree_tests.cpp
 										tests/rmq_tests.cpp
 										tests/bipartite_tests.cpp
-										tests/bipartite_matching_tests.cpp)
+										tests/bipartite_matching_tests.cpp
+										tests/centrality_tests.cpp)
 	
 	target_link_libraries(${PROJECT_TEST_NAME} ${GTEST_BOTH_LIBRARIES} Threads::Threads graph)
 	add_test(AllTests ${PROJECT_TEST_NAME})
