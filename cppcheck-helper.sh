@@ -1,8 +1,8 @@
 #!/bin/bash
 
-rm -rf cppcheck-build
-mkdir cppcheck-build
-cd cppcheck-build
+rm -rf build-cppcheck
+mkdir build-cppcheck
+cd build-cppcheck
 
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
 echo -e "---------------\n"

@@ -1,4 +1,5 @@
 build*
+*.idea
 *.kdev4
 *.kate-swp
 *make*
@@ -6,8 +7,37 @@ build*
 *cmake_install*
 *CMakeFiles*
 Makefile
-.idea
-ct-build
-cppcheck-build
-oclint-build
-graph/utils/experimental
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+*.x
