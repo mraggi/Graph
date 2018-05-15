@@ -1,8 +1,8 @@
 #include "CommonGraphs.hpp"
-#include "Graph.hpp"
 #include "ConnectedComponents.hpp"
-#include "VectorHelpers.hpp"
+#include "Graph.hpp"
 #include "IsSimple.hpp"
+#include "VectorHelpers.hpp"
 #include <gtest/gtest.h>
 #include <iostream>
 
@@ -109,7 +109,7 @@ TEST(Graph, MakeSimple)
     G.add_edge(3, 3);
 
     ASSERT_FALSE(is_simple(G));
-    
+
     G.make_simple();
 
     for (auto v : G.vertices())
@@ -171,19 +171,17 @@ TEST(Graph, GetNeighbor)
 TEST(Graph, RemoveVertex)
 {
     int n = 5;
-    Graph G = graphs::Complete(n+1);
+    Graph G = graphs::Complete(n + 1);
     G.remove_vertex(2);
-    ASSERT_EQ(G.num_vertices(),n);
-    ASSERT_EQ(G.num_edges(),n*(n-1)/2);
+    ASSERT_EQ(G.num_vertices(), n);
+    ASSERT_EQ(G.num_edges(), n*(n - 1)/2);
     for (auto v : G.vertices())
     {
-        ASSERT_EQ(G.degree(v),n-1);
+        ASSERT_EQ(G.degree(v), n - 1);
     }
     ASSERT_TRUE(is_simple(G));
-    
+
     ASSERT_TRUE(is_connected(G));
-    
-    
 }
 
 TEST(Graph, PetersenGraph)

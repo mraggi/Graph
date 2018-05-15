@@ -3,16 +3,16 @@
 #include "ConnectedComponents.hpp"
 #include "Graph.hpp"
 #include "IsSimple.hpp"
+#include "MinSpanningTree.hpp"
 #include "TreeAlgorithms.hpp"
 #include "sanity_check.hpp"
-#include "MinSpanningTree.hpp"
 #include <gtest/gtest.h>
 #include <iostream>
 
 TEST(CommonGraphs, ErdosRenyi)
 {
-    Graph G = graphs::Random(18,0.3);
-    ASSERT_EQ(G.num_vertices(),18);
+    Graph G = graphs::Random(18, 0.3);
+    ASSERT_EQ(G.num_vertices(), 18);
 }
 
 TEST(CommonGraphs, RandomNumEdges)
@@ -85,20 +85,20 @@ TEST(CommonGraphs, CompleteBipartite)
     ASSERT_EQ(G.num_edges(), 7*8);
 }
 
-TEST(CommonGraphs,WeightedGrid)
+TEST(CommonGraphs, WeightedGrid)
 {
     int n = 5;
     int m = 8;
-    Graph G = graphs::WeightedGrid(n,m);
-    ASSERT_EQ(G.num_vertices(),(n+1)*(m+1));
-    ASSERT_EQ(G.num_edges(), n*(m+1) + m*(n+1));
+    Graph G = graphs::WeightedGrid(n, m);
+    ASSERT_EQ(G.num_vertices(), (n + 1)*(m + 1));
+    ASSERT_EQ(G.num_edges(), n*(m + 1) + m*(n + 1));
 }
 
 TEST(CommonGraphs, AlbertBarabanasi)
 {
     int n = 30;
     int k = 3;
-    Graph G = graphs::AlbertBarabanasi(n,k);
-    ASSERT_EQ(G.num_vertices(),n);
-    ASSERT_EQ(G.num_edges(),k*(k-1)/2 + (n-k)*k);
+    Graph G = graphs::AlbertBarabanasi(n, k);
+    ASSERT_EQ(G.num_vertices(), n);
+    ASSERT_EQ(G.num_edges(), k*(k - 1)/2 + (n - k)*k);
 }

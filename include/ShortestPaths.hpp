@@ -264,6 +264,5 @@ Path Astar(const Graph& G, Vertex origin, Objective objective, Heuristic h)
 using Row = std::vector<Distance>;
 using Matrix = std::vector<Row>;
 
-
 // Warning: This algo is O(V^3)!!
 Matrix AllPairsShortestPaths(const Graph& G);

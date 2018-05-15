@@ -5,17 +5,17 @@
 using Matrix = std::vector<std::vector<Distance>>;
 Matrix AllPairsShortestPaths(const Graph& G)
 {
-    constexpr Distance oo = INF/2-1;
+    constexpr Distance oo = INF/2 - 1;
     auto n = G.num_vertices();
-    Matrix D(n,Row(n,oo));
-    
+    Matrix D(n, Row(n, oo));
+
     for (auto u : G.vertices())
     {
         D[u][u] = 0;
         for (auto v : G.neighbors(u))
             D[u][v] = v.weight();
     }
-    
+
     for (auto u : G.vertices())
     {
         for (auto v : G.vertices())
@@ -28,6 +28,6 @@ Matrix AllPairsShortestPaths(const Graph& G)
             }
         }
     }
-    
+
     return D;
 }

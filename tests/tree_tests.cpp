@@ -187,7 +187,7 @@ TEST(TreeAlgorithms, EulerTour)
     LCAWithRMQ L(G, 0);
 
     // 	std::cout << std::vector<int>(natural_number(L.get_euler_tour().size()))
-    // << std::endl; 	std::cout << L.get_euler_tour() << std::endl; 	std::cout
+    // << std::endl; 	std::cout << L.get_euler_tour() << std::endl; std::cout
     // << L.get_height_map() << std::endl; 	int i = 0; 	for (auto t :
     // L.get_first_and_last_occurrences())
     // 	{
