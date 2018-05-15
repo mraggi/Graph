@@ -47,6 +47,3 @@ mkdir build
 cd build
 cmake ..
 make
-./playground
-./graph_tests
-./visualizer

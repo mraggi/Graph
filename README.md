@@ -10,9 +10,8 @@ This is graph-algorithm-visualization software made for my students at ENES More
 	git
 	cmake
 	clang or gcc
-	Google test
+	Google test # included!
 	SFML
-	boost
 
 # Para ubuntu 16.04:
 
