@@ -2,7 +2,6 @@ build*
 *.idea
 *.kdev4
 *.kate-swp
-*make*
 *CMakeCache*
 *cmake_install*
 *CMakeFiles*
