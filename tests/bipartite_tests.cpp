@@ -1,6 +1,7 @@
 #include "Bipartite.hpp"
 #include "CommonGraphs.hpp"
 #include "VectorHelpers.hpp"
+#include "IsSimple.hpp"
 #include <gtest/gtest.h>
 #include <iostream>
 
@@ -34,5 +35,45 @@ TEST(Bipartite, Complete)
     {
         ASSERT_EQ(B.degreeY(v), B.num_verticesX());
         ASSERT_EQ(4, B.num_verticesX());
+    }
+    
+    Graph W = B.GetGraph();
+    
+    ASSERT_EQ(W.num_vertices(),12);
+    ASSERT_EQ(W.num_edges(),32);
+    ASSERT_TRUE(is_simple(W));
+    
+    for (auto x : B.verticesX())
+    {
+        for (auto y : B.neighborsY(x))
+        {
+            ASSERT_TRUE(W.get_neighbor(x,y+B.num_verticesX()) != W.neighbors(x).end());
+        }
+    }
+    
+}
+
+TEST(Bipartite, SortNeighbors)
+{
+    BipartiteGraph G(4,5);
+    G.add_edge(0,3);
+    G.add_edge(2,4);
+    G.add_edge(1,1);
+    G.add_edge(3,1);
+    G.add_edge(2,3);
+    G.add_edge(2,2);
+    G.add_edge(2,1);
+    G.add_edge(0,4);
+    
+    G.sort_neighbors();
+    
+    for (auto x : G.verticesX())
+    {
+        ASSERT_TRUE(std::is_sorted(G.neighborsX(x).begin(), G.neighborsX(x).end()));
+    }
+    
+    for (auto y : G.verticesY())
+    {
+        ASSERT_TRUE(std::is_sorted(G.neighborsY(y).begin(), G.neighborsY(y).end()));
     }
 }

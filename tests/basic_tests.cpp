@@ -1,6 +1,8 @@
 #include "CommonGraphs.hpp"
 #include "Graph.hpp"
+#include "ConnectedComponents.hpp"
 #include "VectorHelpers.hpp"
+#include "IsSimple.hpp"
 #include <gtest/gtest.h>
 #include <iostream>
 
@@ -33,7 +35,7 @@ TEST(Graph, Degree)
 TEST(Graph, AddEdge)
 {
     Graph G(3);
-    G.add_edge(0, 1);
+    G.add_edge_no_repeat(0, 1);
     ASSERT_EQ(G.num_edges(), 1);
 
     G.add_edge_no_repeat(0, 1);
@@ -83,6 +85,7 @@ TEST(Graph, Sort)
         ASSERT_TRUE(
           std::is_sorted(G.neighbors(v).begin(), G.neighbors(v).end()));
     }
+    G.sort_neighbors();
 }
 
 TEST(Graph, MakeSimple)
@@ -105,6 +108,8 @@ TEST(Graph, MakeSimple)
     G.add_edge(2, 2);
     G.add_edge(3, 3);
 
+    ASSERT_FALSE(is_simple(G));
+    
     G.make_simple();
 
     for (auto v : G.vertices())
@@ -161,6 +166,24 @@ TEST(Graph, GetNeighbor)
             }
         }
     }
+}
+
+TEST(Graph, RemoveVertex)
+{
+    int n = 5;
+    Graph G = graphs::Complete(n+1);
+    G.remove_vertex(2);
+    ASSERT_EQ(G.num_vertices(),n);
+    ASSERT_EQ(G.num_edges(),n*(n-1)/2);
+    for (auto v : G.vertices())
+    {
+        ASSERT_EQ(G.degree(v),n-1);
+    }
+    ASSERT_TRUE(is_simple(G));
+    
+    ASSERT_TRUE(is_connected(G));
+    
+    
 }
 
 TEST(Graph, PetersenGraph)

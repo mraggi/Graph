@@ -7,6 +7,7 @@
 #include "external/bipartite_matching.hpp"
 #include <gtest/gtest.h>
 #include <iostream>
+#include <unordered_set>
 
 using Vertex = BipartiteGraph::Vertex;
 
@@ -28,6 +29,20 @@ void CheckMatching(const BipartiteGraph& G, int expected_size)
         }
     }
     ASSERT_EQ(matches.size(), expected_size);
+    
+    auto edges = M.Edges();
+    auto order = [](const Graph::Edge& A, const Graph::Edge& B)
+    {
+        if (A.weight() != B.weight())
+            return A.weight() < B.weight();
+        if (A.from != B.from)
+            return A.from < B.from;
+        return A.to < B.to;
+    };
+    
+    std::set<Graph::Edge,decltype(order)> S(edges.begin(), edges.end(),order);
+    
+    ASSERT_EQ(S.size(), matches.size());
 }
 
 TEST(BipartiteMatching, Small22)
