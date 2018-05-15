@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/mraggi/Graph.svg?branch=master)](https://travis-ci.org/mraggi/Graph)
+[![Coverage Status](https://coveralls.io/repos/github/mraggi/Graph/badge.svg?branch=master)](https://coveralls.io/github/mraggi/Graph?branch=master)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mraggi/Graph/blob/master/LICENSE)
 
 # Intro
 
