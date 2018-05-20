@@ -22,6 +22,10 @@ public:
     {}
 
     ~Line() override = default;
+    Line(const Line& B) = default;
+    Line(Line&& B) = default;
+    Line& operator=(const Line& B) = default;
+    Line& operator=(Line&& B) = default;
 
     void Scale(real Xamount, real Yamount) override {}
     void Scale(real amount) override {}

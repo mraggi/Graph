@@ -180,8 +180,11 @@ public:
     static Point RandomPoint(real minLength, real maxLength);
 
 #ifdef USE_SFML
+    // cppcheck-suppress noExplicitConstructor
     Point(const sf::Vector2f& p) : x(p.x), y(p.y) {} // NOLINT
+    // cppcheck-suppress noExplicitConstructor
     Point(const sf::Vector2i& p) : x(p.x), y(p.y) {} // NOLINT
+    // cppcheck-suppress noExplicitConstructor
     Point(const sf::Vector2u& p) : x(p.x), y(p.y) {} // NOLINT
 
     operator sf::Vector2f() const { return sf::Vector2f(x, y); } // NOLINT

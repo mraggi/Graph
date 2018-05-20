@@ -30,7 +30,7 @@ public:
 
     void reset()
     {
-        std::iota(parent.begin(), parent.end(), 0);
+        std::iota(parent.begin(), parent.end(), 0L);
         m_num_components = size();
     }
 

@@ -16,6 +16,10 @@ public:
     explicit Box(const Point& pos = Point(0, 0), real w = 0, real h = 0);
     explicit Box(const Point& corner1, const Point& corner2);
     ~Box() override = default;
+    Box(const Box& B) = default;
+    Box(Box&& B) = default;
+    Box& operator=(const Box& B) = default;
+    Box& operator=(Box&& B) = default;
 
 #ifdef USE_SFML
     explicit Box(const sf::FloatRect& F)

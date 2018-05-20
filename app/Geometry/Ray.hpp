@@ -18,7 +18,11 @@ public:
         : Convex(origin), m_rAngle(MakeValidAngle(angle))
     {}
     ~Ray() override = default;
-
+    Ray(const Ray& B) = default;
+    Ray(Ray&& B) = default;
+    Ray& operator=(const Ray& B) = default;
+    Ray& operator=(Ray&& B) = default;
+    
     void Scale(real Xamount, real Yamount) override {}
     void Scale(real amount) override {}
     void Rotate(real angle) override { m_rAngle += angle; }

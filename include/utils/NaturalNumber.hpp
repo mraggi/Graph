@@ -12,14 +12,14 @@ template <class IntType>
 class basic_natural_number
 {
 public:
-    using difference_type = long long; // NOLINT
-    using size_type = long long; // NOLINT
+    using difference_type = std::int64_t;
+    using size_type = IntType;
     using value_type = IntType;
     class iterator;
     using const_iterator = iterator;
 
 public:
-    basic_natural_number(IntType n) : m_n(n) { assert(n >= 0); } // NOLINT
+    explicit basic_natural_number(IntType n) : m_n(n) {}
 
     class iterator
     {
@@ -37,11 +37,13 @@ public:
             ++m_ID;
             return *this;
         }
+
         inline iterator& operator--()
         {
             --m_ID;
             return *this;
         }
+
         inline const IntType& operator*() const { return m_ID; }
 
         inline iterator& operator+=(difference_type n)
@@ -66,8 +68,6 @@ public:
 
     private:
         IntType m_ID{0};
-
-        friend class basic_natural_number;
     }; // end class iterator
 
     iterator begin() const { return iterator(0); }
@@ -76,6 +76,8 @@ public:
     IntType operator[](size_type m) const { return m; }
     size_type size() const { return m_n; }
 
+    // Returns the first natural number (between 0 and size()) for which Pred is
+    // false and *end() otherwise.
     template <class Pred>
     IntType partition_point(Pred p)
     {
@@ -86,6 +88,8 @@ public:
     {
         return std::vector<IntType>(begin(), end());
     }
+
+    auto to_vector() const { return std::vector<IntType>(*this); };
 
 private:
     IntType m_n;
@@ -110,10 +114,75 @@ operator-(typename basic_natural_number<IntType>::iterator it,
 }
 
 using natural_number = basic_natural_number<int>;
-using big_natural_number = basic_natural_number<long long>; // NOLINT
+using big_natural_number = basic_natural_number<std::int64_t>;
+
+template <class IntType>
+class basic_natural_number_range
+{
+public:
+    using difference_type = std::int64_t;
+    using size_type = IntType;
+    using value_type = IntType;
+    using iterator = typename basic_natural_number<IntType>::iterator;
+    using const_iterator = iterator;
+
+    explicit basic_natural_number_range(IntType n) : m_end(n)
+    {
+        if (m_end < 0)
+            m_end = 0;
+    }
+
+    basic_natural_number_range(IntType a, IntType b) : m_start(a), m_end(b)
+    {
+        if (m_end < m_start)
+            m_end = m_start;
+    }
+
+    iterator begin() const { return iterator(m_start); }
+    iterator end() const { return iterator(m_end); }
+
+    IntType operator[](size_type m) const { return m_start + m; }
+    IntType size() const { return m_end - m_start; }
+
+    template <class Pred>
+    IntType partition_point(Pred p)
+    {
+        return *std::partition_point(begin(), end(), p);
+    }
+
+    auto to_vector() const { return std::vector<IntType>(*this); };
+
+    explicit operator std::vector<IntType>() const
+    {
+        return std::vector<IntType>(begin(), end());
+    }
+
+private:
+    IntType m_start{0};
+    IntType m_end;
+};
 
 template <class Container, class T = typename Container::size_type>
-basic_natural_number<T> indices(const Container& C)
+auto indices(const Container& C)
 {
     return basic_natural_number<T>(C.size());
+}
+
+template <class IntType>
+auto NN(IntType n)
+{
+    return basic_natural_number<IntType>{n};
+}
+
+template <class IntType>
+auto NN(IntType from, IntType to)
+{
+    return basic_natural_number_range<IntType>(from, to);
+}
+
+template <class IntType>
+auto operator-(const basic_natural_number<IntType>& A,
+               const basic_natural_number<IntType>& B)
+{
+    return NN(B.size(), A.size());
 }

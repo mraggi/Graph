@@ -34,6 +34,11 @@ public:
     explicit Convex(const Point& p = Point(0, 0)) : m_pPosition(p) {}
     Convex() = default;
     virtual ~Convex() = default;
+    
+    Convex(const Convex& B) = default;
+    Convex(Convex&& B) = default;
+    Convex& operator=(const Convex& B) = default;
+    Convex& operator=(Convex&& B) = default;
 
     virtual shape Type() const = 0;
 

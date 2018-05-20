@@ -33,8 +33,6 @@ std::vector<double> closeness(const Graph& G)
     return C;
 }
 
-using namespace std;
-
 void betweenness_normalize(std::vector<double>& B, Vertex n)
 {
     double L = 2*n - 1;
@@ -58,8 +56,6 @@ std::vector<double> betweenness_contrib(const Graph& G, Vertex s)
     D[s] = 0;
     W[s] = 1;
 
-    int d = 0;
-
     std::queue<Vertex> frontier;
     frontier.emplace(s);
 
@@ -69,7 +65,7 @@ std::vector<double> betweenness_contrib(const Graph& G, Vertex s)
         auto lastnode = frontier.front();
         frontier.pop();
 
-        d = D[lastnode];
+        int d = D[lastnode];
 
         for (auto v : G.neighbors(lastnode))
         {

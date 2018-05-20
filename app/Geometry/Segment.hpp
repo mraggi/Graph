@@ -11,6 +11,10 @@ public:
     Segment();
     Segment(const Point& pointA, const Point& pointB);
     ~Segment() override = default;
+    Segment(const Segment& B) = default;
+    Segment(Segment&& B) = default;
+    Segment& operator=(const Segment& B) = default;
+    Segment& operator=(Segment&& B) = default;
 
     Point Direction() const { return m_vDirection; }
 

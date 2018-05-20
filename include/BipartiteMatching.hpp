@@ -8,7 +8,7 @@ public:
     using Vertex = BipartiteGraph::Vertex;
     using Edge = Graph::Edge;
 
-    BipartiteMatcher(const BipartiteGraph& G);
+    explicit BipartiteMatcher(const BipartiteGraph& G);
 
     Vertex MatchX(Vertex x) const { return m_Xmatches[x]; }
     Vertex MatchY(Vertex y) const { return m_Ymatches[y]; }

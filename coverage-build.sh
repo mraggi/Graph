@@ -8,4 +8,4 @@ export CC=gcc
 cmake .. -DBUILD_VISUALIZER=OFF -DCMAKE_BUILD_TYPE=Coverage
 make
 make coverage
-google-chrome-stable ./coverage_out/index.html
+#google-chrome-stable ./coverage_out/index.html

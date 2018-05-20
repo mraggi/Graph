@@ -9,6 +9,7 @@ endif()
 
 option(BUILD_VISUALIZER "Build visualizer (requires SFML)" ON)
 option(BUILD_TESTS "Build unit tests (requires gtest)" ON)
+option(BUILD_OWN_GOOGLETEST "Build own google's unit testing framework, even if found" OFF)
 
 # Set version number (change as needed). These definitions are available
 # by including "exampleConfig.h" in the source. 
@@ -34,7 +35,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 # Things to always include as flags. Change as needed.
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wpedantic")  
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wpedantic -Wextra -Wno-sign-compare -Wno-unused-parameter")  
 
 # Build-type specific flags. Change as needed.
 SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
@@ -100,17 +101,35 @@ endif()
 # Add a make target 'gtest', that runs the tests (and builds all dependencies).
 # The setup of Google Test is done at the very end of this file.
 
-if (${BUILD_TESTS})
+if(${BUILD_TESTS})
+    find_package(GTest)
+    find_package(Threads REQUIRED)
+    set(TEST_LIB googletest)
     file(GLOB TESTFILES "tests/*.cpp")
     set(TEST_MAIN unit_tests.x)
-
-    add_executable(${TEST_MAIN} ${TESTFILES})
-    add_dependencies(${TEST_MAIN} googletest graph)
-    target_link_libraries(${TEST_MAIN} googletest graph pthread)
-    add_custom_target(gtest 
-        COMMAND "${PROJECT_BINARY_DIR}/${TEST_MAIN}"
-        DEPENDS graph ${TEST_MAIN})
-
+	if (${GTEST_FOUND} AND NOT ${BUILD_OWN_GOOGLETEST})
+        message("Using system's google test")
+        include_directories(${GTEST_INCLUDE_DIRS})
+        set(TEST_LIB ${GTEST_BOTH_LIBRARIES})
+        add_executable(${TEST_MAIN} ${TESTFILES})
+	else()
+		message("Not using system's google test. Building our own!")
+        add_custom_target( git_update
+        COMMAND git submodule init
+        COMMAND git submodule update
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} )
+        add_library(googletest
+            ${PROJECT_SOURCE_DIR}/external/googletest/src/gtest-all.cc
+            ${PROJECT_SOURCE_DIR}/external/googletest/src/gtest_main.cc)
+        add_dependencies(googletest git_update)
+        set_source_files_properties(${PROJECT_SOURCE_DIR}/external/googletest/src/gtest-all.cc  PROPERTIES GENERATED 1)
+        set_source_files_properties(${PROJECT_SOURCE_DIR}/external/googletest/src/gtest_main.cc PROPERTIES GENERATED 1)
+        add_executable(${TEST_MAIN} ${TESTFILES})
+        add_dependencies(${TEST_MAIN} ${TEST_LIB} graph)
+    endif()
+    
+    target_link_libraries(${TEST_MAIN} ${TEST_LIB} graph Threads::Threads)
+    add_custom_target(gtest COMMAND "${PROJECT_BINARY_DIR}/${TEST_MAIN}" DEPENDS ${TEST_MAIN})
 
     # Add a standard make target 'test' that runs the tests under CTest (only as an alt. to gtest).
     include(CTest)
@@ -138,25 +157,6 @@ if(DOXYGEN_FOUND)
         COMMENT "${BoldMagenta}Generating API documentation with Doxygen (open ./html/index.html to view).${ColourReset}" VERBATIM
         )
 endif(DOXYGEN_FOUND)
-
-
-# --------------------------------------------------------------------------------
-#                         Google Test (no change needed).
-# --------------------------------------------------------------------------------
-# The following makes sure that an up-to-date version of googletest is available,
-# and built so that it may be used by your tests. 
-add_custom_target( git_update
-    COMMAND git submodule init
-    COMMAND git submodule update
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} )
-add_library( googletest
-    ${PROJECT_SOURCE_DIR}/external/googletest/src/gtest-all.cc
-    ${PROJECT_SOURCE_DIR}/external/googletest/src/gtest_main.cc )
-add_dependencies(googletest git_update)
-set_source_files_properties(${PROJECT_SOURCE_DIR}/external/googletest/src/gtest-all.cc  PROPERTIES GENERATED 1)
-set_source_files_properties(${PROJECT_SOURCE_DIR}/external/googletest/src/gtest_main.cc PROPERTIES GENERATED 1)
-
-
 
 # --------------------------------------------------------------------------------
 #                            Misc (no change needed).

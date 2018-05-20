@@ -8,7 +8,11 @@ class FConvex : public Convex
 public:
     explicit FConvex(const Point& p = Point(0, 0)) : Convex(p) {}
     ~FConvex() override = default;
-
+    FConvex(const FConvex& B) = default;
+    FConvex(FConvex&& B) = default;
+    FConvex& operator=(const FConvex& B) = default;
+    FConvex& operator=(FConvex&& B) = default;
+    
     virtual real MaxX() const = 0;
     virtual real MinX() const = 0;
     virtual real MaxY() const = 0;

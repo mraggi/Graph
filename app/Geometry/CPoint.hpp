@@ -8,7 +8,11 @@ public:
     CPoint() : FConvex(Point(0, 0)) {}
     explicit CPoint(const Point& point) : FConvex(point) {}
     ~CPoint() override = default;
-
+    CPoint(const CPoint& B) = default;
+    CPoint(CPoint&& B) = default;
+    CPoint& operator=(const CPoint& B) = default;
+    CPoint& operator=(CPoint&& B) = default;
+    
     Point FarthestPointAtAngle(real angle) const override { return Position(); }
 
     real Radius() const override { return 0; }

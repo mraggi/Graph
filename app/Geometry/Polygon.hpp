@@ -19,6 +19,10 @@ public:
     explicit Polygon(const Point& point);
     explicit Polygon(const Circle& circle, int num); // regular polygon
     ~Polygon() override = default;
+    Polygon(const Polygon& B) = default;
+    Polygon(Polygon&& B) = default;
+    Polygon& operator=(const Polygon& B) = default;
+    Polygon& operator=(Polygon&& B) = default;
 
     real Radius() const override;
     real Perimeter() const override;

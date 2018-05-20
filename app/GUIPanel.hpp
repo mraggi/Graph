@@ -25,6 +25,10 @@ struct GuiElement
     std::string name;
     sf::Color color;
     virtual ~GuiElement() = default;
+    GuiElement(const GuiElement&) = default;
+    GuiElement(GuiElement&&) = default;
+    GuiElement& operator=(GuiElement&&) = default;
+    GuiElement& operator=(const GuiElement&) = default;
 
     virtual std::string GetString() const { return name; }
 
@@ -41,6 +45,10 @@ struct Spacer : public GuiElement
 {
     Spacer() : GuiElement("", sf::Color::Black) {}
     ~Spacer() override = default;
+    Spacer(const Spacer&) = default;
+    Spacer(Spacer&&) = default;
+    Spacer& operator=(Spacer&&) = default;
+    Spacer& operator=(const Spacer&) = default;
 };
 
 template <class T>

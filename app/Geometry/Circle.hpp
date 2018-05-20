@@ -13,7 +13,11 @@ private:
 public:
     explicit Circle(const Point& p = Point(0, 0), real r = 0);
     ~Circle() override = default;
-
+    Circle(const Circle& B) = default;
+    Circle(Circle&& B) = default;
+    Circle& operator=(const Circle& B) = default;
+    Circle& operator=(Circle&& B) = default;
+    
     void SetRadius(const real r) { m_rRadius = r; }
 
     real MinX() const override { return Position().x - m_rRadius; }
