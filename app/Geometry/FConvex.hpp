@@ -12,7 +12,7 @@ public:
     FConvex(FConvex&& B) = default;
     FConvex& operator=(const FConvex& B) = default;
     FConvex& operator=(FConvex&& B) = default;
-    
+
     virtual real MaxX() const = 0;
     virtual real MinX() const = 0;
     virtual real MaxY() const = 0;

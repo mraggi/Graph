@@ -27,7 +27,7 @@ public:
 
 public:
     BipartiteGraph(size_type x, size_type y) : m_X(x), m_Y(y) {}
-    BipartiteGraph(const Graph& G);
+    explicit BipartiteGraph(const Graph& G);
 
     size_type degreeX(Vertex x) const { return m_X[x].size(); }
     size_type degreeY(Vertex y) const { return m_Y[y].size(); }

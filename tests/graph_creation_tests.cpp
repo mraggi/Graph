@@ -97,8 +97,11 @@ TEST(CommonGraphs, WeightedGrid)
 TEST(CommonGraphs, AlbertBarabanasi)
 {
     int n = 30;
-    int k = 3;
-    Graph G = graphs::AlbertBarabanasi(n, k);
-    ASSERT_EQ(G.num_vertices(), n);
-    ASSERT_EQ(G.num_edges(), k*(k - 1)/2 + (n - k)*k);
+    for (int k = 3; k < 20; ++k)
+    {
+        Graph G = graphs::AlbertBarabanasi(n, k);
+        ASSERT_EQ(G.num_vertices(), n);
+        ASSERT_EQ(G.num_edges(), k*(k - 1)/2 + (n - k)*k);
+    }
+    
 }

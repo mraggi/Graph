@@ -89,7 +89,7 @@ TEST(BipartiteMatching, Complete)
     {
         int n = random_int(1, 20);
         int m = random_int(1, 20);
-        BipartiteGraph G = graphs::CompleteBipartite(n, m);
+        BipartiteGraph G(graphs::CompleteBipartite(n, m));
 
         BipartiteMatcher M(G);
 
@@ -118,7 +118,7 @@ TEST(BipartiteMatching, PermutationGraph)
         for (int x = 0; x < n; ++x)
         {
             auto neighbors_of_x =
-              random_sample(std::vector<Vertex>(B.verticesY()), degreeX);
+              random_sample(B.verticesY().to_vector(), degreeX);
 
             if (std::count(
                   neighbors_of_x.begin(), neighbors_of_x.end(), Y[x]) == 0)
