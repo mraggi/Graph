@@ -21,6 +21,10 @@ This is graph-algorithm-visualization software made for my students at ENES More
 
 `wget https://raw.githubusercontent.com/mraggi/Graph/master/install_ubuntu1710.sh && chmod +x install_ubuntu1710.sh && ./install_ubuntu1710.sh`
 
+# Para Fedora 28
+
+`wget https://raw.githubusercontent.com/mraggi/Graph/master/install_fedora28.sh && chmod +x install_fedora28.sh && ./install_fedora28.sh`
+
 # Para manjaro/arch
 
 `wget https://raw.githubusercontent.com/mraggi/Graph/master/install_arch.sh && chmod +x install_arch.sh && ./install_arch.sh`
