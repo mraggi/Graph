@@ -25,7 +25,7 @@ then
     rpm --query --queryformat "" $PACKAGES
     if [ "$?" -eq 0 ]
     then
-    cd ~
+        cd ~
         rm -rf Graph
         git clone https://github.com/mraggi/Graph
         cd Graph
