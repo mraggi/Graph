@@ -1,5 +1,6 @@
 #include "Bipartite.hpp"
 #include <stack>
+
 using Vertex = BipartiteGraph::Vertex;
 
 void BipartiteGraph::sort_neighbors()
