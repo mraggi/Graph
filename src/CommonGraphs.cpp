@@ -173,21 +173,21 @@ Graph Grid(int n, int m)
         for (int j = 0; j < m; ++j)
         {
             Vertex v = i*(m + 1) + j;
-            G.add_edge(v, v + 1);
-            G.add_edge(v, v + m + 1);
+            G.add_edge(v, v + 1, random_int(0,1000));
+            G.add_edge(v, v + m + 1, random_int(0,1000));
         }
     }
 
     for (int j = 0; j < m; ++j)
     {
         Vertex v = n*(m + 1) + j;
-        G.add_edge(v, v + 1);
+        G.add_edge(v, v + 1, random_int(0,1000));
     }
 
     for (int i = 0; i < n; ++i)
     {
         Vertex v = i*(m + 1) + m;
-        G.add_edge(v, v + m + 1);
+        G.add_edge(v, v + m + 1, random_int(0,1000));
     }
 
     return G;

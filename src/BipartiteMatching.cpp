@@ -40,19 +40,8 @@ void BipartiteMatcher::CreateInitialMatching(const BipartiteGraph& G)
 {
     m_unmatched_in_X.reserve(G.num_verticesX());
 
-    // 	std::vector<Vertex> W = G.verticesX();
-    // 	std::sort(W.begin(), W.end(), [&G](auto a, auto b){ return G.degreeX(a)
-    // < G.degreeX(b); });
-
-    // 	for (auto x : W)
     for (auto x : G.verticesX())
     {
-        // 		std::vector<Vertex> Z(G.neighborsX(x).begin(),
-        // G.neighborsX(x).end()); 		std::sort(Z.begin(), Z.end(), [&G](auto
-        // a, auto b){ return G.degreeY(a) < G.degreeY(b);
-        // });
-
-        // 		for (auto y : Z)
         for (auto y : G.neighborsX(x))
         {
             if (m_Ymatches[y] < 0)
