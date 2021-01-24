@@ -25,10 +25,11 @@ void GraphApp::CreateGUI()
 
     GUI.AddSpacer();
 
-    GUI.AddAction("Fit Graph to Screen",
-                  sf::Keyboard::Return,
-                  [this]() { FitGraphToScreen(); },
-                  sf::Color::Blue);
+    GUI.AddAction(
+      "Fit Graph to Screen",
+      sf::Keyboard::Return,
+      [this]() { FitGraphToScreen(); },
+      sf::Color::Blue);
 
     GUI.AddSpacer();
 
@@ -54,10 +55,11 @@ void GraphApp::CreateGUI()
                       sf::Keyboard::T,
                       sf::Keyboard::Y);
 
-    GUI.AddAction("Sort neighbors",
-                  sf::Keyboard::S,
-                  [this]() { P.sort_neighbors(); },
-                  sf::Color::Magenta);
+    GUI.AddAction(
+      "Sort neighbors",
+      sf::Keyboard::S,
+      [this]() { P.sort_neighbors(); },
+      sf::Color::Magenta);
 
     GUI.AddSpacer();
     GUI.AddText("Create graphs");

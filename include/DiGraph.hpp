@@ -10,9 +10,9 @@ public:
     // something larger than weight_t, for when you have that weight_t doesn't
     // properly hold a sum of weight_t (for example, if weight_t = char).
     using sumweight_t = Graph::sumweight_t;
-	using Edge = Graph::Edge;
-	using Neighbor = Graph::Neighbor;
-	
+    using Edge = Graph::Edge;
+    using Neighbor = Graph::Neighbor;
+
     using neighbor_list = std::vector<Neighbor>;
     using neighbor_const_iterator = neighbor_list::const_iterator;
     using neighbor_iterator = neighbor_list::iterator;

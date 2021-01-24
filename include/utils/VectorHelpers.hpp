@@ -99,7 +99,8 @@ std::vector<T> make_reserved_vector(size_t n)
 }
 
 template <class T>
-inline void remove_unordered(std::vector<T>& X, typename std::vector<T>::iterator it)
+inline void remove_unordered(std::vector<T>& X,
+                             typename std::vector<T>::iterator it)
 {
     *it = std::move(X.back());
     X.pop_back();

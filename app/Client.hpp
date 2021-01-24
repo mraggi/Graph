@@ -278,10 +278,11 @@ Client<Derived>::Client(const std::string& Name)
                       sf::Keyboard::Comma,
                       sf::Keyboard::Period,
                       orange);
-    GUI.AddAction("Toggle Fullscreen",
-                  sf::Keyboard::F,
-                  [this]() { ToggleFullScreen(); },
-                  orange);
+    GUI.AddAction(
+      "Toggle Fullscreen",
+      sf::Keyboard::F,
+      [this]() { ToggleFullScreen(); },
+      orange);
     GUI.AddController(GUI.text_size,
                       "Text size",
                       0.5,
@@ -290,15 +291,16 @@ Client<Derived>::Client(const std::string& Name)
                       orange);
     GUI.AddAction(
       "Change font", sf::Keyboard::F1, [this]() { NextFont(); }, orange);
-    GUI.AddAction("Animation step",
-                  sf::Keyboard::Space,
-                  [this]() {
-                      for (auto& a : m_animations)
-                      {
-                          a->Play();
-                      }
-                  },
-                  orange);
+    GUI.AddAction(
+      "Animation step",
+      sf::Keyboard::Space,
+      [this]() {
+          for (auto& a : m_animations)
+          {
+              a->Play();
+          }
+      },
+      orange);
     GUI.AddSpacer();
 }
 
@@ -464,8 +466,7 @@ void Client<Derived>::ClientOnKeyRelease(sf::Keyboard::Key key)
     switch (key)
     {
     // Exit
-    case sf::Keyboard::Escape:
-    {
+    case sf::Keyboard::Escape: {
         Kill();
         return;
     }

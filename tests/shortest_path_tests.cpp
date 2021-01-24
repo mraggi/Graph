@@ -94,8 +94,8 @@ TEST(ShortestPaths, GridGraph)
     Graph G = graphs::Grid(n - 1, n - 1);
 
     auto DS = DijkstraSearcher(G, 0);
-    auto D = DS.Distances();
 
+    auto D = DS.Distances();
     for (int i = 0; i < n; ++i)
     {
         auto P = DS.GetPath(i);
@@ -104,7 +104,12 @@ TEST(ShortestPaths, GridGraph)
         ASSERT_EQ(P.front(), 0);
         ASSERT_EQ(P.back(), i);
     }
-
+    int i = 0;
+    for (auto d : D)
+    {
+        std::cout << i << ' ' << d << std::endl;
+        ++i;
+    }
     for (int i = 0; i < n; ++i)
     {
         ASSERT_EQ(std::count(D.begin(), D.end(), i), i + 1);

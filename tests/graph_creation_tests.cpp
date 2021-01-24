@@ -103,5 +103,4 @@ TEST(CommonGraphs, AlbertBarabanasi)
         ASSERT_EQ(G.num_vertices(), n);
         ASSERT_EQ(G.num_edges(), k*(k - 1)/2 + (n - k)*k);
     }
-    
 }
