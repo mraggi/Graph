@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 rm -rf build-clang-tidy
 mkdir build-clang-tidy
 cd build-clang-tidy
